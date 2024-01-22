@@ -47,7 +47,7 @@ if(mysqli_query($conn,$query)){
                 </div>
             </div>
             <?php
-            if ($alert_type) {
+            if (isset($alert_type)) {
                   echo '<div class="alert text-dark l-' . $alert_type . '" role="alert">';
                   echo $alert_message;
                   echo '</div>';

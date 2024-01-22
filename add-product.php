@@ -72,15 +72,15 @@ if(isset($_POST['submit'])) {
     $gst = $_POST['gst'];
     $sizeJoined=$size_number.$size;
     
-       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$session'";
+       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$sessionAdmin'";
     $result = mysqli_query($conn, $query);
     
     if(mysqli_num_rows($result) > 0) {
         echo"<script>window.location.href='add-product?status=exists'</script>";
     } else {
       // If the record does not exist, insert the new record
-      $query = "INSERT INTO tblproducts (category, sub_category, productname, saleprice,purchaseprice, HSN, openingstock, gst, size,sizetype,userID) 
-        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$session')";
+      $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`,`purchaseprice`, `HSN`, `openingstock`, `gst`, `size`,`sizetype`,`userID`) 
+        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$sessionAdmin')";
       
       if(mysqli_query($conn, $query)) {
         echo"<script>window.location.href='add-product?status=success'</script>";
@@ -122,7 +122,7 @@ if(isset($_POST['submit'])) {
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
                                         <option >Select Category</option>
                                         <?php
-                                        $getct=mysqli_query($conn,"select name from tblcategory where status='1' and userID='$session'");
+                                        $getct=mysqli_query($conn,"select name from tblcategory where status='1' and userID='$sessionAdmin'");
                                         while($fetchcat=mysqli_fetch_array($getct)){
                                         ?>
                                         <option value="<?php echo $fetchcat['name']; ?>"><?php echo $fetchcat['name']; ?></option>

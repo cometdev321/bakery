@@ -37,7 +37,7 @@ if(isset($_POST['submit'])){
                 </div>
             </div>
             <?php
-            if ($alert_type) {
+            if (isset($alert_type)) {
                   echo '<div class="alert text-dark l-' . $alert_type . '" role="alert">';
                   echo $alert_message;
                   echo '</div>';

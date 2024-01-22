@@ -42,7 +42,7 @@ if(isset($_POST['submit'])){
                   echo $alert_message;
                   echo '</div>';
                   
-                }
+                } 
             ?>
             <div class="row clearfix">
 

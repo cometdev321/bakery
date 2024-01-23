@@ -1,4 +1,7 @@
-<?php include('header.php'); ?>
+<?php 
+include('../common/header2.php'); 
+include('../common/sidebar.php'); 
+?>
 <?php
 // Check if the form has been submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -9,16 +12,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   // Update the database
-  $sql = "UPDATE admin SET Name='$first_name', PhoneNumber='$last_name', Email='$username', Password='$password' WHERE unicode='$session'";
+  $sql = "UPDATE admin SET Name='$first_name', PhoneNumber='$last_name', Email='$username', Password='$password' WHERE unicode='$sessionAdmin'";
   mysqli_query($conn, $sql);
 
   // Update the profile photo if a new one has been uploaded
   if ($_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     $tmp_name = $_FILES['photo']['tmp_name'];
-    $new_name = "Images/" . $_FILES['photo']['name'];
+    $new_name = "../../Images/" . $_FILES['photo']['name'];
     move_uploaded_file($tmp_name, $new_name);
     $photo_name = $_FILES['photo']['name'];
-    $sql = "UPDATE admin SET image='$photo_name' WHERE unicode='$session'";
+    $sql = "UPDATE `admin` SET image='$photo_name' WHERE unicode='$sessionAdmin'";
     mysqli_query($conn, $sql);
   }
 }
@@ -51,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </ul>
                         </div>
                          <?php
-                            $getadmin=mysqli_query($conn,"select * from admin  where unicode='$session'");
+                            $getadmin=mysqli_query($conn,"select * from admin  where unicode='$sessionAdmin'");
                             $fetchadmin=mysqli_fetch_array($getadmin);        
                         ?>
                         <div class="tab-content">
@@ -61,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <h6>Company Logo</h6>
                                     <div class="media">
                                         <div class="media-left m-r-15">
-                                            <img src="Images/<?php  echo $fetchadmin['image']; ?>" class="user-photo media-object" alt="User">
+                                            <img src="../../Images/<?php  echo $fetchadmin['image']; ?>" class="user-photo media-object" alt="User">
                                         </div>
                                         <div class="media-body">
                                             <p>Upload your photo.
@@ -270,12 +273,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <!-- Javascript -->
-<script src="assets/bundles/libscripts.bundle.js"></script>    
-<script src="assets/bundles/vendorscripts.bundle.js"></script>
+<script src="../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 
-<script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 
-<script src="assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/bundles/mainscripts.bundle.js"></script>
 <script>
     $(function() {
         // photo upload
@@ -295,5 +298,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 </body>
 
-<!-- Mirrored from www.wrraptheme.com/templates/lucid/html/light/page-profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Mar 2023 05:12:10 GMT -->
 </html>

@@ -254,10 +254,8 @@
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-book-open"></i> <span>Reports</span></a>
                                 <ul>                                    
-                                    <li><a href="file-dashboard.html">Dashboard</a></li>
-                                    <li><a href="file-documents.html">Documents</a></li>
-                                    <li><a href="file-media.html">M7edia</a></li>
-                                    <li><a href="file-images.html">Images</a></li>
+                                    <li><a href="file-dashboard.html">Balance</a></li>
+                              
                                 </ul>
                             </li>
 

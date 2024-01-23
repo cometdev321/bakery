@@ -179,6 +179,7 @@ function get_list(val) {
             toDate: end 
         };
     }
+    console.log(formData);
 
     $.ajax({
         url: "get_ajax/get_sales_invoice_list.php",

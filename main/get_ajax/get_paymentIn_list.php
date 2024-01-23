@@ -1,6 +1,6 @@
 <?php
-include('../cnn.php');
-session_start();
+ include('../common/cnn.php');
+ session_start();
 
 if(!isset($_SESSION['admin'])){
     header("Location:page-login");   

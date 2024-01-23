@@ -81,10 +81,8 @@ $(document).ready(function() {
 <?php
 
 if(isset($_POST['submit'])){
-  
-
            $name  =     $_POST["name"];
-            $query = "SELECT * FROM tblcategory WHERE name = '$name' and status='1'  and userID='$sessionAdmin'";
+            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' and status='1'  and userID='$sessionAdmin'";
             $result = mysqli_query($conn, $query);
             
             if (mysqli_num_rows($result) > 0) {

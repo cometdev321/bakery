@@ -1,13 +1,10 @@
  <?php
- include('../cnn.php');
+ include('../common/cnn.php');
 session_start();
 
-if(!isset($_SESSION['admin'])){
-    header("Location:../page-login");   
-}
 
 $session=$_SESSION['admin'];
-$getParties = mysqli_query($conn, "SELECT mobno,name FROM tblparty where userID='$session'");
+$getParties = mysqli_query($conn, "SELECT mobno,name FROM `tblparty` where userID='$session'");
 ?>
 <option selected value="null">Select Party Name</option>
 <?php

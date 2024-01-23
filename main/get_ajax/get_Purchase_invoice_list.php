@@ -1,5 +1,5 @@
 <?php
-include('../cnn.php');
+include('../common/cnn.php');
 session_start();
 
 if(!isset($_SESSION['admin'])){

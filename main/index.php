@@ -1,3 +1,3 @@
 <script>
-    window.location.href='auth/page-login'
+    window.location.href='dashboard'
 </script>

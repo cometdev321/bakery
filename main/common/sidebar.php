@@ -214,11 +214,8 @@
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-basket"></i> <span>Category</span></a>
                                 <ul>
-                                <?php
-                                   if(isset($_SESSION['admin'])){
-                                ?>
+                               
                                     <li><a href="<?php echo $base ?>/category/add-category"><i class="fa icon-mouse"></i> Add New Category</a></li>
-                                    <?php } ?>
                                     <li><a href="new-category"><i class="fa icon-mouse"></i>Category Requests</a></li>
                                     <!--<li><a href="add-subcategory"><i class="fa icon-mouse"></i> Add Sub-Category</a></li>-->
 
@@ -227,28 +224,24 @@
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Products</span></a>
                                 <ul>
-                                <?php
-                                   if(isset($_SESSION['admin'])){
-                                ?>
+                              
                                     <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
                                     <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
-                                    <?php } ?>
-                                    <li><a href="new-products"><i class="fa icon-mouse"></i>Product Requests</a></li>
-
+                               
                                 </ul>
                             </li>
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-tag"></i> <span>Sales</span></a>
                                 <ul>                                    
-                                    <li><a href="sales_invoice">Sales Invoices</a></li>
-                                    <li><a href="paymentIn_list">Payment In</a></li>
+                                    <li><a href="<?php echo $base ?>/sales/sales_invoice">Sales Invoices</a></li>
+                                    <li><a href="<?php echo $base ?>/sales/paymentIn_list">Payment In</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
                                 <ul>                                    
-                                    <li><a href="purchase_invoice">Purchase Invoices</a></li>
-                                    <li><a href="paymentout_list">Payment Out</a></li>
+                                    <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li>
+                                    <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
                                 </ul>
                             </li>
                             <li>

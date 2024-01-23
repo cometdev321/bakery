@@ -1,5 +1,9 @@
-<?php include('header.php'); ?>
+<?php 
+    include('../common/header2.php');
+    include('../common/sidebar.php');
+date_default_timezone_set('Asia/Kolkata');
 
+?>
 <style>
   .required {
     color: red;
@@ -126,7 +130,7 @@
         }
         
               $.ajax({
-                url: 'create_party_ajax.php',
+                url: 'functions/create_party_ajax.php',
                 type: 'POST',
                 data: formdata,
                 success: function(response) {
@@ -208,11 +212,11 @@
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create Payment Out</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create Payment In</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Create Payment Out</li>
+                            <li class="breadcrumb-item active">Create Payment In</li>
                         </ul>
                     </div>
                     </div>
@@ -221,11 +225,11 @@
 <?php
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-$query1 = "SELECT paymentOutNumber FROM tblpaymentOUT where userID='$session' ORDER BY id DESC LIMIT 1";
+$query1 = "SELECT paymentInNumber FROM tblpaymentIN where userID='$sessionAdmin' ORDER BY id DESC LIMIT 1";
 $result1 = mysqli_query($conn, $query1);
 if ($result1 && mysqli_num_rows($result1) > 0) {
     $row = mysqli_fetch_assoc($result1);
-    $lastInvoiceNumber = $row['paymentOutNumber'];
+    $lastInvoiceNumber = $row['paymentInNumber'];
     $nextInvoiceNumber = $lastInvoiceNumber + 1;
 }
 ?>
@@ -248,7 +252,7 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                           <input type="text" name="party_mobno" placeholder="Type here" id="party_mobno" class="form-control" >
                         </div>
                        <div class="col-md-12 my-2">
-                          <label>Amount Paid</label>
+                          <label>Amount Received</label>
                           <style>
                             #payment_amount {
                               height: 60px;
@@ -274,11 +278,11 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                     <div class="col-lg-6">
                       <div class="row">
                         <div class="col-md-12 my-2">
-                          <label>Payment Out Number</label>
-                          <input type="number" name="Payment_Out_number" id="Payment_Out_number" value="<?php echo $nextInvoiceNumber ? $nextInvoiceNumber : '1'; ?>" class="form-control" required>
+                          <label>Payment IN Number</label>
+                          <input type="number" name="paymentIN_number" id="paymentIN_number" value="<?php echo $nextInvoiceNumber ? $nextInvoiceNumber : '1'; ?>" class="form-control" required>
                         </div>
                         <div class="col-md-12 my-2">
-                          <label>Payment Out Date</label>
+                          <label>Payment IN Date</label>
                           <input type="date" name="payment_date" id="payment_date" value="<?php echo date("Y-m-d") ?>" class="form-control" required>
                         </div>
                         <div class="col-md-12 my-2">
@@ -317,7 +321,7 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
   
        function getparties() {
         $.ajax({
-            url: "get_ajax/get_party_name.php",
+            url: "../get_ajax/get_party_name.php",
             method: "GET",
             success: function(response) {
                 $("#partySelect").html(response);
@@ -340,7 +344,7 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
           var party = partySelect.value;
           var partyMobno = document.getElementById("party_mobno").value;
           var paymentAmount = document.getElementById("payment_amount").value;
-          var Payment_Out_number = document.getElementById("Payment_Out_number").value;
+          var paymentINNumber = document.getElementById("paymentIN_number").value;
           var paymentDate = document.getElementById("payment_date").value;
           var paymentMode = document.getElementById("payment_mode").value;
           var note = document.getElementById("note").value;
@@ -373,18 +377,18 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
             partySelect: party,
             partyMobno: partyMobno,
             paymentAmount: paymentAmount,
-            Payment_Out_number: Payment_Out_number,
+            paymentINNumber: paymentINNumber,
             paymentDate: paymentDate,
             paymentMode: paymentMode,
             note: note
           };
           
           $.ajax({
-            url: 'add_paymentOUT.php',
+            url: 'add_paymentIN.php',
             method: 'POST',
             data: data,
              success: function(response) {
-                window.location.href='paymentout_list'
+                window.location.href='paymentIn_list'
             },
             error: function() {
                 console.log("Error occurred ");
@@ -401,33 +405,33 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
 </script>
 
 <!-- Javascript -->
-<script src="assets/bundles/libscripts.bundle.js"></script>    
-<script src="assets/bundles/vendorscripts.bundle.js"></script>
+<script src="../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 
 
-<script src="assets/bundles/datatablescripts.bundle.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
 
-<script src="assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
 
-<script src="assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
-<script src="assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
-<script src="assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-<script src="assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
-<script src="assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
-<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
-<script src="assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
+<script src="../../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
+<script src="../../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
+<script src="../../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+<script src="../../assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
+<script src="../../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="../../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
+<script src="../../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
 
-<script src="assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/tables/jquery-datatable.js"></script>
-<script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
+    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
+<script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
 </body>
 
 </html>

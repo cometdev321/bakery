@@ -1,34 +1,26 @@
-<?php include('header.php');
+<?php 
+    include('../common/header2.php');
+    include('../common/sidebar.php');
 date_default_timezone_set('Asia/Kolkata');
 
 ?>
-<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
 
-<link rel="stylesheet" href="assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/vendor/sweetalert/sweetalert.css"/>
-
-<!-- MAIN CSS -->
-<link rel="stylesheet" href="assets/css/main.css">
-<link rel="stylesheet" href="assets/css/color_skins.css">
 
     <div id="main-content">
         <div class="container-fluid">
            <div class="block-header">
             <div class="row">
                 <div class="col-lg-5 col-md-8 col-sm-12">                        
-                    <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Payment Out</h2>
+                    <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Payment In</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.php"><i class="icon-home"></i></a></li>                            
                         <li class="breadcrumb-item">Dashboard</li>
-                        <li class="breadcrumb-item active">Payment Out</li>
+                        <li class="breadcrumb-item active">Payment In</li>
                     </ul>
                 </div>            
                 <div class="col-lg-7 col-md-4 col-sm-12">
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_paymentout'"><i class="fa fa-plus"></i> <span>&nbsp;Create Payment Out</span></button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_paymentIn'"><i class="fa fa-plus"></i> <span>&nbsp;Create Payment In</span></button>
                     </div>
                 </div>
             </div>
@@ -75,7 +67,7 @@ date_default_timezone_set('Asia/Kolkata');
                                <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>PAYMENT OUT LIST </h2>                            
+                            <h2>PAYMENT IN LIST </h2>                            
                         </div>
                         <div class="body">
 						<div class="table-responsive">
@@ -100,7 +92,7 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>ACTION</th>
                                     </tr>
                                 </tfoot>
-                                <tbody id="paymentout-list">
+                                <tbody id="paymentin-list">
                                  
                                 </tbody>
                             </table>
@@ -114,7 +106,7 @@ date_default_timezone_set('Asia/Kolkata');
             </div>
         </div>
     </div>
-            <form id="salesOUTvoice" action="sale_OUTvoce" method="POST" style="display: none;">
+            <form id="salesInvoice" action="sale_invoce" method="POST" style="display: none;">
                 <input type="text" hidden name="sale_id" id="sale_id">
             </form>
             <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
@@ -138,7 +130,7 @@ date_default_timezone_set('Asia/Kolkata');
 function get_list(val) {
     var formData = {};
 
-     if (val === 'Today') {
+    if (val === 'Today') {
         formData = {
             fromDate: "<?php echo date('Y-m-d'); ?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
@@ -177,11 +169,11 @@ function get_list(val) {
         };
     }
     $.ajax({
-        url: "get_ajax/get_paymentout_list.php",
+        url: "get_ajax/get_paymentIn_list.php",
         data: formData,
         type: 'POST',
         success: function(response) {
-            $("#paymentout-list").html(response);
+            $("#paymentin-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");
@@ -195,24 +187,24 @@ function get_list(val) {
     document.title="NAYAN"
 </script>
 <!-- Javascript -->
-<script src="assets/bundles/libscripts.bundle.js"></script>    
-<script src="assets/bundles/vendorscripts.bundle.js"></script>
+<script src="../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 
-<script src="../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/bundles/datatablescripts.bundle.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
 
-<script src="assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
 
-<script src="assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/tables/jquery-datatable.js"></script>
-<script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
+    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
+<script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
 </body>
 
 </html>

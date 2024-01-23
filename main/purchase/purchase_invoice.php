@@ -1,18 +1,9 @@
-<?php include('header.php');
+<?php 
+    include('../common/header2.php');
+    include('../common/sidebar.php');
 date_default_timezone_set('Asia/Kolkata');
 
 ?>
-<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
-
-<link rel="stylesheet" href="assets/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
-<link rel="stylesheet" href="assets/vendor/sweetalert/sweetalert.css"/>
-
-<!-- MAIN CSS -->
-<link rel="stylesheet" href="assets/css/main.css">
-<link rel="stylesheet" href="assets/css/color_skins.css">
 
     <div id="main-content">
         <div class="container-fluid">
@@ -180,7 +171,7 @@ function get_list(val) {
     }
     
     $.ajax({
-        url: "get_ajax/get_Purchase_invoice_list.php",
+        url: "../get_ajax/get_Purchase_invoice_list.php",
         data: formData,
         type: 'POST',
         success: function(response) {
@@ -198,24 +189,24 @@ function get_list(val) {
     document.title="NAYAN"
 </script>
 <!-- Javascript -->
-<script src="assets/bundles/libscripts.bundle.js"></script>    
-<script src="assets/bundles/vendorscripts.bundle.js"></script>
+<script src="../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 
-<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/bundles/datatablescripts.bundle.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
 
-<script src="assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
 
-<script src="assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/tables/jquery-datatable.js"></script>
-<script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
+    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
+<script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
 </body>
 
 </html>

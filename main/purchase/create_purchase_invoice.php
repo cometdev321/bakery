@@ -1,5 +1,9 @@
-<?php include('header.php'); ?>
+<?php 
+    include('../common/header2.php');
+    include('../common/sidebar.php');
+date_default_timezone_set('Asia/Kolkata');
 
+?>
 <style>
   .required {
     color: red;
@@ -118,9 +122,9 @@
           <small id="product_errorMessage" class="text-danger" style="display: none;">Type Product Name</small>
         </div>
         <div class="modal-body">
-          <label for="salePriceInput"><span class="required">*</span> Sale Price:</label>
-          <input type="number" class="form-control" id="salePriceInput" name="sale_price" placeholder="Enter sale price" required onkeyup="clear_product_error();">
-          <small id="sale_errorMessage" class="text-danger" style="display: none;">Type Sale Price</small>
+          <label for="PurchasePriceInput"><span class="required">*</span> Purchase Price:</label>
+          <input type="number" class="form-control" id="PurchasePriceInput" name="Purchase_price" placeholder="Enter Purchase price" required onkeyup="clear_product_error();">
+          <small id="Purchase_errorMessage" class="text-danger" style="display: none;">Type Purchase Price</small>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-sm" id="saveButton" onclick="check_product_data();" name="add_product">Save</button>
@@ -163,7 +167,7 @@
         }
         
               $.ajax({
-                url: 'create_party_ajax.php',
+                url: '../get_ajax/create_party_ajax.php',
                 type: 'POST',
                 data: formdata,
                 success: function(response) {
@@ -245,11 +249,11 @@
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create Sales Invoice</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create Purchase Invoice</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Create Sales Invoice</li>
+                            <li class="breadcrumb-item active">Create Purchase Invoice</li>
                         </ul>
                     </div>
                     </div>
@@ -273,84 +277,84 @@
                                             </div>
                                             <?php
 
-                                                // Retrieve the last invoice number from tblsalesinvoices
-                                                $query1 = "SELECT sale_invoice_number FROM tblsalesinvoices ORDER BY id DESC LIMIT 1";
+                                                // Retrieve the last invoice number from tblPurchaseinvoices
+                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where  userID='$sessionAdmin' ORDER BY id DESC LIMIT 1";
                                                 $result1 = mysqli_query($conn, $query1);
                                                 
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {
                                                     $row = mysqli_fetch_assoc($result1);
-                                                    $lastInvoiceNumber = $row['sale_invoice_number'];
+                                                    $lastInvoiceNumber = $row['purchase_invoice_number'];
                                                     $nextInvoiceNumber = $lastInvoiceNumber + 1;
                                                 }
                                                 
                                                 ?>
                                                 
-                                                <!-- Update the "Sale Invoice Number" input field -->
+                                                <!-- Update the "Purchase Invoice Number" input field -->
                                                 <div class="col-lg-3 col-md-12 my-2">
-                                                    <label>Sale Invoice Number</label>
-                                                    <input type="number" name="saleprice" id="sale_invoice_number"value="<?php echo $nextInvoiceNumber?$nextInvoiceNumber:'1'; ?>" class="form-control" required>
+                                                    <label>Purchase Invoice Number</label>
+                                                    <input type="number" name="Purchaseprice" id="Purchase_invoice_number"value="<?php echo $nextInvoiceNumber?$nextInvoiceNumber:'1'; ?>" class="form-control" required>
                                                 </div>
 
                                             <div class="col-lg-3 col-md-12  my-2">
-                                                <label>Sales Invoice Date</label>
-                                                <input type="date" name="sales_invoice_date" id="sales_invoice_date" value="<?php echo date("Y-m-d") ?>" class="form-control" required>
+                                                <label>Purchase Invoice Date</label>
+                                                <input type="date" name="Purchase_invoice_date" id="Purchase_invoice_date" value="<?php echo date("Y-m-d") ?>" class="form-control" required>
                                             </div>
                                     </div>
 
                             </div>
                         </div>
 
-                <div class="card planned_task">
-                    <div class="body">
-                        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-                           Add Item&nbsp;<i class="fa fa-plus"></i> 
-                        </button>
-                        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
-                        <div class="body table-responsive">
-                            <table class="table table-bordered  table-striped table-hover" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Sl.No</th>
-                                        <th>Item Name</th>
-                                        <th>HSN</th>
-                                        <th>Batch No</th>
-                                        <th>Expire Date</th>
-                                        <th>Manuf. Date</th>
-                                        <th>Size</th>
-                                        <th>Qty</th>
-                                        <th>Price</th>
-                                        <th>Discount</th>
-                                        <th>Tax</th>
-                                        <th>Amount</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Sl.No</th>
-                                        <th>Item Name</th>
-                                        <th>HSN</th>
-                                        <th>Batch No</th>
-                                        <th>Expire Date</th>
-                                        <th>Manuf. Date</th>
-                                        <th>Size</th>
-                                        <th>Qty</th>
-                                        <th>Price</th>
-                                        <th>Discount</th>
-                                        <th>Tax</th>
-                                        <th>Amount</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody id="table-body">
-                
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div> 
-                
-                <div class="card planned_task">
+<div class="card planned_task">
+    <div class="body">
+        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
+           Add Item&nbsp;<i class="fa fa-plus"></i> 
+        </button>
+        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
+        <div class="body table-responsive">
+            <table class="table table-bordered  table-striped table-hover" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Item Name</th>
+                        <th>HSN</th>
+                        <th>Batch No</th>
+                        <th>Expire Date</th>
+                        <th>Manuf. Date</th>
+                        <th>Size</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Item Name</th>
+                        <th>HSN</th>
+                        <th>Batch No</th>
+                        <th>Expire Date</th>
+                        <th>Manuf. Date</th>
+                        <th>Size</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Discount</th>
+                        <th>Tax</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody id="table-body">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 
+
+<div class="card planned_task">
                   
                         <div class="body">
                                  <div class="row clearfix">
@@ -360,7 +364,7 @@
                                                 <input type="text" name="subtotal" placeholder="---" id="subtotal" readonly class="form-control" >
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
-                                                <label>Add-Discount</label>
+                                                <label>Discount</label>
                                                 <input type="number" name="total_discount" value="0" placeholder="Type Here" onkeyup="calculate_total_discount()" id="discount"  class="form-control" >
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
@@ -379,7 +383,7 @@
                                             </div>
                                             
                                             <div class="col-lg-2 col-md-12 my-2">
-                                                <label>Amount Received</label>
+                                                <label>Amount Paid</label>
                                                 <div class="input-group">
                                                     <input type="text"  id="amount_received" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
@@ -404,8 +408,8 @@
                                     <div class="row">&nbsp;</div>
                                     <div class="row">&nbsp;</div>
                                     <div class="row clearfix" style="float: right;">
-                                      <button type="button" class="btn btn-success mx-2" onclick="create_sales_invoice()">
-                                        <i class="fa fa-check-circle"></i> <span>Save Sales Invoice</span>
+                                      <button type="button" class="btn btn-success mx-2" onclick="create_Purchase_invoice()">
+                                        <i class="fa fa-check-circle"></i> <span>Save Purchase Invoice</span>
                                       </button>
                                       <button type="button" class="btn btn-primary" onclick="location.reload()">
                                         <i class="icon-refresh"></i> <span></span>
@@ -484,11 +488,11 @@
         update_paid();
     }
     
-function create_sales_invoice() {
+function create_Purchase_invoice() {
   let party = partySelect.value;
   let party_mob = party_mobno.value;
-  let sale_invoice_no = sale_invoice_number.value;
-  let sale_invoice_date = sales_invoice_date.value;
+  let Purchase_invoice_no = Purchase_invoice_number.value;
+  let Purchase_invoice_date_ = Purchase_invoice_date.value;
   let subtotal_value = subtotal.value;
   let discount_value = discount.value;
   let after_discount_total_value = total.value;
@@ -517,8 +521,8 @@ function create_sales_invoice() {
   var formData = {
     party: party,
     party_mob: party_mob,
-    sale_invoice_no: sale_invoice_no,
-    sale_invoice_date: sale_invoice_date,
+    purchase_invoice_no: Purchase_invoice_no,
+    purchase_invoice_date: Purchase_invoice_date_,
     subtotal_value: subtotal_value,
     discount_value: discount_value,
     after_discount_total_value: after_discount_total_value,
@@ -543,7 +547,6 @@ function create_sales_invoice() {
     const expiredate = row.querySelector('[name="expiredate[]"]').value;
     const mafdate = row.querySelector('[name="mafdate[]"]').value;
     const qty = row.querySelector('[name="qty[]"]').value;
-    const size = row.querySelector('[name="size[]"]').value;
     const price = row.querySelector('[name="price[]"]').value;
     const discount = row.querySelector('[name="discount[]"]').value;
     const tax = row.querySelector('[name="tax[]"]').value;
@@ -565,7 +568,6 @@ function create_sales_invoice() {
       expiredate,
       mafdate,
       qty,
-      size,
       price,
       discount,
       tax,
@@ -575,7 +577,7 @@ function create_sales_invoice() {
     data.push(rowData);
   }
 
-  const url = 'insert_sales_invoice.php';
+  const url = 'insert_purchase_invoice.php';
   const options = {
     method: 'POST',
     headers: {
@@ -590,7 +592,7 @@ function create_sales_invoice() {
     .then(result => {
       if (result === 'error') {
         Toastify({
-          text: "Party could not be added. Error Occurred",
+          text: " Error Occurred",
           duration: 3000,
           newWindow: true,
           close: true,
@@ -603,7 +605,7 @@ function create_sales_invoice() {
         }).showToast();
       } else if (result === 'success') {
         Toastify({
-          text: "Party added successfully",
+          text: "Invoice added successfully",
           duration: 3000,
           newWindow: true,
           close: true,
@@ -614,7 +616,7 @@ function create_sales_invoice() {
           stopOnFocus: true,
           onClick: function() {},
         }).showToast();
-        window.location.href = "sales_invoice";
+        window.location.href = "purchase_invoice";
       }
     })
     .catch(error => {
@@ -697,7 +699,7 @@ function create_sales_invoice() {
 
     function getparties() {
         $.ajax({
-            url: "get_ajax/get_party_name.php",
+            url: "../get_ajax/get_party_name.php",
             method: "GET",
             success: function(response) {
                 $("#partySelect").html(response);
@@ -710,7 +712,7 @@ function create_sales_invoice() {
 
     function getproducts(val) {
         $.ajax({
-            url: "get_ajax/get_products.php",
+            url: "../get_ajax/get_products_purchase.php",
             method: "GET",
             success: function(response) {
                 $("#select_products-" + val).html(response);
@@ -722,22 +724,28 @@ function create_sales_invoice() {
     }
  function clear_product_error(val) {
     category_errorMessage.style.display = 'none';
-    sale_errorMessage.style.display = 'none';
+    Purchase_errorMessage.style.display = 'none';
     product_errorMessage.style.display = 'none';
     party_errorMessage.style.display = 'none';
-      const errorMessage = document.querySelector(`#product_errorMessage-${val}`);
-      errorMessage.style.display = 'none';
+        try{
+                const errorMessage = document.querySelector(`#product_errorMessage-${val}`);
+            errorMessage.style.display = 'none';
+        }catch(err){
+            
+        }
   }
 
     function check_product_data() {
-        let categoryName = category.value;
-        let productName = productNameInput.value;
-        let salePrice = salePriceInput.value;
+        let categoryName = document.getElementById('category').value;
+        let productName = document.getElementById('productNameInput').value;
+        let PurchasePrice = document.getElementById('PurchasePriceInput').value;
         
         let category_errorMessage = document.getElementById('category_errorMessage');
-        let sale_errorMessage = document.getElementById('sale_errorMessage');
+        let Purchase_errorMessage = document.getElementById('Purchase_errorMessage');
         let product_errorMessage = document.getElementById('product_errorMessage');
         
+        
+     
         if (categoryName === 'null') {
           category_errorMessage.style.display = 'block';
           category_errorMessage.textContent = 'Category is required.';
@@ -752,9 +760,9 @@ function create_sales_invoice() {
           return;
         } 
         
-        if (salePrice === '') {
-          sale_errorMessage.style.display = 'block';
-          sale_errorMessage.textContent = 'Sale price is required.';
+        if (PurchasePrice === '') {
+          Purchase_errorMessage.style.display = 'block';
+          Purchase_errorMessage.textContent = 'Purchase price is required.';
           event.preventDefault();
           return;
         }
@@ -764,12 +772,12 @@ function create_sales_invoice() {
         var formData = {
             category: categoryName,
             productName: productName,
-            salePrice: salePrice
+            PurchasePrice: PurchasePrice
         };
 
         // Send AJAX request using jQuery
         $.ajax({
-            url: 'add_product_ajax.php',
+            url: '../get_ajax/add_product_ajax.php',
             type: 'POST',
             data: formData,
             success: function(response) {
@@ -842,33 +850,33 @@ function create_sales_invoice() {
 </script>
 
 <!-- Javascript -->
-<script src="assets/bundles/libscripts.bundle.js"></script>    
-<script src="assets/bundles/vendorscripts.bundle.js"></script>
+<script src="../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 
 
-<script src="assets/bundles/datatablescripts.bundle.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
 
-<script src="assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
 
-<script src="assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
-<script src="assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
-<script src="assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-<script src="assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
-<script src="assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
-<script src="assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
-<script src="assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
+<script src="../../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
+<script src="../../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
+<script src="../../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+<script src="../../assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
+<script src="../../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="../../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
+<script src="../../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
 
-<script src="assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/tables/jquery-datatable.js"></script>
-<script src="assets/bundles/mainscripts.bundle.js"></script>
-<script src="assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
+    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
+<script src="../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
 </body>
 
 </html>

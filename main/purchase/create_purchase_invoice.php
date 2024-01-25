@@ -278,7 +278,7 @@ date_default_timezone_set('Asia/Kolkata');
                                             <?php
 
                                                 // Retrieve the last invoice number from tblPurchaseinvoices
-                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where  userID='$sessionAdmin' ORDER BY id DESC LIMIT 1";
+                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where  userID='$session' ORDER BY id DESC LIMIT 1";
                                                 $result1 = mysqli_query($conn, $query1);
                                                 
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {

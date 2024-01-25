@@ -225,7 +225,7 @@ date_default_timezone_set('Asia/Kolkata');
 <?php
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-$query1 = "SELECT paymentOutNumber FROM tblpaymentOUT where userID='$sessionAdmin' ORDER BY id DESC LIMIT 1";
+$query1 = "SELECT paymentOutNumber FROM tblpaymentOUT where userID='$session' ORDER BY id DESC LIMIT 1";
 $result1 = mysqli_query($conn, $query1);
 if ($result1 && mysqli_num_rows($result1) > 0) {
     $row = mysqli_fetch_assoc($result1);

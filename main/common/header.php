@@ -1,20 +1,5 @@
 <?php
-session_start();
-include('cnn.php');
-
-if (!isset($_SESSION['admin']) && !isset($_SESSION['user'])) {
-    header("Location:auth/page-login.php");
-    exit();
-}
-if(isset($_SESSION['admin'])){
-$sessionAdmin=$_SESSION['admin'];
-}
-if(isset($_SESSION['user'])){
-$sessionUser=$_SESSION['user'];
-}
-date_default_timezone_set('Asia/Kolkata');
-
-
+include('session_control.php');
 ?>
 <!doctype html>
 <html lang="en">

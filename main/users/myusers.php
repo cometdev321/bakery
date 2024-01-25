@@ -108,7 +108,7 @@ if (isset($_POST['submit'])) {
         } else {
             // Insert the new user if the username doesn't exist
             $randomString = generateRandomString(10);
-            $insert_query = "INSERT INTO tblusers (`branch`, `username`, `password`,`superAdminID`,`userID`) VALUES ('$branchname', '$username', '$password','$sessionAdmin','$randomString')";
+            $insert_query = "INSERT INTO tblusers (`branch`, `username`, `password`,`superAdminID`,`userID`) VALUES ('$branchname', '$username', '$password','$session','$randomString')";
             $insert_result = mysqli_query($conn, $insert_query);
 
             if ($insert_result) {
@@ -161,7 +161,7 @@ if (isset($_POST['submit'])) {
                                     <select class="form-control show-tick ms select2" name="branch" data-placeholder="Select" required>
                                         <option value="0">Select Branch</option>
                                         <?php
-                                            $getbrx=mysqli_query($conn,"select name from branch where status='1' and userID='$sessionAdmin'");
+                                            $getbrx=mysqli_query($conn,"select name from branch where status='1' and userID='$session'");
                                             while($fetchbx=mysqli_fetch_array($getbrx)){
                                         ?>
                                          <option value="<?php echo $fetchbx['name'];?>"><?php echo $fetchbx['name'];?></option>
@@ -215,7 +215,7 @@ if (isset($_POST['submit'])) {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblusers WHERE status = '1' and superAdminID='$sessionAdmin' order by id desc";
+                                    $query = "SELECT * FROM tblusers WHERE status = '1' and superAdminID='$session' order by id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

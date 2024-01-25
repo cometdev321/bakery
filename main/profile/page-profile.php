@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
 
   // Update the database
-  $sql = "UPDATE admin SET Name='$first_name', PhoneNumber='$last_name', Email='$username', Password='$password' WHERE unicode='$sessionAdmin'";
+  $sql = "UPDATE admin SET Name='$first_name', PhoneNumber='$last_name', Email='$username', Password='$password' WHERE unicode='$session'";
   mysqli_query($conn, $sql);
 
   // Update the profile photo if a new one has been uploaded
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_name = "../../Images/" . $_FILES['photo']['name'];
     move_uploaded_file($tmp_name, $new_name);
     $photo_name = $_FILES['photo']['name'];
-    $sql = "UPDATE `admin` SET image='$photo_name' WHERE unicode='$sessionAdmin'";
+    $sql = "UPDATE `admin` SET image='$photo_name' WHERE unicode='$session'";
     mysqli_query($conn, $sql);
   }
 }
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </ul>
                         </div>
                          <?php
-                            $getadmin=mysqli_query($conn,"select * from admin  where unicode='$sessionAdmin'");
+                            $getadmin=mysqli_query($conn,"select * from admin  where unicode='$session'");
                             $fetchadmin=mysqli_fetch_array($getadmin);        
                         ?>
                         <div class="tab-content">

@@ -82,14 +82,14 @@ $(document).ready(function() {
 
 if(isset($_POST['submit'])){
            $name  =     $_POST["name"];
-            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' and status='1'  and userID='$sessionAdmin'";
+            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' and status='1'  and userID='$session'";
             $result = mysqli_query($conn, $query);
             
             if (mysqli_num_rows($result) > 0) {
             echo"<script>window.location.href='add-category?status=category_error'</script>";
             } else {
               // If the branch does not exist, insert it into the database
-              $insert_query = "INSERT INTO tblcategory (name,userId) VALUES ('$name','$sessionAdmin')";
+              $insert_query = "INSERT INTO tblcategory (name,userId) VALUES ('$name','$session')";
               $insert_result = mysqli_query($conn, $insert_query);
             
               if ($insert_result) {
@@ -185,7 +185,7 @@ if(isset($_POST['submit'])){
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$sessionAdmin' order by id desc";
+                                    $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$session' order by id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

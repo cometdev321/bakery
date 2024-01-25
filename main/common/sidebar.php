@@ -15,10 +15,10 @@
 <!-- Overlay For Sidebars -->
     <?php
     if(isset($_SESSION['admin'])){
-        $getadmin=mysqli_query($conn,"select * from admin where unicode='$sessionAdmin'");
+        $getadmin=mysqli_query($conn,"select * from admin where unicode='$session'");
         $fetchadmin=mysqli_fetch_array($getadmin);        
     }else if(isset($_SESSION['user'])){
-        $getadmin=mysqli_query($conn,"select * from tblusers where userID='$sessionUser'");
+        $getadmin=mysqli_query($conn,"select * from tblusers where userID='$session'");
         $fetchadmin=mysqli_fetch_array($getadmin);        
     }
     ?>
@@ -170,7 +170,7 @@
                         <!--<li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>-->
                         <li><a href="page-profile"><i class="icon-settings"></i>Settings</a></li>
                         <li class="divider"></li>
-                        <li><a href="auth/logout"><i class="icon-power"></i>Logout</a></li>
+                        <li><a href="<?php echo $base ?>/auth/logout"><i class="icon-power"></i>Logout</a></li>
                     </ul>
                 </div>
                 <hr>

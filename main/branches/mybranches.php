@@ -85,14 +85,14 @@ if(isset($_POST['submit'])){
 
          $branchname  =     $_POST["branchname"];
          $location    =     $_POST["location"];
-            $query = "SELECT * FROM branch WHERE name = '$branchname' AND location = '$location' and status='1' and userID='$sessionAdmin'";
+            $query = "SELECT * FROM branch WHERE name = '$branchname' AND location = '$location' and status='1' and userID='$session'";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_num_rows($result) > 0) {
                 echo"<script>window.location.href='mybranches?status=branch_error'</script>";
             } else {
               // If the branch does not exist, insert it into the database
-              $insert_query = "INSERT INTO branch (name, location,userID) VALUES ('$branchname', '$location','$sessionAdmin')";
+              $insert_query = "INSERT INTO branch (name, location,userID) VALUES ('$branchname', '$location','$session')";
               $insert_result = mysqli_query($conn, $insert_query);
             
               if ($insert_result) {
@@ -174,7 +174,7 @@ if(isset($_POST['submit'])){
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM branch WHERE status = '1' and userID='$sessionAdmin' order by id desc";
+                                    $query = "SELECT * FROM branch WHERE status = '1' and userID='$session' order by id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

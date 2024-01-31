@@ -225,12 +225,14 @@ date_default_timezone_set('Asia/Kolkata');
 <?php
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-$query1 = "SELECT paymentInNumber FROM tblpaymentIN where userID='$session' ORDER BY id DESC LIMIT 1";
+$query1 = "SELECT `paymentInNumber` FROM `tblpaymentIN` where `userID`='$session' ORDER BY id DESC LIMIT 1";
 $result1 = mysqli_query($conn, $query1);
 if ($result1 && mysqli_num_rows($result1) > 0) {
     $row = mysqli_fetch_assoc($result1);
     $lastInvoiceNumber = $row['paymentInNumber'];
     $nextInvoiceNumber = $lastInvoiceNumber + 1;
+}else{
+  $nextInvoiceNumber=1;
 }
 ?>
             <div class="card planned_task">
@@ -278,8 +280,8 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                     <div class="col-lg-6">
                       <div class="row">
                         <div class="col-md-12 my-2">
-                          <label>Payment IN Number</label>
-                          <input type="number" name="paymentIN_number" id="paymentIN_number" value="<?php echo $nextInvoiceNumber ? $nextInvoiceNumber : '1'; ?>" class="form-control" required>
+                          <label>Receipt Number</label>
+                          <input type="number" name="paymentIN_number" id="paymentIN_number" value="<?php echo $nextInvoiceNumber ?>" class="form-control" required>
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Payment IN Date</label>
@@ -384,14 +386,14 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
           };
           
           $.ajax({
-            url: 'add_paymentIN.php',
+            url: 'functions/add_paymentIN.php',
             method: 'POST',
             data: data,
              success: function(response) {
-                window.location.href='paymentIn_list'
+                window.location.href='paymentIn_list?status=success'
             },
             error: function() {
-                console.log("Error occurred ");
+              window.location.href='paymentIn_list?status=error'
             }
           })
        

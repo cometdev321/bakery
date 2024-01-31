@@ -1,12 +1,8 @@
 <?php
-include('cnn.php');
-session_start();
+ include('../common/cnn.php');
+ include('../common/session_control.php');
+ session_start();
 
-if(!isset($_SESSION['admin']) && !isset($_SESSION['user'])){
-    header("Location:page-login");   
-}
-
-$session=$_SESSION['admin'];
 
 if(isset($_POST['category']) && isset($_POST['productName']) && isset($_POST['salePrice'])) {
     $category = $_POST['category'];
@@ -14,7 +10,7 @@ if(isset($_POST['category']) && isset($_POST['productName']) && isset($_POST['sa
     $salePrice = $_POST['salePrice'];
 
     // Check if the product already exists
-    $query = "SELECT * FROM tblproducts WHERE productname = '$productName' and userID='$sessionAdmin'";
+    $query = "SELECT * FROM tblproducts WHERE productname = '$productName' and userID='$session'";
     $result = mysqli_query($conn, $query);
 
     if(mysqli_num_rows($result) > 0) {
@@ -22,7 +18,7 @@ if(isset($_POST['category']) && isset($_POST['productName']) && isset($_POST['sa
     } else {
         // If the record does not exist, insert the new record
         $query = "INSERT INTO tblproducts (category, productname, saleprice,userID)
-                  VALUES ('$category', '$productName', '$salePrice','$sessionAdmin')";
+                  VALUES ('$category', '$productName', '$salePrice','$session')";
       
         if(mysqli_query($conn, $query)) {
             echo "product_added";

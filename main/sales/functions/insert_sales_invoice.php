@@ -1,12 +1,8 @@
 <?php
-include('cnn.php');
-session_start();
+ include('../../common/cnn.php');
+ include('../../common/session_control.php');
 
-if(!isset($_SESSION['admin'])){
-    header("Location:page-login");   
-}
 
-$session=$_SESSION['admin'];
     // Retrieve the JSON data
     $postData = json_decode(file_get_contents('php://input'), true);
 
@@ -20,11 +16,14 @@ $session=$_SESSION['admin'];
     $afterDiscountTotal = $postData['formData']['after_discount_total_value'];
     $fullyPaid = $postData['formData']['check_payment_received'];
     $amountReceived = $postData['formData']['amount_received_value'];
-    $amountReceivedtype = $postData['formData']['amount_received_type_value'];
     $totalBalance = $postData['formData']['balance_total_value'];
-
+    $amountReceivedtype='none';
+    if (isset($postData['formData']['amount_received_type_value'])) {
+        $amountReceivedtype = $postData['formData']['amount_received_type_value'];
+    }
+    
     // Prepare and execute the query for tblsalesinvoices
-    $query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sale_invoice_number, sale_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received,amount_received_type, total_balance,userID) 
+    $query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sales_invoice_number, sales_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received,amount_received_type, total_balance,userID) 
               VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session')";
 
     // Perform the database query

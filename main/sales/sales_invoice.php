@@ -5,7 +5,50 @@ date_default_timezone_set('Asia/Kolkata');
 
 ?>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+$(document).ready(function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  if (status === 'success') {
+    Toastify({
+      text: " sales stored succesfully",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top",
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
+      margintop:"202px",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
 
+ 
+   if (status === 'error') {
+    Toastify({
+      text: "Something Went Wrong",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
+});
+</script>
     <div id="main-content">
         <div class="container-fluid">
            <div class="block-header">
@@ -108,7 +151,7 @@ date_default_timezone_set('Asia/Kolkata');
             </div>
         </div>
     </div>
-            <form id="salesInvoice" action="sale_invoce" method="POST" style="display: none;">
+            <form id="salesInvoice" action="view_invoice" method="POST" style="display: none;">
                 <input type="text" hidden name="sale_id" id="sale_id">
             </form>
             <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
@@ -173,7 +216,7 @@ function get_list(val) {
     console.log(formData);
 
     $.ajax({
-        url: "get_ajax/get_sales_invoice_list.php",
+        url: "../get_ajax/get_sales_invoice_list.php",
         data: formData,
         type: 'POST',
         success: function(response) {

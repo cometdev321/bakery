@@ -85,7 +85,7 @@ date_default_timezone_set('Asia/Kolkata');
         </div>
         <div class="modal-body">
           <label for="gstInput">GST Number (Optional):</label>
-          <input type="number" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
+          <input type="text" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
           <small id="gstHelpText" class="form-text text-muted">Example: GSTIN-12**34**56*78ZA</small>
         </div>
         <div class="modal-footer">
@@ -167,7 +167,7 @@ date_default_timezone_set('Asia/Kolkata');
         }
         
               $.ajax({
-                url: 'create_party_ajax.php',
+                url: '../get_ajax/create_party_ajax.php',
                 type: 'POST',
                 data: formdata,
                 success: function(response) {
@@ -276,15 +276,18 @@ date_default_timezone_set('Asia/Kolkata');
                                                 <input type="text" name="party_mobno" placeholder="Type here" id="party_mobno"class="form-control" >
                                             </div>
                                             <?php
+                                                include('../common/cnn.php');
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-                                                $query1 = "SELECT sale_invoice_number FROM tblsalesinvoices ORDER BY id DESC LIMIT 1";
+                                                $query1 = "SELECT sales_invoice_number FROM tblsalesinvoices where userID='$session' ORDER BY id DESC LIMIT 1";
                                                 $result1 = mysqli_query($conn, $query1);
                                                 
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {
                                                     $row = mysqli_fetch_assoc($result1);
-                                                    $lastInvoiceNumber = $row['sale_invoice_number'];
+                                                    $lastInvoiceNumber = $row['sales_invoice_number'];
                                                     $nextInvoiceNumber = $lastInvoiceNumber + 1;
+                                                }else{
+                                                  $nextInvoiceNumber=1;
                                                 }
                                                 
                                                 ?>
@@ -292,7 +295,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                 <!-- Update the "Sale Invoice Number" input field -->
                                                 <div class="col-lg-3 col-md-12 my-2">
                                                     <label>Sale Invoice Number</label>
-                                                    <input type="number" name="saleprice" id="sale_invoice_number"value="<?php echo $nextInvoiceNumber?$nextInvoiceNumber:'1'; ?>" class="form-control" required>
+                                                    <input type="number" name="saleprice" id="sale_invoice_number"value="<?php echo $nextInvoiceNumber; ?>" class="form-control" required>
                                                 </div>
 
                                             <div class="col-lg-3 col-md-12  my-2">
@@ -444,7 +447,7 @@ date_default_timezone_set('Asia/Kolkata');
         const newRowContent =
             '<td><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount + '" name="slno[]" readonly></td>' +
             '<td>' +
-            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
+            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
             '    <option value="null">Select Product</option>' +
             '  </select>' +
             '  <small id="product_errorMessage-' + rowCount + '" class="text-danger" style="display: none;">Select Product</small>' +
@@ -474,8 +477,9 @@ date_default_timezone_set('Asia/Kolkata');
         calculate_total_discount();
     }
     
-    function update_price(val,sizetype,row) {
+    function update_price(hsn,val,sizetype,row) {
         if (!isNaN(val)) {
+            document.getElementById(`hsn-${row}`).value = hsn;
             document.getElementById(`price-${row}`).value = val;
             document.getElementById(`sizetype-${row}`).value = sizetype;
             update_amount(rowCount);
@@ -578,8 +582,7 @@ function create_sales_invoice() {
 
     data.push(rowData);
   }
-
-  const url = 'insert/insert_sales_invoice.php';
+  const url = 'functions/insert_sales_invoice.php';
   const options = {
     method: 'POST',
     headers: {
@@ -605,6 +608,7 @@ function create_sales_invoice() {
           stopOnFocus: true,
           onClick: function() {},
         }).showToast();
+        window.location.href = "sales_invoice?status=error";
       } else if (result === 'success') {
         Toastify({
           text: "Party added successfully",
@@ -618,7 +622,7 @@ function create_sales_invoice() {
           stopOnFocus: true,
           onClick: function() {},
         }).showToast();
-        window.location.href = "sales_invoice";
+        window.location.href = "sales_invoice?status=success";
       }
     })
     .catch(error => {
@@ -714,7 +718,7 @@ function create_sales_invoice() {
 
     function getproducts(val) {
         $.ajax({
-            url: "../get_ajax/get_products.php",
+            url: "../get_ajax/get_products_sales.php",
             method: "GET",
             success: function(response) {
                 $("#select_products-" + val).html(response);
@@ -773,7 +777,7 @@ function create_sales_invoice() {
 
         // Send AJAX request using jQuery
         $.ajax({
-            url: 'add_product_ajax.php',
+            url: '../get_ajax/add_product_ajax.php',
             type: 'POST',
             data: formData,
             success: function(response) {

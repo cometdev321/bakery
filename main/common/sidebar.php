@@ -2,6 +2,10 @@
 <style>
     .demo-card label{ display: block; position: relative;}
     .demo-card .col-lg-4{ margin-bottom: 30px;}
+    .sb{
+        margin-top:0px;
+        top: 0%;
+    }
 </style>
 <body class="theme-cyan">
 
@@ -29,10 +33,6 @@
             <div class="navbar-btn">
                 <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
             </div>
-          <style>
-
-
-          </style>
             <div class="navbar-brand">
                 <a href="<?php echo $base ?>/dashboard" class="text-dark">
                     &nbsp; &nbsp; &nbsp; &nbsp; ADMIN
@@ -144,7 +144,7 @@
             </div>
         </div>
     </nav>
-    <div id="left-sidebar" class="sidebar">
+    <div id="left-sidebar" class="sb sidebar">
         <div class="sidebar-scroll">
             <div class="user-account">
                 <!--<img src="Images/<?php
@@ -241,6 +241,7 @@
                                 <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li>
+                                    <li><a href="<?php echo $base ?>/vendors/vendor.php">Vendor</a></li>
                                     <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
                                 </ul>
                             </li>

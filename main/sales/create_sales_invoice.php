@@ -279,7 +279,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                 include('../common/cnn.php');
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-                                                $query1 = "SELECT sales_invoice_number FROM tblsalesinvoices where userID='$session' ORDER BY id DESC LIMIT 1";
+                                                $query1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where `userID`='$session' ORDER BY `id` DESC LIMIT 1";
                                                 $result1 = mysqli_query($conn, $query1);
                                                 
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {

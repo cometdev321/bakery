@@ -24,10 +24,8 @@ if (mysqli_num_rows($result) > 0) {
                 <td><?php echo $row['partyName']; ?></td>
                 <td><?php echo $row['paymentAmount']; ?></td>
                 <td>
-                    <div class="row">
-                        
-                    <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View PaymentIN"  onclick="submitPaymentIN('<?php echo $row['paymentInNumber']; ?>')"><i class="icon-drawer"></i></button>
-                    <button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit PaymentIN"  onclick="edit_paymentIN('<?php echo $row['paymentInNumber']; ?>')"><i class="icon-pencil"></i></button>
+                    <div class="row">                        
+                    &nbsp;&nbsp;<button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit PaymentIN"  onclick="edit_paymentIN('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
                     </div>
                     
                 </td>

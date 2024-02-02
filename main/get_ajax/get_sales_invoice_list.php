@@ -6,7 +6,7 @@ include('../common/session_control.php');
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
-$query = "SELECT * FROM tblsalesinvoices WHERE `timestamp` >= '$fromDate' AND `timestamp` <= '$toDate' AND userID='$session' ORDER BY id DESC";
+$query = "SELECT * FROM tblsalesinvoices WHERE `timestamp` >= '$fromDate' AND `timestamp` <= '$toDate' AND userID='$session' and `status`='1' ORDER BY id DESC";
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {

@@ -65,7 +65,6 @@ if(isset($_POST['newcategory_approve'])){
     $sql = "UPDATE tblcategory SET status='1' WHERE id=$id";
     mysqli_query($conn, $sql);
     echo"<script>window.location.href='new-category?status=success'</script>";
-
 }
 
 #reject the category from user
@@ -76,3 +75,16 @@ if(isset($_POST['newcategory_reject'])){
     echo"<script>window.location.href='new-category?status=rejected'</script>";
 }
 
+#remove sales invoice
+if(isset($_POST['sales_invoice'])){
+    $id=$_POST['sales_invoice'];
+    $sql = "UPDATE tblsalesinvoices SET status='0' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}
+
+#remove the sales invoice product from the list
+if(isset($_POST['sales_invoice_item'])){
+    $id=$_POST['sales_invoice_item'];
+    $sql = "UPDATE tblsalesinvoice_details SET status='0' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}

@@ -149,22 +149,17 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-            <form id="salesInvoice" action="sale_invoce" method="POST" style="display: none;">
-                <input type="text" hidden name="sale_id" id="sale_id">
-            </form>
-            <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
-                <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
+         
+            <form id="edit_salesInvoice" action="edit_paymentIn" method="POST" style="display: none;">
+                <input type="text" hidden name="edit_paymentIn" id="edit_paymentIn">
             </form>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
            <script>
-                function submitSaleInvoiceForm(val) {
-                    document.getElementById('sale_id').value=val;
-                    document.getElementById('salesInvoice').submit();
-                }
-                function edit_invoice(val) {
-                    document.getElementById('edit_sale_id').value=val;
+              
+                function edit_paymentIN(val) {
+                    document.getElementById('edit_paymentIn').value=val;
                     document.getElementById('edit_salesInvoice').submit();
                 }
             </script>

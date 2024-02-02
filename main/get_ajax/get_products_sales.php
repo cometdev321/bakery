@@ -1,11 +1,7 @@
 <?php
  include('../common/cnn.php');
  include('../common/session_control.php');
- session_start();
 
-if(!isset($_SESSION['admin'])){
-    header("Location:../page-login");   
-}
 
 ?>
 <option value="null">Select Item</option>

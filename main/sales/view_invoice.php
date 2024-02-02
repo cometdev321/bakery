@@ -22,6 +22,8 @@ date_default_timezone_set('Asia/Kolkata');
                             <li class="breadcrumb-item">Dashboard</li>
                             <li class="breadcrumb-item active"> Sales Invoice</li>
                         </ul>
+                        <br>
+                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
                     </div>
                     </div>
                 </div>
@@ -95,7 +97,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <?php   
                                     $slno=1;
                                     $salesInvoiceNum=$row['sales_invoice_number']; 
-                                    $query1 = "SELECT * FROM `tblsalesinvoice_details` WHERE `sales_invoice_number`='$salesInvoiceNum' AND userID='$session' ORDER BY id DESC";
+                                    $query1 = "SELECT * FROM `tblsalesinvoice_details` WHERE `sales_invoice_number`='$salesInvoiceNum' AND userID='$session' and `status`='1' ORDER BY id ASC";
                                     $result1 = mysqli_query($conn, $query1);
 
                                     if (mysqli_num_rows($result1) > 0) {
@@ -199,7 +201,19 @@ date_default_timezone_set('Asia/Kolkata');
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
- 
+ <script>
+        function deleteInvoice(id) {
+    $.ajax({
+        url: '../common/remove_item.php',
+        type: 'POST',
+        data: { sales_invoice: id }, 
+        success: function (response) {
+            console.log("removed");
+            window.location.href="sales_invoice";
+        }
+    });
+  }
+  </script>
 
 
 <!-- Javascript -->

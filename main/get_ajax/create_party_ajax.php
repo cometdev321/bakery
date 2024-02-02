@@ -24,7 +24,7 @@ $session=$_SESSION['admin'];
     } else {
 
         // Prepare the SQL query to insert the data into the table
-        $insertQuery = "INSERT INTO tblparty (name, mobno, gstno,userID) VALUES ('$name', '$mobile', '$gstno','$session')";
+        $insertQuery = "INSERT INTO tblparty (`name`, `mobno`, `gstno`,`userID`) VALUES ('$name', '$mobile', '$gstno','$session')";
 
         // Execute the SQL query
         if ($conn->query($insertQuery) === TRUE) {

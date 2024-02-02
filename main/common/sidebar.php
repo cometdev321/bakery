@@ -222,6 +222,15 @@
                                 </ul>
                             </li>
                             <li>
+                                <a href="#App" class="has-arrow"><i class=" icon-users"></i> <span>Party</span></a>
+                                <ul>
+                              
+                                    <li><a href="<?php echo $base ?>/party/add-party"><i class="fa icon-mouse"></i> Add New Party</a></li>
+                                    <li><a href="<?php echo $base ?>/party/manage-party"><i class="fa icon-mouse"></i> Manage Party</a></li>
+                               
+                                </ul>
+                            </li>
+                            <li>
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Products</span></a>
                                 <ul>
                               

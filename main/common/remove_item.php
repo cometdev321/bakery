@@ -88,3 +88,17 @@ if(isset($_POST['sales_invoice_item'])){
     $sql = "UPDATE tblsalesinvoice_details SET status='0' WHERE id=$id";
     mysqli_query($conn, $sql);
 }
+
+#remove the party
+if(isset($_POST['remove_party'])){
+    $id=$_POST['remove_party'];
+    $sql = "UPDATE tblparty SET status='bin' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}
+
+#recover deleted party
+if(isset($_POST['recover_party'])){
+    $id=$_POST['recover_party'];
+    $sql = "UPDATE tblparty SET status='1' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}

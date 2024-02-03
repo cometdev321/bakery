@@ -1,9 +1,10 @@
 <?php
 session_start();
 include('cnn.php');
+include('base.php');
 
 if (!isset($_SESSION['admin']) && !isset($_SESSION['user'])) {
-    header("Location:auth/page-login.php");
+    header("Location:$base/auth/page-login.php");
     exit();
 }
 

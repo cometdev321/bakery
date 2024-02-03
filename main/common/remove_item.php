@@ -102,3 +102,10 @@ if(isset($_POST['recover_party'])){
     $sql = "UPDATE tblparty SET status='1' WHERE id=$id";
     mysqli_query($conn, $sql);
 }
+
+#remove paymentIn
+if(isset($_POST['remove_paymentIn'])){
+    $id=$_POST['remove_paymentIn'];
+    $sql = "UPDATE tblpaymentin SET status='0' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}

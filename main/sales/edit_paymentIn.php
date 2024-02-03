@@ -3,8 +3,11 @@
     include('../common/sidebar.php');
 date_default_timezone_set('Asia/Kolkata');
 $paymentInID=$_POST['edit_paymentIn'];
-$query = "SELECT * FROM `tblpaymentin` WHERE `id`='$paymentInID' AND userID='$session'";
-$result = mysqli_query($conn, $query);
+$query = "SELECT pi.*, p.name AS `name`
+          FROM tblpaymentin pi
+          INNER JOIN tblparty p ON pi.partyName = p.id
+          WHERE pi.id = '$paymentInID' AND pi.userID = '$session'";
+          $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_array($result);
 ?>
 <style>
@@ -185,7 +188,7 @@ $row = mysqli_fetch_array($result);
                           <input id="party_name" value="<?php echo $row['partyName']; ?>" hidden>
                           <input id="salesInId" value="<?php echo $paymentInID;?>" hidden>
                           <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
-                          <option selected value="<?php echo $row['partyName']; ?>" class="btn btn-secondary btn-sm"><?php echo $row['partyName']; ?></option>
+                          <option selected value="<?php echo $row['partyName']; ?>" class="btn btn-secondary btn-sm"><?php echo $row['name']; ?></option>
                           <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
                           </select>
                           <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>

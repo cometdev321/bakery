@@ -3,8 +3,13 @@
     include('../common/cnn.php');
     include('../common/sidebar.php');
     $id=$_POST['edit_sale_id'];
-    $query = "SELECT * FROM `tblsalesinvoices` WHERE `id`='$id' AND userID='$session'";
-    $result = mysqli_query($conn, $query);
+$query = "SELECT si.*, p.name AS `name` 
+          FROM tblsalesinvoices si
+          INNER JOIN tblparty p ON si.party_name = p.id
+          WHERE  si.userID = '$session' AND si.status = '1' 
+          ORDER BY si.id DESC"; 
+          
+          $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($result);
     date_default_timezone_set('Asia/Kolkata');
 
@@ -286,7 +291,7 @@
                                         <div class="col-lg-3 col-md-12 my-2">
                                             <label>Party</label>
                                             <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()"> 
-                                                <option selected value="<?php echo $row['party_name']; ?>" class="btn btn-secondary btn-sm"><?php echo $row['party_name']; ?></option>
+                                                <option selected value="<?php echo $row['party_name']; ?>" class="btn btn-secondary btn-sm"><?php echo $row['name']; ?></option>
                                                 <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
                                                 </select>
                                                 <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>

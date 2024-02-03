@@ -162,6 +162,19 @@ $(document).ready(function() {
                     document.getElementById('edit_paymentIn').value=val;
                     document.getElementById('edit_salesInvoice').submit();
                 }
+                function delete_paymentIN(val) {
+                    $.ajax({
+                        url: "../common/remove_item.php",
+                        data: {remove_paymentIn:val},
+                        type: 'POST',
+                        success: function(response) {
+                            window.location.reload();
+                        },
+                        error: function() {
+                            console.log("Error occurred while fetching parties.");
+                        }
+                    });
+                }
             </script>
 
 <script>

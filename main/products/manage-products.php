@@ -195,7 +195,7 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblproducts WHERE status = 'bin'  and userID='$sessionAdmin' order by id desc";
+                                    $query = "SELECT * FROM tblproducts WHERE status = 'bin'  and userID='$session' order by id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

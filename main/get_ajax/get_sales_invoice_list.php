@@ -6,13 +6,18 @@ include('../common/session_control.php');
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
-$query = "SELECT * FROM tblsalesinvoices WHERE `timestamp` >= '$fromDate' AND `timestamp` <= '$toDate' AND userID='$session' and `status`='1' ORDER BY id DESC";
-$result = mysqli_query($conn, $query);
+$query = "SELECT si.*, p.name AS party_name 
+          FROM tblsalesinvoices si
+          INNER JOIN tblparty p ON si.party_name = p.id
+          WHERE si.timestamp >= '$fromDate' AND si.timestamp <= '$toDate' AND si.userID = '$session' AND si.status = '1' 
+          ORDER BY si.id DESC";
+          $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {
     ?>
-        <?php while ($row = mysqli_fetch_array($result)) { ?>
-    
+        <?php while ($row = mysqli_fetch_array($result)) { 
+        
+            ?>
             <tr>
                 <td><?php echo $slno; ?></td>
                 <td><?php echo $row['sales_invoice_date']; ?></td>

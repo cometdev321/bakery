@@ -365,7 +365,9 @@ $query = "SELECT si.*, p.name AS `name`
                                 <?php
                                 $slno = 1;
                                 $salesInvoiceNum = $row['sales_invoice_number'];
-                                $query1 = "SELECT * FROM `tblsalesinvoice_details` WHERE `sales_invoice_number`='$salesInvoiceNum' AND userID='$session' AND `status`='1' ORDER BY id ASC";
+                                $query1 = "SELECT ts.*,tp.productname as `pname` FROM `tblsalesinvoice_details` ts
+                                          inner join tblproducts tp on tp.id=ts.ItemName
+                                           WHERE ts.sales_invoice_number='$salesInvoiceNum' AND ts.userID='$session' AND ts.status='1' ORDER BY ts.id ASC";
                                 $result1 = mysqli_query($conn, $query1);
 
                                 if (mysqli_num_rows($result1) > 0) {
@@ -379,7 +381,7 @@ $query = "SELECT si.*, p.name AS `name`
                                           <input type="text" class="form-control" id="<?php echo $slno; ?>" value="<?php echo $slno; ?>" name="slno[]" readonly></td>
                                             <td>
                                               <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-<?php echo $slno; ?>" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,<?php echo $slno; ?>),clear_product_error(<?php echo $slno; ?>)">
-                                                <option value="<?php echo $row1['ItemName']; ?>"><?php echo $row1['ItemName']; ?></option>
+                                                <option value="<?php echo $row1['ItemName']; ?>"><?php echo $row1['pname']; ?></option>
                                               </select>
                                               <script> getproducts(<?php echo $slno; ?>);</script>
                                             </td>

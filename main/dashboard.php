@@ -36,8 +36,13 @@
                     <div class="card overflowhidden number-chart">
                         <div class="body">
                             <div class="number">
+                                <?php
+                                $querySales = "SELECT sum(total_balance) as total FROM tblsalesinvoices where userID='$session'"; 
+                                $querySalesResult = mysqli_query($conn, $querySales);
+                                $rowSales = mysqli_fetch_array($querySalesResult);
+                          ?>
                                 <h6>SALES</h6>
-                                <span>$500</span>
+                                <span>&#8377;<?php echo $rowSales['total'];?></span>
                             </div>
                             <small class="text-muted">19% compared to last week</small>
                         </div>

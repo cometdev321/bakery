@@ -1,6 +1,7 @@
 <?php  
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
+include('../common/session_control.php'); 
 
  ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -60,6 +61,22 @@ $(document).ready(function() {
       },
     }).showToast();
   }
+   if (status === 'limit') {
+    Toastify({
+      text: "Branch creation limit exceeded",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
    if (status === 'error') {
     Toastify({
       text: "Something Went Wrong",
@@ -81,8 +98,21 @@ $(document).ready(function() {
 <?php
     
 if(isset($_POST['submit'])){
-  
+        $getBranchCount="select `MaxShops` from `admin` where `unicode`='$session' ";
+        $getBrancInfo=mysqli_query($conn,$getBranchCount);
+        $fetchBranchCount=mysqli_fetch_array($getBrancInfo);
 
+        $countTotal=$fetchBranchCount['MaxShops'];
+
+        $getCreatedBranch="select count(id) as `created` from `branch` where `userID`='$session'";
+        $getBrancInfo=mysqli_query($conn,$getCreatedBranch);
+        $fetchCreatedBranch=mysqli_fetch_array($getBrancInfo);
+
+        $totalcreated=$fetchCreatedBranch['created'];
+
+        if($countTotal==$totalcreated){
+          echo"<script>window.location.href='mybranches?status=limit'</script>";
+        }else{
          $branchname  =     $_POST["branchname"];
          $location    =     $_POST["location"];
             $query = "SELECT * FROM branch WHERE name = '$branchname' AND location = '$location' and status='1' and userID='$session'";
@@ -101,6 +131,8 @@ if(isset($_POST['submit'])){
                 echo"<script>window.location.href='mybranches?status=error'</script>";
               }
             }
+
+        }
 
 }
 ?>

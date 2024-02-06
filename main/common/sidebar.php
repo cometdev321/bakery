@@ -49,18 +49,19 @@
                 <div id="navbar-menu">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="file-dashboard.html" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="fa fa-folder-open-o"></i></a>
+                            <a href="<?php echo $base ?>/party/add-party" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-users"></i></a>
                         </li>
                         <li>
-                            <a href="app-calendar.html" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-calendar"></i></a>
+                            <a href="<?php echo $base ?>/products/add-product" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-grid"></i></a>
                         </li>
                         <li>
-                            <a href="app-chat.html" class="icon-menu d-none d-sm-block"><i class="icon-bubbles"></i></a>
+                            <a href="<?php echo $base ?>/sales/create_sales_invoice" class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
                         </li>
                         <li>
-                            <a href="app-inbox.html" class="icon-menu d-none d-sm-block"><i class="icon-envelope"></i><span class="notification-dot"></span></a>
+                            <a href="<?php echo $base ?>/purchase/purchase_invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
+                            <!-- <span class="notification-dot"></span> -->
                         </li>
-                        <li class="dropdown">
+                        <!-- <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
                                 <i class="icon-bell"></i>
                                 <span class="notification-dot"></span>
@@ -121,7 +122,7 @@
                                 </li>
                                 <li class="footer"><a href="javascript:void(0);" class="more">See all notifications</a></li>
                             </ul>
-                        </li>
+                        </li> -->
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
                             <ul class="dropdown-menu user-menu menu-icon">
@@ -166,9 +167,9 @@
                         ?>&nbsp;
                     </strong></a>
                     <ul class="dropdown-menu dropdown-menu-right account">
-                        <li><a href="page-profile"><i class="icon-user"></i>My Profile</a></li>
+                        <li><a href="<?php echo $base ?>/profile/page-profile"><i class="icon-user"></i>My Profile</a></li>
                         <!--<li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>-->
-                        <li><a href="page-profile"><i class="icon-settings"></i>Settings</a></li>
+                        <li><a href="<?php echo $base ?>/profile/page-profile"><i class="icon-settings"></i>Settings</a></li>
                         <li class="divider"></li>
                         <li><a href="<?php echo $base ?>/auth/logout"><i class="icon-power"></i>Logout</a></li>
                     </ul>
@@ -254,13 +255,54 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#FileManager" class="has-arrow"><i class="icon-book-open"></i> <span>Reports</span></a>
+                                <a href="#FileManager" class="has-arrow"><i class="icon-plane"></i> <span>Transport</span></a>
                                 <ul>                                    
-                                    <li><a href="file-dashboard.html">Balance</a></li>
+                                    <li><a href="<?php echo $base ?>/transaction/transfer">Transfer Stock</a></li>
+                                    <li><a href="<?php echo $base ?>/transaction/transfer_history">Transfer History</a></li>
                               
                                 </ul>
                             </li>
 
+                            <li>
+                                <a href="#menu-level-1" class="has-arrow"><i class="icon-book-open"></i> <span>Reports</span></a>
+                                <ul>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
+                                        <ul>
+                                            <li><a href="">Sale</a></li>
+                                            <li><a href="">Purchase</a></li>
+                                            <li><a href="">Day Book</a></li>
+                                            <li><a href="">All Transaction</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Party Report</a>
+                                        <ul>
+                                            <li><a href="">Party Statement</a></li>
+                                            <li><a href="">Party wise Profit & Loss</a></li>
+                                            <li><a href="">All Parties</a></li>
+                                            <li><a href="">Sale Purchase By Party</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
+                                        <ul>
+                                            <li><a href="">Stock Details</a></li>
+                                            <li><a href="">Item Report By Party</a></li>
+                                            <li><a href="">Low Stock Summary</a></li>
+                                            <li><a href="">Sale Purchase By Party</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Expense Report</a>
+                                        <ul>
+                                            <li><a href="">Expense Details</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                </ul>
+                            </li>
+                            <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
                         </ul>
                     </nav>
                 </div>

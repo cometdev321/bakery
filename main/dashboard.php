@@ -42,7 +42,7 @@
                                 $rowSales = mysqli_fetch_array($querySalesResult);
                           ?>
                                 <h6>SALES</h6>
-                                <span>&#8377;<?php echo $rowSales['total'];?></span>
+                                <span>&#8377;&nbsp;<?php echo $rowSales['total']?$rowSales['total']:'0.00';?></span>
                             </div>
                             <small class="text-muted">19% compared to last week</small>
                         </div>

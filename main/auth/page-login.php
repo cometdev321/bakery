@@ -81,7 +81,7 @@ if(isset($_POST["login-submit"])){
                             <p class="lead">Login to your account</p>
                         </div>
                         <div class="body">
-                            <form class="form-auth-small" action="" method="post">
+                            <form class="form-auth-small" action="../common/session_control.php" method="post">
                                 <div class="form-group">
                                     <label for="signin-email" class="control-label sr-only">Email</label>
                                     <input type="text" class="form-control" id="signin-email" name="username"  placeholder="Username">

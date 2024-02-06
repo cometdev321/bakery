@@ -135,9 +135,9 @@ input[type=number] {
                                   </div>
                                   <div class="form-group">
                                     <select class="form-control" name="Plan">
-                                      <option value="free-trial">Free trial</option>
-                                      <option value="1-year-no-support">1 year plan without support</option>
-                                      <option value="1-year-with-support" selected>1 year plan with customization and support</option>
+                                      <option value="7F">Free trial for 7 days</option>
+                                      <option value="1Y">1 year plan without support</option>
+                                      <option value="1YS" selected>1 year plan with customization and support</option>
                                     </select>
                                   </div>
                               

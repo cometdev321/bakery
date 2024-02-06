@@ -1,17 +1,19 @@
 <?php  
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
+include('../common/session_control.php'); 
 
- ?><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+ ?>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script>
 $(document).ready(function() {
   const urlParams = new URLSearchParams(window.location.search);
   const status = urlParams.get('status');
-  if (status === 'user_created') {
+  if (status === 'success') {
     Toastify({
-      text: "User Created succesfully",
+      text: "Category Created succesfully",
       duration: 3000,
       newWindow: true,
       close: true,
@@ -26,9 +28,26 @@ $(document).ready(function() {
       },
     }).showToast();
   }
-   if (status === 'branch_error') {
+  if (status === 'updated') {
     Toastify({
-      text: "Please Select The Branch",
+      text: "Category Updated succesfully",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
+      margintop:"202px",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
+   if (status === 'category_error') {
+    Toastify({
+      text: "Category Already Exists",
       duration: 3000,
       newWindow: true,
       close: true,
@@ -58,195 +77,136 @@ $(document).ready(function() {
       },
     }).showToast();
   }
-   if (status === 'user_exists') {
-    Toastify({
-      text: "The User Name Already Exists!!",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top", // top, bottom, left, right
-      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      onClick: function(){}, // Callback after click
-       style: {
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-      },
-    }).showToast();
-  }
 });
 </script>
-
 <?php
 
-function generateRandomString($length = 15) {
-  $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $randomString = '';
-
-  for ($i = 0; $i < $length; $i++) {
-      $randomString .= $characters[rand(0, strlen($characters) - 1)];
-  }
-
-  return $randomString;
+if(isset($_POST['submit'])){
+      
 }
-
-if (isset($_POST['submit'])) {
-    $branchname = $_POST["branch"];
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-
-    if ($branchname === "0") {
-        echo"<script>window.location.href='myusers?status=branch_error'</script>";
-    } else {
-        // Check if the username already exists
-        $check_query = "SELECT * FROM tblusers WHERE username = '$username' and userID='$session'";
-        $check_result = mysqli_query($conn, $check_query);
-
-        if (mysqli_num_rows($check_result) > 0) {
-        echo"<script>window.location.href='myusers?status=user_exists'</script>";
-
-        } else {
-            // Insert the new user if the username doesn't exist
-            $randomString = generateRandomString(10);
-            $insert_query = "INSERT INTO tblusers (`branch`, `username`, `password`,`superAdminID`,`userID`) VALUES ('$branchname', '$username', '$password','$session','$randomString')";
-            $insert_result = mysqli_query($conn, $insert_query);
-
-            if ($insert_result) {
-                echo"<script>window.location.href='myusers?status=user_created'</script>";
-            } else {
-                echo"<script>window.location.href='myusers?status=error'</script>";
-
-            }
-        }
-    }
-}
-
-
-
 ?>
-
     <div id="main-content">
         <div class="container-fluid">
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Add Users</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Add Transfer</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Add Users</li>
+                            <li class="breadcrumb-item active">Transfer</li>
                         </ul>
                     </div>            
                 </div>
             </div>
-            <?php
-            if (isset($alert_type)) {
-                  echo '<div class="alert text-dark l-' . $alert_type . '" role="alert">';
-                  echo $alert_message;
-                  echo '</div>';
-                  
-                }
-            ?>
+
             <div class="row clearfix">
 
                 <div class="col-lg-12 col-md-12">
                     <div class="card planned_task">
                         <div class="header">
-                            <h2>User Details</h2>
+                            <h2>Transport Details</h2>
                         </div>
                         <div class="body">
-                             <form action="" method="post" >
-                                <div class="form-group">
-                                    <label>Branch</label>
-                                    <select class="form-control show-tick ms select2" name="branch" data-placeholder="Select" required>
-                                        <option value="0">Select Branch</option>
-                                        <?php
-                                            $getbrx=mysqli_query($conn,"select id,name from branch where status='1' and userID='$session'");
-                                            while($fetchbx=mysqli_fetch_array($getbrx)){
-                                        ?>
-                                         <option value="<?php echo $fetchbx['id'];?>"><?php echo $fetchbx['name'];?></option>
-                                        <?php   
+                             <form  method="post" action="">
+                               <div class="form-group">
+                                <div class="row clearfix">
+
+                                    <div class="col-lg-6 col-md-12 my-2">
+                                        <label>From Branch</label>
+                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="category">                                        >
+                                        <?php 
+                                          if(isset($_SESSION['admin'])){
+                                          ?>
+                                            <option >Select Branch</option>
+                                          <?php } ?>
+
+                                            <?php
+                                            $slno=1;
+                                            if(isset($_SESSION['admin'])){
+                                              $queryBatch="select b.name as Bname,b.id as `branchID` from branch b
+                                              join tblusers tu on tu.superAdminID=b.userID
+                                              where b.status='1'";
+                                            }else{
+                                              $queryBatch="select name as Bname,id as branchID from branch where status='1' and id in
+                                              (select branch from tblusers where userID='$session' )";
                                             }
-                                        ?>
-                                    </select>                                
+                                            $getct=mysqli_query($conn,$queryBatch);
+                                            while($fetchcat=mysqli_fetch_array($getct)){
+                                            ?>
+                                            <option value="<?php echo $fetchcat['branchID']; ?>"><?php echo strtoupper($fetchcat['Bname']); ?></option>
+                                            <?php } ?>
+                                            </select>  
+                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                        <label>To Branch</label>
+                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
+                                            <option >Select Branch</option>
+                                            <?php
+                                                $slno=1;
+                                                $queryBatch="select b.name as Bname,b.id as `branchID` from branch b
+                                                    join tblusers tu on tu.superAdminID=b.userID
+                                                    where b.status='1'";
+                                                $getct=mysqli_query($conn,$queryBatch);
+                                                while($fetchcat=mysqli_fetch_array($getct)){
+                                                ?>
+                                                <option value="<?php echo $fetchcat['branchID']; ?>"><?php echo strtoupper($fetchcat['Bname']); ?></option>
+                                                <?php } ?>
+                                            </select>   
+                                        </div>
+                                    <div class="col-lg-6 col-md-12 my-2">
+                                        <label>Select Product</label>
+                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
+                                        <option >Select Product</option>
+                                            <?php
+                                            $slno=1;
+                                            $queryBatch="select id,productname from tblproducts where status='1' and userID='$session'";
+                                            $getct=mysqli_query($conn,$queryBatch);
+                                            while($fetchcat=mysqli_fetch_array($getct)){
+                                            ?>
+                                            <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['productname']; ?></option>
+                                            <?php } ?>
+                                            </select>  
+                                        </div>
+                                       
+                                        </div>                             
                                 </div>
                                 <div class="form-group">
-                                    <label>Username</label>
-                                    <input type="text" placeholder="Type Here" name="username" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" placeholder="Type Here" name="password" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
+                                <button type="submit"  name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
                                 </div>
                                 
                             </form>
                         </div>
                     </div>
                 </div>
-                                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>User Details<small>Manage your users from here</small> </h2>                            
-                        </div>
-                        <div class="body">
-						<div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                <thead>
-                                    <tr>
-                                        <th>Slno</th>
-                                        <th>Branch Name</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Remove</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Slno</th>
-                                        <th>Branch Name</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
-                                        <th>Remove</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                <?php
-                                    $slno=1;
-                                    $query = "SELECT tu.*,b.name as branchN FROM tblusers tu
-                                      join branch b on b.userID=tu.superAdminID
-                                       WHERE tu.status = '1' and tu.superAdminID='$session' order by id desc";
-                                    $result = mysqli_query($conn, $query);
-                                    while($row=mysqli_fetch_array($result)){
-                                ?>
-                                    <tr>
-                                        <td><?php echo $slno;?></td>
-                                        <td><?php echo $row['branchN'];?></td>
-                                        <td><?php echo $row['username'];?></td>
-                                        <td><?php echo $row['password'];?></td>
-                                        <td><button type="submit" name="submit" class="btn btn-danger btn-sm js-sweetalert" data-type="ajax-loader" onclick="ready(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td>
-                                    </tr>
-                                <?php $slno++; } ?>
-                                </tbody>
-                            </table>
-							</div>
-                        </div>
-                    </div>
-                </div>
+
+            
+
+
 
             </div>
         </div>
     </div>
     
 </div>
-
 <script>
 
-let userid=0;
+let catid=0;
 function ready(val){
-    userid+=val;
+    catid+=val;
   setTimeout(function() {getalert(val);},50);
 }
 
@@ -256,7 +216,7 @@ function getalert(val){
      
      
     const h2Element = document.querySelector('.sweet-alert h2');
-    h2Element.innerHTML = 'This will remove the user from list';
+    h2Element.innerHTML = 'This will remove the category from list';
     
     const pElement = document.querySelector('.sweet-alert p');
     pElement.innerHTML = 'Press ok to proceed';
@@ -277,7 +237,7 @@ function checkok(){
     $.ajax({
       url:"../common/remove_item.php",
        type:"post",
-       data:{remove_user:userid},
+       data:{category:catid},
        success:function(response){
         setTimeout(displaysuccess,1980);
        }
@@ -300,7 +260,7 @@ for (const div of divs) {
 
   // If the h2 element contains the text "Ajax request finished!", replace it with "done"
 if (h2 && h2.textContent.trim() === "Ajax request finished!") {
-  h2.textContent = "User Removed From The List";
+  h2.textContent = "Category Removed From List";
   const successDiv = document.createElement("div");
   successDiv.className = "sa-icon sa-success animate";
   successDiv.style.display = "block";

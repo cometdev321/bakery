@@ -282,10 +282,11 @@ date_default_timezone_set('Asia/Kolkata');
                                                 $result1 = mysqli_query($conn, $query1);
                                                 
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {
-                                                    $row = mysqli_fetch_assoc($result1);
-                                                    $lastInvoiceNumber = $row['purchase_invoice_number'];
-                                                    $nextInvoiceNumber = $lastInvoiceNumber + 1;
-                                                }
+                                                  $row = mysqli_fetch_assoc($result1);
+                                                  $lastInvoiceNumber = intval($row['purchase_invoice_number']);
+                                                  $nextInvoiceNumber = $lastInvoiceNumber + 1;
+                                              }
+                                              
                                                 
                                                 ?>
                                                 
@@ -592,8 +593,8 @@ function create_Purchase_invoice() {
   fetch(url, options)
     .then(response => response.text())
     .then(result => {
+      console.log(result)
       if (result === 'error') {
-        console.log(result);
         Toastify({
           text: " Error Occurred",
           duration: 3000,
@@ -608,7 +609,6 @@ function create_Purchase_invoice() {
         }).showToast();
         window.location.href = "purchase_invoice";
       } else if (result === 'success') {
-        console.log(result);
         Toastify({
           text: "Invoice added successfully",
           duration: 3000,

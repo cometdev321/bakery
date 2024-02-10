@@ -126,15 +126,21 @@
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
                             <ul class="dropdown-menu user-menu menu-icon">
-                                <li class="menu-heading">ACCOUNT SETTINGS</li>
-                                <li><a href="javascript:void(0);"><i class="icon-note"></i> <span>Basic</span></a></li>
-                                <li><a href="javascript:void(0);"><i class="icon-equalizer"></i> <span>Preferences</span></a></li>
-                                <li><a href="javascript:void(0);"><i class="icon-lock"></i> <span>Privacy</span></a></li>
-                                <li><a href="javascript:void(0);"><i class="icon-bell"></i> <span>Notifications</span></a></li>
-                                <li class="menu-heading">BILLING</li>
-                                <li><a href="javascript:void(0);"><i class="icon-credit-card"></i> <span>Payments</span></a></li>
-                                <li><a href="javascript:void(0);"><i class="icon-printer"></i> <span>Invoices</span></a></li>                                
-                                <li><a href="javascript:void(0);"><i class="icon-refresh"></i> <span>Renewals</span></a></li>
+                                <li class="menu-heading">Transaction Report</li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Sale</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Purchase</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Day Book</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>All Transaction</span></a></li>
+                                <li class="menu-heading">Party Reports</li>
+                                <li><a href="<?php echo $base ?>/reports/party/party_sales_report"><i class="icon-credit-card"></i> <span>PartyWise Sales Report</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/party/party_purchase_report"><i class="icon-credit-card"></i> <span>PartyWise Purchase Report</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/party/allParties"><i class="icon-credit-card"></i> <span>All Parties</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/party/partySummary"><i class="icon-credit-card"></i> <span>Sale Purchase By Party</span></a></li>
+                                <li class="menu-heading">Item/Stock Report</li>
+                                <li><a href="<?php echo $base ?>/reports/stock/stockDetails"><i class="icon-credit-card"></i> <span>Stock Details</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/stock/allParties"><i class="icon-credit-card"></i> <span>Item Report By Party</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/stock/party_sales_report"><i class="icon-credit-card"></i> <span>Stock Summary</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/stock/lowStock"><i class="icon-credit-card"></i> <span>Low Stock Summary</span></a></li>
                             </ul>
                         </li>
                         <li>
@@ -278,10 +284,10 @@
                                     <li>
                                         <a href="#menu-level-2" class="has-arrow">Party Report</a>
                                         <ul>
-                                            <li><a href="">Party Statement</a></li>
-                                            <li><a href="">Party wise Profit & Loss</a></li>
-                                            <li><a href="">All Parties</a></li>
-                                            <li><a href="">Sale Purchase By Party</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/party/party_sales_report">PartyWise Sales Report</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/party/party_purchase_report">PartyWise Sales Report</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/party/allParties">All Parties</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/party/partySummary">Sale Purchase By Party</a></li>
                                         </ul>
                                     </li>
                                     <li>
@@ -289,8 +295,8 @@
                                         <ul>
                                             <li><a href="">Stock Details</a></li>
                                             <li><a href="">Item Report By Party</a></li>
-                                            <li><a href="">Low Stock Summary</a></li>
-                                            <li><a href="">Sale Purchase By Party</a></li>
+                                            <li><a href="">Stock Summary</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li>
                                         </ul>
                                     </li>
                                     <li>

@@ -1,12 +1,8 @@
 <?php
  include('../common/cnn.php');
- session_start();
+ include('../common/session_control.php');
 
-if(!isset($_SESSION['admin'])){
-    header("Location:page-login");   
-}
 
-$session=$_SESSION['admin'];
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];

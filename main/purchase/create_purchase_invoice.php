@@ -547,6 +547,7 @@ function create_Purchase_invoice() {
     const expiredate = row.querySelector('[name="expiredate[]"]').value;
     const mafdate = row.querySelector('[name="mafdate[]"]').value;
     const qty = row.querySelector('[name="qty[]"]').value;
+    const size = row.querySelector('[name="size[]"]').value;
     const price = row.querySelector('[name="price[]"]').value;
     const discount = row.querySelector('[name="discount[]"]').value;
     const tax = row.querySelector('[name="tax[]"]').value;
@@ -567,6 +568,7 @@ function create_Purchase_invoice() {
       batchno,
       expiredate,
       mafdate,
+      size,
       qty,
       price,
       discount,
@@ -577,7 +579,7 @@ function create_Purchase_invoice() {
     data.push(rowData);
   }
 
-  const url = 'insert_purchase_invoice.php';
+  const url = 'functions/insert_purchase_invoice.php';
   const options = {
     method: 'POST',
     headers: {
@@ -591,6 +593,7 @@ function create_Purchase_invoice() {
     .then(response => response.text())
     .then(result => {
       if (result === 'error') {
+        console.log(result);
         Toastify({
           text: " Error Occurred",
           duration: 3000,
@@ -603,7 +606,9 @@ function create_Purchase_invoice() {
           stopOnFocus: true,
           onClick: function() {},
         }).showToast();
+        window.location.href = "purchase_invoice";
       } else if (result === 'success') {
+        console.log(result);
         Toastify({
           text: "Invoice added successfully",
           duration: 3000,

@@ -1,9 +1,8 @@
  <?php
  include('../common/cnn.php');
-session_start();
+ include('../common/session_control.php');
 
 
-$session=$_SESSION['admin'];
 $getParties = mysqli_query($conn, "SELECT `mobno`,`name`,`id` FROM `tblparty` where userID='$session'");
 ?>
 <option selected value="null">Select Party Name</option>

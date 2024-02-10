@@ -1,12 +1,6 @@
 <?php
-include('cnn.php');
-session_start();
-
-if(!isset($_SESSION['admin'])){
-    header("Location:page-login");   
-}
-
-$session=$_SESSION['admin'];
+ include('../../common/cnn.php');
+ include('../../common/session_control.php');
     // Retrieve the JSON data
     $postData = json_decode(file_get_contents('php://input'), true);
 

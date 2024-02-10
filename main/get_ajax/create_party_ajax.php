@@ -1,10 +1,9 @@
 <?php
 session_start();
 include('../common/cnn.php');
+include('../common/session_control.php');
 
 
-
-$session=$_SESSION['admin'];
 
     $name = $_POST['name'];
     $mobile = $_POST['mobno'];

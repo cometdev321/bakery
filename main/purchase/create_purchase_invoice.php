@@ -278,13 +278,16 @@ date_default_timezone_set('Asia/Kolkata');
                                             <?php
 
                                                 // Retrieve the last invoice number from tblPurchaseinvoices
-                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where  userID='$session' ORDER BY id DESC LIMIT 1";
+                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where userID='$session' ORDER BY id DESC LIMIT 1";
                                                 $result1 = mysqli_query($conn, $query1);
-                                                
+                                                $nextInvoiceNumber;
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {
                                                   $row = mysqli_fetch_assoc($result1);
                                                   $lastInvoiceNumber = intval($row['purchase_invoice_number']);
                                                   $nextInvoiceNumber = $lastInvoiceNumber + 1;
+                                              }else{
+                                                $nextInvoiceNumber =  1;
+
                                               }
                                               
                                                 
@@ -593,7 +596,6 @@ function create_Purchase_invoice() {
   fetch(url, options)
     .then(response => response.text())
     .then(result => {
-      console.log(result)
       if (result === 'error') {
         Toastify({
           text: " Error Occurred",

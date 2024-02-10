@@ -127,7 +127,7 @@
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
                             <ul class="dropdown-menu user-menu menu-icon">
                                 <li class="menu-heading">Transaction Report</li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Sale</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/sale"><i class="icon-note"></i> <span>Sale</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Purchase</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Day Book</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>All Transaction</span></a></li>

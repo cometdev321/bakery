@@ -127,10 +127,10 @@
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
                             <ul class="dropdown-menu user-menu menu-icon">
                                 <li class="menu-heading">Transaction Report</li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Sale</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/sale"><i class="icon-note"></i> <span>Sale</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Purchase</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Day Book</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>All Transaction</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/daybook"><i class="icon-note"></i> <span>Day Book</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/alltransaction"><i class="icon-note"></i> <span>All Transaction</span></a></li>
                                 <li class="menu-heading">Party Reports</li>
                                 <li><a href="<?php echo $base ?>/reports/party/party_sales_report"><i class="icon-credit-card"></i> <span>PartyWise Sales Report</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/party/party_purchase_report"><i class="icon-credit-card"></i> <span>PartyWise Purchase Report</span></a></li>
@@ -275,10 +275,10 @@
                                     <li>
                                         <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
                                         <ul>
-                                            <li><a href="">Sale</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/transaction/sale">Sale</a></li>
                                             <li><a href="">Purchase</a></li>
-                                            <li><a href="">Day Book</a></li>
-                                            <li><a href="">All Transaction</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/transaction/daybook">Day Book</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/transaction/alltransaction">All Transaction</a></li>
                                         </ul>
                                     </li>
                                     <li>

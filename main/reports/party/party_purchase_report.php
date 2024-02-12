@@ -110,7 +110,8 @@ if(isset($_POST['submit'])) {
 
 
 function getPurchase() {
-    var partyName=document.getElementById('party').value;;
+    var partyName=document.getElementById('party').value;
+    console.log(partyName);
     var fromDate=document.getElementById('fromDate').value;
     var toDate=document.getElementById('toDate').value;
     const formData={

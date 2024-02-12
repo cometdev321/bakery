@@ -50,11 +50,32 @@ if(isset($_POST['submit'])) {
                                         <tbody id="table-body">
                                             <?php
                                                 $slno=1;
-                                                $query="select p.name as party,sum(ts.total_balance) as totalSales,
-                                                sum(tp.total_balance) as totalPurchase from tblparty p
-                                                LEFT join tblsalesinvoices ts on ts.party_name=p.id
-                                                LEFT join tblpurchaseinvoices tp on tp.party_name=p.id
-                                                 where p.status='1'and p.userID='$session' GROUP BY p.name;
+                                                $query="SELECT 
+                                                p.id,
+                                                p.name AS party,
+                                                COALESCE(ts.totalSales, 0) AS totalSales,
+                                                COALESCE(tp.totalPurchase, 0) AS totalPurchase
+                                            FROM 
+                                                tblparty p
+                                            LEFT JOIN 
+                                                (SELECT 
+                                                     party_name,
+                                                     SUM(total_balance) AS totalSales
+                                                 FROM 
+                                                     tblsalesinvoices
+                                                 GROUP BY 
+                                                     party_name) AS ts ON ts.party_name = p.id
+                                            LEFT JOIN 
+                                                (SELECT 
+                                                     party_name,
+                                                     SUM(total_balance) AS totalPurchase
+                                                 FROM 
+                                                     tblpurchaseinvoices
+                                                 GROUP BY 
+                                                     party_name) AS tp ON tp.party_name = p.id
+                                            WHERE 
+                                                p.status = '1' AND p.userID = '$session';
+                                            
                                                  ";
                                                 $fetchProducts=mysqli_query($conn,$query);
                                                     while($row=mysqli_fetch_array($fetchProducts)){

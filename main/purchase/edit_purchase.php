@@ -1,7 +1,20 @@
 <?php 
     include('../common/header2.php');
+    include('../common/cnn.php');
     include('../common/sidebar.php');
-date_default_timezone_set('Asia/Kolkata');
+
+    $id=$_POST['edit_purchase_id'];
+
+    
+$query = "SELECT si.*, p.name AS `name` 
+          FROM tblpurchaseinvoices si
+          INNER JOIN tblparty p ON si.party_name = p.id
+          WHERE  si.userID = '$session' AND si.status = '1' 
+          ORDER BY si.id DESC"; 
+          
+          $result = mysqli_query($conn, $query);
+    $row = mysqli_fetch_array($result);
+    date_default_timezone_set('Asia/Kolkata');
 
 ?>
 <style>
@@ -85,7 +98,7 @@ date_default_timezone_set('Asia/Kolkata');
         </div>
         <div class="modal-body">
           <label for="gstInput">GST Number (Optional):</label>
-          <input type="number" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
+          <input type="text" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
           <small id="gstHelpText" class="form-text text-muted">Example: GSTIN-12**34**56*78ZA</small>
         </div>
         <div class="modal-footer">
@@ -122,9 +135,9 @@ date_default_timezone_set('Asia/Kolkata');
           <small id="product_errorMessage" class="text-danger" style="display: none;">Type Product Name</small>
         </div>
         <div class="modal-body">
-          <label for="PurchasePriceInput"><span class="required">*</span> Purchase Price:</label>
-          <input type="number" class="form-control" id="PurchasePriceInput" name="Purchase_price" placeholder="Enter Purchase price" required onkeyup="clear_product_error();">
-          <small id="Purchase_errorMessage" class="text-danger" style="display: none;">Type Purchase Price</small>
+          <label for="purchasePriceInput"><span class="required">*</span> purchase Price:</label>
+          <input type="number" class="form-control" id="purchasePriceInput" name="purchase_price" placeholder="Enter purchase price" required onkeyup="clear_product_error();">
+          <small id="purchase_errorMessage" class="text-danger" style="display: none;">Type purchase Price</small>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-sm" id="saveButton" onclick="check_product_data();" name="add_product">Save</button>
@@ -235,11 +248,23 @@ date_default_timezone_set('Asia/Kolkata');
         if (selectElement === 'add_new') {
             $('#myModal').modal('show');
         }else{
+          party_name.value=selectElement;
             party_mobno.value=val;
         }
         
     }
-
+   function getproducts(val) {
+        $.ajax({
+            url: "../get_ajax/get_products_purchase.php",
+            method: "GET",
+            success: function(response) {
+                $("#select_products-" + val).append(response);
+            },
+            error: function() {
+                console.log("Error occurred while fetching products.");
+            }
+        });
+    }
 
     
 </script>
@@ -249,147 +274,191 @@ date_default_timezone_set('Asia/Kolkata');
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create Purchase Invoice</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> purchase Invoice</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Create Purchase Invoice</li>
+                            <li class="breadcrumb-item active"> purchase Invoice</li>
                         </ul>
+                        <br>
+                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
                     </div>
                     </div>
                 </div>
             </div>
-
-                    <div class="card planned_task">
+            
+            <div class="card planned_task">
                   <form action="" method="post">
                         <div class="body">
                                  <div class="row clearfix">
                                         <div class="col-lg-3 col-md-12 my-2">
                                             <label>Party</label>
-                                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
-                                                  <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
+                                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()"> 
+                                                <option selected value="<?php echo $row['party_name']; ?>" class="btn btn-secondary btn-sm"><?php echo $row['name']; ?></option>
+                                                <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
                                                 </select>
                                                 <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                                              </div>
                                             <div class="col-lg-3 col-md-12 my-2">
                                                 <label>Party Mobile Number</label>
-                                                <input type="text" name="party_mobno" placeholder="Type here" id="party_mobno"class="form-control" >
-                                            </div>
-                                            <?php
+                                                <input type="text" name="party_mobno" value="<?php echo $row['party_mobno']; ?>" placeholder="Type here" id="party_mobno"class="form-control" >
+                                              </div>
 
-                                                // Retrieve the last invoice number from tblPurchaseinvoices
-                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where  userID='$session' ORDER BY id DESC LIMIT 1";
-                                                $result1 = mysqli_query($conn, $query1);
                                                 
-                                                if ($result1 && mysqli_num_rows($result1) > 0) {
-                                                  $row = mysqli_fetch_assoc($result1);
-                                                  $lastInvoiceNumber = intval($row['purchase_invoice_number']);
-                                                  $nextInvoiceNumber = $lastInvoiceNumber + 1;
-                                                }else{
-                                                  $nextInvoiceNumber = 1;
-                                                }
-                                                ?>
-                                                
-                                                <!-- Update the "Purchase Invoice Number" input field -->
+                                                <!-- Update the "purchase Invoice Number" input field -->
                                                 <div class="col-lg-3 col-md-12 my-2">
-                                                    <label>Purchase Invoice Number</label>
-                                                    <input type="number" name="Purchaseprice" id="Purchase_invoice_number" value="<?php echo $nextInvoiceNumber; ?>" class="form-control" required>
+                                                    <label>purchase Invoice Number</label>
+                                                    <input type="number" name="purchaseprice" id="purchase_invoice_number"value="<?php echo $row['purchase_invoice_number']; ?>" class="form-control" readonly>
                                                 </div>
 
                                             <div class="col-lg-3 col-md-12  my-2">
-                                                <label>Purchase Invoice Date</label>
-                                                <input type="date" name="Purchase_invoice_date" id="Purchase_invoice_date" value="<?php echo date("Y-m-d") ?>" class="form-control" required>
+                                                <label>purchase Invoice Date</label>
+                                                <input type="date" name="purchase_invoice_date" id="purchase_invoice_date" value="<?php echo $row['purchase_invoice_date']; ?>" class="form-control" readonly>
                                             </div>
                                     </div>
 
-                            </div>
+                                    <input hidden type="text" value="<?php echo $row['party_name']; ?>" id="party_name" >
+                                    <input hidden type="text" value="<?php echo $id ?>" id="purchase_invoice_id" >
+                                  </div>
                         </div>
 
-<div class="card planned_task">
-    <div class="body">
-        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-           Add Item&nbsp;<i class="fa fa-plus"></i> 
-        </button>
-        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
-        <div class="body table-responsive">
-            <table class="table table-bordered  table-striped table-hover" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Sl.No</th>
-                        <th>Item Name</th>
-                        <th>HSN</th>
-                        <th>Batch No</th>
-                        <th>Expire Date</th>
-                        <th>Manuf. Date</th>
-                        <th>Size</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Discount</th>
-                        <th>Tax</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Sl.No</th>
-                        <th>Item Name</th>
-                        <th>HSN</th>
-                        <th>Batch No</th>
-                        <th>Expire Date</th>
-                        <th>Manuf. Date</th>
-                        <th>Size</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Discount</th>
-                        <th>Tax</th>
-                        <th>Amount</th>
-                        <th>Action</th>
-                    </tr>
-                </tfoot>
-                <tbody id="table-body">
+                <div class="card planned_task">
+                    <div class="body">
+                        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
+                           Add Item&nbsp;<i class="fa fa-plus"></i> 
+                        </button>
+                        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
+                        <div class="body table-responsive">
+                            <table class="table table-bordered  table-striped table-hover" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Item Name</th>
+                                        <th>HSN</th>
+                                        <th>Batch No</th>
+                                        <th>Expire Date</th>
+                                        <th>Manuf. Date</th>
+                                        <th>Size</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Discount</th>
+                                        <th>Tax</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Item Name</th>
+                                        <th>HSN</th>
+                                        <th>Batch No</th>
+                                        <th>Expire Date</th>
+                                        <th>Manuf. Date</th>
+                                        <th>Size</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Discount</th>
+                                        <th>Tax</th>
+                                        <th>Amount</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody id="table-body">
+                                <?php
+                                $slno = 1;
+                                $purchaseInvoiceNum = $row['purchase_invoice_number'];
+                                $query1 = "SELECT ts.*,tp.productname as `pname` FROM `tblpurchaseinvoice_details` ts
+                                          inner join tblproducts tp on tp.id=ts.ItemName
+                                           WHERE ts.purchase_invoice_number='$purchaseInvoiceNum' AND ts.userID='$session' AND ts.status='1' ORDER BY ts.id ASC";
+                                $result1 = mysqli_query($conn, $query1);
 
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div> 
-
-<div class="card planned_task">
+                                if (mysqli_num_rows($result1) > 0) {
+                                    while ($row1 = mysqli_fetch_array($result1)) {
+                                            $product=$row1['ItemName']; 
+                                        ?>
+                                        <tr id="row-<?php echo $slno; ?>" class="gradeA">
+                                        <td>
+                                          <input type="text" hidden id="purchaseDetailsId-<?php echo $slno; ?>" value="<?php echo $row1['id']; ?>" name="purchaseID[]">
+                                          <input type="text" hidden  value="old" name="type[]">
+                                          <input type="text" class="form-control" id="<?php echo $slno; ?>" value="<?php echo $slno; ?>" name="slno[]" readonly></td>
+                                            <td>
+                                              <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-<?php echo $slno; ?>" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,<?php echo $slno; ?>),clear_product_error(<?php echo $slno; ?>)">
+                                                <option value="<?php echo $row1['ItemName']; ?>"><?php echo $row1['pname']; ?></option>
+                                              </select>
+                                              <script> getproducts(<?php echo $slno; ?>);</script>
+                                            </td>
+                                            <td><input type="text" style="width:100px" class="form-control" id="hsn-<?php echo $slno; ?>" value="<?php echo $row1['HSN']; ?>" name="hsn[]"></td>
+                                            <td><input type="text" style="width:100px" class="form-control" id="batchno-<?php echo $slno; ?>" value="<?php echo $row1['BatchNo']; ?>" name="batchno[]"></td>
+                                            <td><input type="date" style="width:150px" class="form-control" id="expiredate-<?php echo $slno; ?>" value="<?php echo $row1['ExpireDate']; ?>" name="expiredate[]"></td>
+                                            <td><input type="date" style="width:150px" class="form-control" id="mafdate-<?php echo $slno; ?>" value="<?php echo $row1['ManufactureDate']; ?>" name="mafdate[]"></td>
+                                            <td><input type="text" style="width:100px" class="form-control" id="sizetype-<?php echo $slno; ?>" value="<?php echo $row1['Size']; ?>" readonly name="size[]"></td>
+                                            <td><input type="number" style="width:100px" class="form-control" id="qty-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Qty']; ?>" name="qty[]"></td>
+                                            <td><input type="number" style="width:100px" class="form-control" id="price-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" readonly value="<?php echo $row1['Price']; ?>" name="price[]"></td>
+                                            <td><input type="number" style="width:100px" class="form-control" id="discount-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Discount']; ?>" name="discount[]"></td>
+                                            <td><input type="number" style="width:100px" class="form-control" id="tax-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Tax']; ?>" name="tax[]"></td>
+                                            <td><input type="number" style="width:100px" class="form-control" id="amount-<?php echo $slno; ?>" value="<?php echo $row1['Amount']; ?>" name="amount[]" ></td>
+                                            <td><button type="button" onclick="deletepurchase(<?php echo $slno; ?>,<?php echo $row1['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i></button></td>
+                                        </tr>
+                                        <?php
+                                        $slno++;
+                                    }
+                                } else {
+                                    ?>
+                                    <tr>
+                                        <td>No Records Found</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                <?php
+                                }
+                                ?>
+                                <input type="text" id="lastslno" hidden value="<?php echo $slno; ?>">
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> 
+                
+                <div class="card planned_task">
                   
                         <div class="body">
                                  <div class="row clearfix">
 
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Sub-Total</label>
-                                                <input type="text" name="subtotal" placeholder="---" id="subtotal" readonly class="form-control" >
+                                                <input type="text" name="subtotal"  id="subtotal" value="<?php echo $row['sub_total']; ?>" readonly class="form-control" >
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
-                                                <label>Discount</label>
-                                                <input type="number" name="total_discount" value="0" placeholder="Type Here" onkeyup="calculate_total_discount()" id="discount"  class="form-control" >
+                                                <label>Add-Discount</label>
+                                                <input type="number" name="total_discount" value="0" placeholder="Type Here"  value="<?php echo $row['discount']; ?>" onkeyup="calculate_total_discount()" id="discount"  class="form-control" >
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>After Discount Total</label>
-                                                <input type="text" name="total"  id="total" readonly class="form-control" >
+                                                <input type="text" name="total"  id="total"  value="<?php echo $row['after_discount_total']; ?>" readonly class="form-control" >
                                             </div>
                                             
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <center>
                                                 <label>Mark As Fully Paid</label><br>
                                                 <label class="control-inline fancy-checkbox">
-                                            <input id="received_pay" type="checkbox" value="No" name="paid_checkbox" onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
+                                            <input id="received_pay" type="checkbox" value="No" <?php $paid=$row['full_paid']; if($paid=='Yes'){echo 'checked';}else{ }?> name="paid_checkbox"  onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
                                         <span></span>
                                             </label>
                                                 </center>
                                             </div>
                                             
                                             <div class="col-lg-2 col-md-12 my-2">
-                                                <label>Amount Paid</label>
+                                                <label>Amount Received</label>
                                                 <div class="input-group">
-                                                    <input type="text"  id="amount_received" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
+                                                    <input type="text"  id="amount_received"  value="<?php echo $row['amount_received']; ?>" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
                                                         <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
-                                                            <option selected value="cash">Cash</option>
+                                                            <option selected value="<?php echo $row['amount_received_type']; ?>"><?php echo strtoupper($row['amount_received_type']); ?></option>
+                                                            <option  value="cash">Cash</option>
                                                             <option value="bank">Bank</option>
                                                             <option value="cheque">Cheque</option>
                                                         </select>
@@ -401,7 +470,7 @@ date_default_timezone_set('Asia/Kolkata');
                      
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Total Balance</label>
-                                                <input type="text" name="balance_total"  id="balance_total" readonly class="form-control" >
+                                                <input type="text" name="balance_total"  value="<?php echo $row['total_balance']; ?>" id="balance_total" readonly class="form-control" >
                                             </div>
                                             
                                     </div>
@@ -409,8 +478,8 @@ date_default_timezone_set('Asia/Kolkata');
                                     <div class="row">&nbsp;</div>
                                     <div class="row">&nbsp;</div>
                                     <div class="row clearfix" style="float: right;">
-                                      <button type="button" class="btn btn-success mx-2" onclick="create_Purchase_invoice()">
-                                        <i class="fa fa-check-circle"></i> <span>Save Purchase Invoice</span>
+                                      <button type="button" class="btn btn-success mx-2" onclick="create_purchase_invoice()">
+                                        <i class="fa fa-check-circle"></i> <span>Save purchase Invoice</span>
                                       </button>
                                       <button type="button" class="btn btn-primary" onclick="location.reload()">
                                         <i class="icon-refresh"></i> <span></span>
@@ -429,9 +498,17 @@ date_default_timezone_set('Asia/Kolkata');
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-    let rowCount = 0;
+        document.addEventListener('input', function(event) {
+            if (event.target.classList.contains('number')) {
+                if (event.target.value === '') {
+                    event.target.value = 0;
+                }
+            }
+        });
+    </script>
+<script>
+    let rowCount = document.getElementById('lastslno').value-1;
 
     // Function to add a new row to the table
     function addRow() {
@@ -443,9 +520,9 @@ date_default_timezone_set('Asia/Kolkata');
         newRow.className = 'gradeA';
 
         const newRowContent =
-            '<td><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount + '" name="slno[]" readonly></td>' +
+            '<td><input type="text" hidden name="purchaseID[]" ><input type="text" hidden value="new" name="type[]"><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount + '" name="slno[]" readonly></td>' +
             '<td>' +
-            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
+            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
             '    <option value="null">Select Product</option>' +
             '  </select>' +
             '  <small id="product_errorMessage-' + rowCount + '" class="text-danger" style="display: none;">Select Product</small>' +
@@ -456,10 +533,10 @@ date_default_timezone_set('Asia/Kolkata');
             '<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="sizetype-' + rowCount + '"  name="size[]" type="text" readonly></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount + '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount + '" name="amount[]" value="0" readonly></td>' +
+            '<td><input type="number" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="number" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="number" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="number" style="width:100px" class="form-control" id="amount-' + rowCount + '" name="amount[]" value="0" readonly></td>' +
             '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
 
 
@@ -470,16 +547,17 @@ date_default_timezone_set('Asia/Kolkata');
         const selectElement = newRow.querySelector('select[name="itemname[]"]');
         $(selectElement).select2();
 
-        document.getElementById('add-row-btn').disabled = true;
+        document.getElementById('add-row-btn').disabled = false;
         getproducts(rowCount);
         calculate_total_discount();
     }
     
-    function update_price(val,sizetype,row) {
+    function update_price(hsn,val,sizetype,row) {
         if (!isNaN(val)) {
+            document.getElementById(`hsn-${row}`).value = hsn;
             document.getElementById(`price-${row}`).value = val;
             document.getElementById(`sizetype-${row}`).value = sizetype;
-            update_amount(rowCount);
+            update_amount(row);
             document.getElementById('add-row-btn').disabled = false;
         } else {
             document.getElementById(`price-${row}`).value = '';
@@ -487,13 +565,16 @@ date_default_timezone_set('Asia/Kolkata');
         }
         calculate_total_discount();
         update_paid();
+        
     }
     
-function create_Purchase_invoice() {
-  let party = partySelect.value;
+function create_purchase_invoice() {
+  
+  let purchaseId = purchase_invoice_id.value;
+  let party = party_name.value;
   let party_mob = party_mobno.value;
-  let Purchase_invoice_no = Purchase_invoice_number.value;
-  let Purchase_invoice_date_ = Purchase_invoice_date.value;
+  let purchase_invoice_no = purchase_invoice_number.value;
+  let purchase_invoice_date = purchase_invoice_date.value;
   let subtotal_value = subtotal.value;
   let discount_value = discount.value;
   let after_discount_total_value = total.value;
@@ -505,25 +586,14 @@ function create_Purchase_invoice() {
       amount_received_type_value = amount_received_type.value;
     }
 
- 
-  if (party === 'null') {
-    party_errorMessage.style.display = 'block';
-    party_errorMessage.textContent = 'Party name is required.';
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth' // Optional: Add smooth scrolling behavior
-    });
-    partySelect.focus();
-    event.preventDefault();
-    return;
-  }
 
 
   var formData = {
+    purchaseId:purchaseId,
     party: party,
     party_mob: party_mob,
-    purchase_invoice_no: Purchase_invoice_no,
-    purchase_invoice_date: Purchase_invoice_date_,
+    purchase_invoice_no: purchase_invoice_no,
+    purchase_invoice_date: purchase_invoice_date,
     subtotal_value: subtotal_value,
     discount_value: discount_value,
     after_discount_total_value: after_discount_total_value,
@@ -542,6 +612,8 @@ function create_Purchase_invoice() {
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
 
+    const purchaseID = row.querySelector('[name="purchaseID[]"]').value;
+    const type = row.querySelector('[name="type[]"]').value;
     const itemname = row.querySelector('[name="itemname[]"]').value;
     const hsn = row.querySelector('[name="hsn[]"]').value;
     const batchno = row.querySelector('[name="batchno[]"]').value;
@@ -562,15 +634,16 @@ function create_Purchase_invoice() {
       event.preventDefault();
       return;
     }
-
     const rowData = {
+      purchaseID,
+      type,
       itemname,
       hsn,
       batchno,
       expiredate,
       mafdate,
-      size,
       qty,
+      size,
       price,
       discount,
       tax,
@@ -579,8 +652,8 @@ function create_Purchase_invoice() {
 
     data.push(rowData);
   }
-
-  const url = 'functions/insert_purchase_invoice.php';
+  console.log(data);
+  const url = 'functions/update_invoice.php';
   const options = {
     method: 'POST',
     headers: {
@@ -593,10 +666,9 @@ function create_Purchase_invoice() {
   fetch(url, options)
     .then(response => response.text())
     .then(result => {
-      console.log(result)
       if (result === 'error') {
         Toastify({
-          text: " Error Occurred",
+          text: "Party could not be added. Error Occurred",
           duration: 3000,
           newWindow: true,
           close: true,
@@ -607,10 +679,10 @@ function create_Purchase_invoice() {
           stopOnFocus: true,
           onClick: function() {},
         }).showToast();
-        window.location.href = "purchase_invoice";
+        window.location.href = "purchase_invoice?status=error";
       } else if (result === 'success') {
         Toastify({
-          text: "Invoice added successfully",
+          text: "Party added successfully",
           duration: 3000,
           newWindow: true,
           close: true,
@@ -621,7 +693,7 @@ function create_Purchase_invoice() {
           stopOnFocus: true,
           onClick: function() {},
         }).showToast();
-        window.location.href = "purchase_invoice";
+        window.location.href = "purchase_invoice?status=success";
       }
     })
     .catch(error => {
@@ -702,6 +774,34 @@ function create_Purchase_invoice() {
         calculate_total_discount();
     }
 
+
+    function deletepurchase(row, id) {
+    $.ajax({
+        url: '../common/remove_item.php',
+        type: 'POST',
+        data: { purchase_invoice_item: id }, 
+        success: function (response) {
+            console.log("removed");
+        }
+    });
+
+    const rowId = `row-${row}`;
+    const rowElement = document.getElementById(rowId);
+    rowElement.remove();
+    calculate_total_discount();
+  }
+    function deleteInvoice(id) {
+    $.ajax({
+        url: '../common/remove_item.php',
+        type: 'POST',
+        data: { purchase_invoice: id }, 
+        success: function (response) {
+            console.log("removed");
+            window.location.href="purchase_invoice";
+        }
+    });
+  }
+
     function getparties() {
         $.ajax({
             url: "../get_ajax/get_party_name.php",
@@ -715,42 +815,25 @@ function create_Purchase_invoice() {
         });
     }
 
-    function getproducts(val) {
-        $.ajax({
-            url: "../get_ajax/get_products_purchase.php",
-            method: "GET",
-            success: function(response) {
-                $("#select_products-" + val).html(response);
-            },
-            error: function() {
-                console.log("Error occurred while fetching products.");
-            }
-        });
-    }
+ 
  function clear_product_error(val) {
     category_errorMessage.style.display = 'none';
-    Purchase_errorMessage.style.display = 'none';
+    purchase_errorMessage.style.display = 'none';
     product_errorMessage.style.display = 'none';
     party_errorMessage.style.display = 'none';
-        try{
-                const errorMessage = document.querySelector(`#product_errorMessage-${val}`);
-            errorMessage.style.display = 'none';
-        }catch(err){
-            
-        }
+      const errorMessage = document.querySelector(`#product_errorMessage-${val}`);
+      errorMessage.style.display = 'none';
   }
 
     function check_product_data() {
-        let categoryName = document.getElementById('category').value;
-        let productName = document.getElementById('productNameInput').value;
-        let PurchasePrice = document.getElementById('PurchasePriceInput').value;
+        let categoryName = category.value;
+        let productName = productNameInput.value;
+        let purchasePrice = purchasePriceInput.value;
         
         let category_errorMessage = document.getElementById('category_errorMessage');
-        let Purchase_errorMessage = document.getElementById('Purchase_errorMessage');
+        let purchase_errorMessage = document.getElementById('purchase_errorMessage');
         let product_errorMessage = document.getElementById('product_errorMessage');
         
-        
-     
         if (categoryName === 'null') {
           category_errorMessage.style.display = 'block';
           category_errorMessage.textContent = 'Category is required.';
@@ -765,9 +848,9 @@ function create_Purchase_invoice() {
           return;
         } 
         
-        if (PurchasePrice === '') {
-          Purchase_errorMessage.style.display = 'block';
-          Purchase_errorMessage.textContent = 'Purchase price is required.';
+        if (purchasePrice === '') {
+          purchase_errorMessage.style.display = 'block';
+          purchase_errorMessage.textContent = 'purchase price is required.';
           event.preventDefault();
           return;
         }
@@ -777,7 +860,7 @@ function create_Purchase_invoice() {
         var formData = {
             category: categoryName,
             productName: productName,
-            PurchasePrice: PurchasePrice
+            purchasePrice: purchasePrice
         };
 
         // Send AJAX request using jQuery
@@ -849,8 +932,6 @@ function create_Purchase_invoice() {
 
     document.addEventListener('DOMContentLoaded', function() {
         getparties();
-        addRow();
-
     });
 </script>
 

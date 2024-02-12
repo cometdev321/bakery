@@ -30,7 +30,7 @@ if(isset($_POST['submit'])) {
                         <div class="col-lg-12 col-md-12">
                             <div class="card planned_task">
                                 <div class="body row">
-                                    <div class="col-lg-2 col-md-12">
+                                    <div class="col-lg-3 col-md-12">
                                     <div class="form-group">
                                         <label>Time</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="time_period" id="time_period" onchange="get_list(this.value)">
@@ -43,7 +43,7 @@ if(isset($_POST['submit'])) {
                                         </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-12">
+                                    <div class="col-lg-3 col-md-12">
                                     <div class="form-group">
                                         <label>Party</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="party" id="party" onchange="get_list(this.value)">
@@ -76,11 +76,43 @@ if(isset($_POST['submit'])) {
                                         </div>
                                     </div>
                                 </div>
-
-
-                                </div>
+                            </div>
                             </div>
                         </div>
+                        </div>
+                        <?php
+                            $salesPaid="select sum(after_discount_total) as totalpaid from tblsalesinvoices where userID='$session' and status='1' and full_paid='Yes'";
+                            $salesPending="select sum(after_discount_total) as totalPending from tblsalesinvoices where userID='$session' and status='1' and full_paid='No'";
+                            $getPaid=mysqli_query($conn,$salesPaid);
+                            $getPending=mysqli_query($conn,$salesPending);
+                            $fetchPaid=mysqli_fetch_array($getPaid);
+                            $fetchPending=mysqli_fetch_array($getPending);
+
+                        ?>
+                        <div class="row clearfix">
+                            <div class="col-lg-4 col-md-6 col-sm-12" >
+                            <div class="card" style="background: linear-gradient(to right, lightgreen, #49c5b6);color:black"> 
+                                    <div class="body">
+                                    <h6>Paid : <?php echo $fetchPaid['totalpaid']? $fetchPaid['totalpaid']:0;?></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="card" style="background: linear-gradient(to right, lightgreen, #49c5b6);color:black"> 
+                                    <div class="body">
+                                    <h6>Un-Paid : <?php echo $fetchPending['totalPending']?$fetchPending['totalPending']:0;?></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="card" style="background: linear-gradient(to right, lightgreen, #49c5b6);color:black"> 
+                                    <div class="body">
+                                    <h6>Total : <?php echo ($fetchPaid['totalpaid']+$fetchPending['totalPending']);?></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            </div>
              
                         <div class="card planned_task">
                             <div class="body">

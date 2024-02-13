@@ -368,9 +368,18 @@ $query = "SELECT si.*, p.name AS `name`
                                 <?php
                                 $slno = 1;
                                 $purchaseInvoiceNum = $row['purchase_invoice_number'];
-                                $query1 = "SELECT ts.*,tp.productname as `pname` FROM `tblpurchaseinvoice_details` ts
-                                          inner join tblproducts tp on tp.id=ts.ItemName
-                                           WHERE ts.purchase_invoice_number='$purchaseInvoiceNum' AND ts.userID='$session' AND ts.status='1' ORDER BY ts.id ASC";
+                                $query1 = "SELECT ts.*, tp.productname AS pname 
+                                FROM tblpurchaseinvoice_details ts
+                                INNER JOIN tblproducts tp ON tp.productname = ts.ItemName
+                                WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
+                                  AND ts.userID = '$session' 
+                                  AND ts.status = '1' 
+                                ORDER BY ts.id ASC;
+                                ";
+
+                                // $query1 = "SELECT * from tblpurchaseinvoice_details where purchase_invoice_number = '$purchaseInvoiceNum' 
+                                //           AND userID = '$session' 
+                                //           AND status = '1' ORDER BY id ASC";
                                 $result1 = mysqli_query($conn, $query1);
 
                                 if (mysqli_num_rows($result1) > 0) {
@@ -451,7 +460,7 @@ $query = "SELECT si.*, p.name AS `name`
                                                 </center>
                                             </div>
                                             
-                                            <div class="col-lg-2 col-md-12 my-2">
+                                            <!-- <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Received</label>
                                                 <div class="input-group">
                                                     <input type="text"  id="amount_received"  value="<?php echo $row['amount_received']; ?>" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
@@ -465,7 +474,7 @@ $query = "SELECT si.*, p.name AS `name`
                                                     </div>
                                                 </div>
 
-                                            </div>
+                                            </div> -->
                                             
                      
                                             <div class="col-lg-2 col-md-12 my-2">
@@ -579,15 +588,15 @@ function create_purchase_invoice() {
   let discount_value = discount.value;
   let after_discount_total_value = total.value;
   let check_payment_received = received_pay.value;
-  let amount_received_value = amount_received.value;
+ // let amount_received_value = amount_received.value;
   let balance_total_value = balance_total.value;
-  var  amount_received_type_value;
-    if (!amount_received_type.disabled) {
-      amount_received_type_value = amount_received_type.value;
-    }
+ // var  amount_received_type_value;
+    // if (!amount_received_type.disabled) {
+    //   amount_received_type_value = amount_received_type.value;
+    // }
 
 
-
+    //console.log(party_mob);
   var formData = {
     purchaseId:purchaseId,
     party: party,
@@ -598,8 +607,8 @@ function create_purchase_invoice() {
     discount_value: discount_value,
     after_discount_total_value: after_discount_total_value,
     check_payment_received: check_payment_received,
-    amount_received_value: amount_received_value,
-    amount_received_type_value: amount_received_type_value,
+   // amount_received_value: amount_received_value,
+   // amount_received_type_value: amount_received_type_value,
     balance_total_value: balance_total_value
   };
 
@@ -653,7 +662,7 @@ function create_purchase_invoice() {
     data.push(rowData);
   }
   console.log(data);
-  const url = 'functions/update_invoice.php';
+  const url = './functions/update_invoice.php';
   const options = {
     method: 'POST',
     headers: {

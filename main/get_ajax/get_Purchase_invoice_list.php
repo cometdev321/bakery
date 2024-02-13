@@ -3,8 +3,6 @@ include('../common/cnn.php');
 include('../common/session_control.php');
 
 
-
-//$session=$_SESSION['admin'];
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
@@ -29,6 +27,7 @@ if (mysqli_num_rows($result) > 0) {
                 <td><?php echo $row['full_paid'] == 'Yes' ? 'Paid' : 'Pending'; ?></td>
                 <td>
                     <div class="row">
+                        
                     <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Sales Invoice"  onclick="submitPurchaseInvoiceForm('<?php echo $row['id']; ?>')"><i class="icon-drawer"></i></button>
                     <button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit Sales Invoice"  onclick="edit_invoice('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
                     </div>

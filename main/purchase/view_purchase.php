@@ -5,9 +5,9 @@ include('../common/sidebar.php');
 
 $id=$_POST['purchase_id'];
 
-
-
-
+?>
+<script>console.log("hello world");</script>
+<?php
 //$query = "SELECT * FROM tblpurchaseinvoices WHERE id ='$id' AND userID= '$session' ";
 
 $query = "SELECT pi.* , p.name AS party_name
@@ -184,7 +184,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                 </center>
                                             </div>
                                             
-                                            <div class="col-lg-2 col-md-12 my-2">
+                                            <!-- <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Received</label>
                                                 <div class="input-group">
                                                     <?php 
@@ -195,7 +195,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                     </div>
                                                 </div>
 
-                                            </div>
+                                            </div> -->
                                             
                      
                                             <div class="col-lg-2 col-md-12 my-2">

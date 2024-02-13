@@ -312,8 +312,14 @@ $query = "SELECT si.*, p.name AS `name`
                                                 </div>
 
                                             <div class="col-lg-3 col-md-12  my-2">
+                                                  <?php  $string = $row['purchase_invoice_date'];
+                                                   $formattedDate = date("Y-m-d", strtotime($string)); 
+                                                   
+                                                        //$formattedDate = $currentDate->format('Y-m-d');
+                                                  ?>
+
                                                 <label>purchase Invoice Date</label>
-                                                <input type="date" name="purchase_invoice_date" id="purchase_invoice_date" value="<?php echo $row['purchase_invoice_date']; ?>" class="form-control" readonly>
+                                                <input type="date" name="purchase_invoice_date" id="purchase_invoice_date" value="<?php echo $formattedDate; ?>" class="form-control" readonly>
                                             </div>
                                     </div>
 

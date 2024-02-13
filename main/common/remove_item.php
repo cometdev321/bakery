@@ -82,6 +82,13 @@ if(isset($_POST['sales_invoice'])){
     mysqli_query($conn, $sql);
 }
 
+
+if(isset($_POST['purchase_invoice'])){
+    $id = $_POST['purchase_invoice'];
+    $sql = "UPDATE tblpurchaseinvoices SET status='0' where id = $id";
+    mysqli_query($conn,$sql);
+}
+
 #remove the sales invoice product from the list
 if(isset($_POST['sales_invoice_item'])){
     $id=$_POST['sales_invoice_item'];

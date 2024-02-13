@@ -14,9 +14,12 @@
     $afterDiscountTotal = $postData['formData']['after_discount_total_value'];
     $fullyPaid = $postData['formData']['check_payment_received'];
     $amountReceived = $postData['formData']['amount_received_value'];
-    $amountReceivedtype = $postData['formData']['amount_received_type_value'];
     $totalBalance = $postData['formData']['balance_total_value'];
-
+    $amountReceivedtype='none';
+    if (isset($postData['formData']['amount_received_type_value'])) {
+        $amountReceivedtype = $postData['formData']['amount_received_type_value'];
+    }
+    
     // Prepare and execute the query for tblpurchasesinvoices
     $query = "INSERT INTO tblpurchaseinvoices (party_name, party_mobno, purchase_invoice_number, purchase_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_paid,amount_paid_type, total_balance,userID) 
               VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session')";
@@ -54,7 +57,7 @@
         // Insertion failed
         echo "error";
     }
-
+    
     // Close the database connection
     mysqli_close($conn);
 

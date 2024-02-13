@@ -6,7 +6,7 @@
 $query = "SELECT si.*, p.name AS `name` 
           FROM tblsalesinvoices si
           INNER JOIN tblparty p ON si.party_name = p.id
-          WHERE  si.userID = '$session' AND si.status = '1' 
+          WHERE  si.userID = '$session' AND si.status = '1' and si.id='$id'
           ORDER BY si.id DESC"; 
           
           $result = mysqli_query($conn, $query);

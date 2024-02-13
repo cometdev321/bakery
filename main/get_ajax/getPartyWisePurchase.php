@@ -9,7 +9,7 @@ $toDate = $_POST['toDate'];
 $party=$_POST['partyName'];
 
 $query = "SELECT id,purchase_invoice_number,purchase_invoice_date,full_paid,total_balance from tblpurchaseinvoices
-        where status='1' and  party_name='$party' and purchase_invoice_date>='$fromDate' and purchase_invoice_date<='$toDate'";
+        where `status`=1 and  `party_name`='$party' and `purchase_invoice_date`>='$fromDate' and `purchase_invoice_date`<='$toDate'";
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {

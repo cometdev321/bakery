@@ -57,7 +57,7 @@
         // Insertion failed
         echo "error";
     }
-
+    
     // Close the database connection
     mysqli_close($conn);
 

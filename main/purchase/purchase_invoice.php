@@ -101,32 +101,28 @@ date_default_timezone_set('Asia/Kolkata');
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
-            <form id="PurchaseInvoice" action="sale_invoce" method="POST" style="display: none;">
-                <input type="text" hidden name="sale_id" id="sale_id">
+            <form id="PurchaseInvoice" action="view_purchase" method="POST" style="display: none;">
+                <input type="text" hidden name="purchase_id" id="purchase_id">
             </form>
-            <form id="edit_PurchaseInvoice" action="edit_invoice" method="POST" style="display: none;">
-                <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
+            <form id="edit_PurchaseInvoice" action="edit_purchase" method="POST" style="display: none;">
+                <input type="text" hidden name="edit_purchase_id" id="edit_purchase_id">
             </form>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
            <script>
-                function submitSaleInvoiceForm(val) {
-                    document.getElementById('sale_id').value=val;
+                function submitPurchaseInvoiceForm(val) {
+                    document.getElementById('purchase_id').value=val;
                     document.getElementById('PurchaseInvoice').submit();
                 }
                 function edit_invoice(val) {
-                    document.getElementById('edit_sale_id').value=val;
+                    document.getElementById('edit_purchase_id').value=val;
                     document.getElementById('edit_PurchaseInvoice').submit();
                 }
             </script>
-
 <script>
 function get_list(val) {
     var formData = {};

@@ -13,6 +13,10 @@ $query = "SELECT si.*, p.name AS party_name
           ORDER BY si.id DESC";
           $result = mysqli_query($conn, $query);
 
+
+
+
+
 if (mysqli_num_rows($result) > 0) {
     ?>
         <?php while ($row = mysqli_fetch_array($result)) { 

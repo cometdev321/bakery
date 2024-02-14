@@ -20,9 +20,7 @@
                     </div>
                 </div>
             </div>
-
-                     
-                        <div class="card planned_task">
+            <div class="card planned_task">
                             <div class="body">
                                 <div class="body table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -107,8 +105,27 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     getSales();
+    $(document).ready(function() {
+    console.log("here it is");
+    $.ajax({
+      url: '../get_ajax/get_paryreport.php',
+      type: 'POST',
+      success: function(response){
+        $('#table-body').html(response);
+        console.log("success");
+      },
+      error: function(xhr,status,error){
+        console.error(error);
+      }
+    });
+  });
+
   });
   document.title='AllParties';
+
+
+  
+
 </script>
 
 

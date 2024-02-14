@@ -388,7 +388,8 @@ date_default_timezone_set('Asia/Kolkata');
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Paid</label>
                                                 <div class="input-group">
-                                                    <input type="text"  id="amount_received" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
+                                                    <input type="text"  id="amount_received" name="amount_received"
+                                                     class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
                                                         <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
                                                             <option selected value="cash">Cash</option>
@@ -400,7 +401,10 @@ date_default_timezone_set('Asia/Kolkata');
 
                                             </div>
                                             
-                     
+                                            <div class="col-lg-2 col-md-12 my-2">
+                                                <label>Amount remaining</label>
+                                                <input type="text" name="amt_remaining"  id="amt_remaining" readonly  onclick="update_paid();" class="form-control" >
+                                            </div>
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Total Balance</label>
                                                 <input type="text" name="balance_total"  id="balance_total" readonly class="form-control" >
@@ -433,6 +437,9 @@ date_default_timezone_set('Asia/Kolkata');
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+
+    
+
     let rowCount = 0;
 
     // Function to add a new row to the table
@@ -503,9 +510,7 @@ function create_Purchase_invoice() {
   let amount_received_value = amount_received.value;
   let balance_total_value = balance_total.value;
   var  amount_received_type_value;
-    if (!amount_received_type.disabled) {
-      amount_received_type_value = amount_received_type.value;
-    }
+  let amount_remaining = amt_remaining.value;
 
  
   if (party === 'null') {
@@ -531,6 +536,7 @@ function create_Purchase_invoice() {
     after_discount_total_value: after_discount_total_value,
     check_payment_received: check_payment_received,
     amount_received_value: amount_received_value,
+    amount_remaining_value: amount_remaining,
     amount_received_type_value: amount_received_type_value,
     balance_total_value: balance_total_value
   };
@@ -644,6 +650,9 @@ function create_Purchase_invoice() {
         document.getElementById('subtotal').value = parseFloat(amount);
         document.getElementById('total').value = parseFloat(amount);
         document.getElementById('balance_total').value = parseFloat(amount);
+
+       
+
     }
 
     function calculate_total_discount() {
@@ -675,7 +684,39 @@ function create_Purchase_invoice() {
              var selectElement = document.getElementById('amount_received_type');
             selectElement.disabled = true;
         }
+        // const total_amt = document.getElementById('balance_total').value;
+        //     const amt_paid = document.getElementById('amount_received').value;
+        //     console.log(amt_paid);
+        //     document.getElementById('amt_remaining').value = total_amt - amt_paid;
+        // calculating the paid and remaining amount part
+        const checkox = document.getElementById('received_pay');
+
+        checkbox.addEventListener("change",function(){
+          if(this.checked){
+            //update_paid();
+            console.log("working");
+            document.getElementById('amt_remaining').value = 0;
+          }else{
+            update_paid();
+          }
+        })
     }
+
+    const inputField = document.getElementById("amount_received");
+
+// Add an onchange event listener to the input field
+inputField.addEventListener("change", function() {
+  // Call your function with the new value
+  update_remaining();
+});
+
+  function update_remaining(){
+    const tot_val = document.getElementById('balance_total').value;
+    const amt_paid = document.getElementById('amount_received').value;
+
+    document.getElementById('amt_remaining').value = tot_val - amt_paid;
+  }
+
 
     function update_amount(row) {
         const qtyInput = document.getElementById(`qty-${row}`);

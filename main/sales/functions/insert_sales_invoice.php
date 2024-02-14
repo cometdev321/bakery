@@ -21,10 +21,11 @@
     if (isset($postData['formData']['amount_received_type_value'])) {
         $amountReceivedtype = $postData['formData']['amount_received_type_value'];
     }
+    $amount_remaining = $postData['formData']['amount_remaining_value'];
     
     // Prepare and execute the query for tblsalesinvoices
-    $query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sales_invoice_number, sales_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received,amount_received_type, total_balance,userID) 
-              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session')";
+    $query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sales_invoice_number, sales_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received,amount_received_type, total_balance,userID,amt_remaining) 
+              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session','$amount_remaining')";
 
     // Perform the database query
     $result = mysqli_query($conn, $query);

@@ -436,11 +436,24 @@ date_default_timezone_set('Asia/Kolkata');
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+ // document.getElementById("add-row-btn").addEventListener("click", addRow);
+
+  
+  function handleKeyPress(event) {
+    // Check if the key pressed is 'Enter' (key code 13)
+    
+    if (event.keyCode === 78) {
+        // Trigger the click event of the button when 'Enter' is pressed
+        document.getElementById("add-row-btn").click();
+    }
+}
+  document.addEventListener("keydown", handleKeyPress);
 
 
 
 
     let rowCount = 0;
+   
 
     // Function to add a new row to the table
     function addRow() {
@@ -478,7 +491,7 @@ date_default_timezone_set('Asia/Kolkata');
         // Initialize Select2 for the new select element
         const selectElement = newRow.querySelector('select[name="itemname[]"]');
         $(selectElement).select2();
-
+        //addRow();
         document.getElementById('add-row-btn').disabled = true;
         getproducts(rowCount);
         calculate_total_discount();

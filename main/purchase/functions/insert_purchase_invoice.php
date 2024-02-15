@@ -20,10 +20,11 @@
         $amountReceivedtype = $postData['formData']['amount_received_type_value'];
     }
     $amount_remaining = $postData['formData']['amount_remaining_value'];
+    $current_time = date("H:i:s", time()); 
     
     // Prepare and execute the query for tblpurchasesinvoices
-    $query = "INSERT INTO tblpurchaseinvoices (party_name, party_mobno, purchase_invoice_number, purchase_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_paid,amount_paid_type,amt_remaining, total_balance,userID) 
-              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$amount_remaining','$totalBalance','$session')";
+    $query = "INSERT INTO tblpurchaseinvoices (party_name, party_mobno, purchase_invoice_number, purchase_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_paid,amount_paid_type,amt_remaining, total_balance,userID,purchase_time) 
+              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$amount_remaining','$totalBalance','$session','$current_time')";
 
     // Perform the database query
     $result = mysqli_query($conn, $query);
@@ -59,7 +60,7 @@
         if(mysqli_num_rows($result2) > 0){
             $row2 = mysqli_fetch_array($result2);
             $receivable_bal = $row2['p_balance'] + $amount_remaining;
-            $query2 = "UPDATE tblpartyreport SET p_balance = '$receivable_bal' WHERE userID = '$session'";
+            $query2 = "UPDATE tblpartyreport SET p_balance = '$receivable_bal' WHERE partyname='$partyName' AND userID = '$session'";
             mysqli_query($conn, $query2);
         } else {
             $query2 = "INSERT INTO tblpartyreport (userID, partyname, mobno, p_balance) VALUES ('$session', '$partyName', '$partyMobNo', '$amount_remaining')";

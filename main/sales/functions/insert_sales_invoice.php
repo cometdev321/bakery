@@ -27,6 +27,8 @@
     $query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sales_invoice_number, sales_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received,amount_received_type, total_balance,userID,amt_remaining) 
               VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session','$amount_remaining')";
 
+   
+
     // Perform the database query
     $result = mysqli_query($conn, $query);
 
@@ -54,7 +56,21 @@
             $details_query = "INSERT INTO tblsalesinvoice_details (sales_invoice_number,ItemName,HSN,BatchNo,ExpireDate,ManufactureDate,Size,Qty,Price,Discount,Tax,Amount,userID) 
               VALUES ('$salesInvoiceId', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session')";
             mysqli_query($conn, $details_query);
+
         }
+        $query2 = "SELECT * from tblpartyreport where partyname ='$partyName' AND userID='$session'";
+        $result2 = mysqli_query($conn,$query2);
+    
+        if(mysqli_num_rows($result2) > 0){
+            $row = mysqli_fetch_array($result2);
+            $receivable_bal = $row['r_balance'] + $amount_remaining;
+            $query2 = "UPDATE tblpartyreport SET r_balance = '$receivable_bal' WHERE userID = '$session'";
+            mysqli_query($conn, $query2);
+        } else {
+            $query2 = "INSERT INTO tblpartyreport (userID, partyname, mobno, r_balance) VALUES ('$session', '$partyName', '$partyMobNo', '$amount_remaining')";
+            mysqli_query($conn, $query2);
+        }
+        
         echo "success";
     } else {
         // Insertion failed

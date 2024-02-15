@@ -53,6 +53,18 @@
               VALUES ('$purchasesInvoiceId', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session')";
             mysqli_query($conn, $details_query);
         }
+        $query2 = "SELECT * from tblpartyreport where partyname = '$partyName' AND userID='$session'";
+        $result2 = mysqli_query($conn,$query2);
+    
+        if(mysqli_num_rows($result2) > 0){
+            $row2 = mysqli_fetch_array($result2);
+            $receivable_bal = $row2['p_balance'] + $amount_remaining;
+            $query2 = "UPDATE tblpartyreport SET p_balance = '$receivable_bal' WHERE userID = '$session'";
+            mysqli_query($conn, $query2);
+        } else {
+            $query2 = "INSERT INTO tblpartyreport (userID, partyname, mobno, p_balance) VALUES ('$session', '$partyName', '$partyMobNo', '$amount_remaining')";
+            mysqli_query($conn, $query2);
+        }
         echo "success";
     } else {
         // Insertion failed

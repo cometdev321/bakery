@@ -1,7 +1,6 @@
 <?php  
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
-include('../common/session_control.php'); 
 
  ?>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -111,22 +110,26 @@ if(isset($_POST['submit'])){
                              <form  method="post" action="">
                                <div class="form-group">
                                 <div class="row clearfix">
+                                <div class="col-lg-3 col-md-12 my-2">
+                                        <label>Date</label>
+                                        <input type="date"  id="date" class="form-control" value="<?php echo date('Y-m-d');?>">
 
-                                    <div class="col-lg-6 col-md-12 my-2">
+                                      </div>
+                                    <div class="col-lg-3 col-md-12 my-2">
                                         <label>From Branch</label>
-                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="category">                                        >
+                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="from" id="from"onchange="updateError()" >                                        >
                                         <?php 
                                           if(isset($_SESSION['admin'])){
                                           ?>
-                                            <option >Select Branch</option>
+                                            <option value="null">Select Branch</option>
                                           <?php } ?>
 
                                             <?php
                                             $slno=1;
                                             if(isset($_SESSION['admin'])){
                                               $queryBatch="select b.name as Bname,b.id as `branchID` from branch b
-                                              join tblusers tu on tu.superAdminID=b.userID
-                                              where b.status='1'";
+                                              join tblusers tu on tu.branch=b.id
+                                              where b.status='1' and tu.status=1";
                                             }else{
                                               $queryBatch="select name as Bname,id as branchID from branch where status='1' and id in
                                               (select branch from tblusers where userID='$session' )";
@@ -137,55 +140,51 @@ if(isset($_POST['submit'])){
                                             <option value="<?php echo $fetchcat['branchID']; ?>"><?php echo strtoupper($fetchcat['Bname']); ?></option>
                                             <?php } ?>
                                             </select>  
+                                            <small id="from_errorMessage" class="text-danger" style="display: none;">Select different batch</small> 
                                         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
                                         <div class="col-lg-6 col-md-12  my-2">
                                         <label>To Branch</label>
-                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
-                                            <option >Select Branch</option>
+                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="to" id="to" onchange="updateError()">
+                                            <option value="null">Select Branch</option>
                                             <?php
                                                 $slno=1;
                                                 $queryBatch="select b.name as Bname,b.id as `branchID` from branch b
-                                                    join tblusers tu on tu.superAdminID=b.userID
-                                                    where b.status='1'";
+                                                    join tblusers tu on tu.branch=b.id
+                                                    where b.status='1' and tu.userID not in('$session') and tu.status=1";
                                                 $getct=mysqli_query($conn,$queryBatch);
                                                 while($fetchcat=mysqli_fetch_array($getct)){
                                                 ?>
                                                 <option value="<?php echo $fetchcat['branchID']; ?>"><?php echo strtoupper($fetchcat['Bname']); ?></option>
                                                 <?php } ?>
-                                            </select>   
-                                        </div>
-                                    <div class="col-lg-6 col-md-12 my-2">
-                                        <label>Select Product</label>
-                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
-                                        <option >Select Product</option>
+                                            </select>  
+                                            <small id="to_errorMessage" class="text-danger" style="display: none;">Select different batch</small> 
+                                          </div>
+                                          <div class="col-lg-6 col-md-12 my-2">
+                                            <label>Select Product</label>
+                                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="product" id="product"  onchange="updateError()">
+                                        <option value="null">Select Product</option>
                                             <?php
                                             $slno=1;
-                                            $queryBatch="select id,productname from tblproducts where status='1' and userID='$session'";
+                                            $queryBatch="select id,productname from tblproducts where status='1' and userID='$session' ";
                                             $getct=mysqli_query($conn,$queryBatch);
                                             while($fetchcat=mysqli_fetch_array($getct)){
-                                            ?>
+                                              ?>
                                             <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['productname']; ?></option>
                                             <?php } ?>
-                                            </select>  
+                                          </select>  
+                                          <small id="product_errorMessage" class="text-danger" style="display: none;">Select Product</small> 
                                         </div>
+                                    <div class="col-lg-6 col-md-12 my-2">
+                                        <label>Quantity</label>
+                                        <input type="number" value="1" id="qty" class="form-control" placeholder="Enter quantity" onkeyup="updateError()">
+                                        <small id="qty_errorMessage" class="text-danger" style="display: none;">Add Quantity</small> 
+
+                                      </div>
                                        
                                         </div>                             
                                 </div>
                                 <div class="form-group">
-                                <button type="submit"  name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
+                                <button type="button"  name="submit" class="btn btn-success btn-sm" onclick="updateTransfer()"><i class="fa fa-check-circle"></i> <span>Save</span></button>
                                 </div>
                                 
                             </form>
@@ -204,111 +203,93 @@ if(isset($_POST['submit'])){
 </div>
 <script>
 
-let catid=0;
-function ready(val){
-    catid+=val;
-  setTimeout(function() {getalert(val);},50);
+
+function updateError(){
+  from_errorMessage.style.display = 'none';
+  to_errorMessage.style.display = 'none';
+  product_errorMessage.style.display = 'none';
+  qty_errorMessage.style.display = 'none';
 }
 
-function getalert(val){
-    const sweetAlertDiv = document.querySelector('.sweet-alert');
-  if (sweetAlertDiv.style.display === 'block') {
-     
-     
-    const h2Element = document.querySelector('.sweet-alert h2');
-    h2Element.innerHTML = 'This will remove the category from list';
-    
-    const pElement = document.querySelector('.sweet-alert p');
-    pElement.innerHTML = 'Press ok to proceed';
-    
+  function updateTransfer() {
+    formData={};
 
-       
-       setTimeout(checkok(),50);
-
-  }
-}
-
-
-function checkok(){
-
-  const okButton = document.querySelector('.sweet-alert .sa-confirm-button-container .confirm');
+  var date=document.getElementById('date').value;
+  var from=document.getElementById('from').value;
+  var to=document.getElementById('to').value;
+  var product=document.getElementById('product').value;
+  var qty=document.getElementById('qty').value;
   
-  function newOnClick() {
-    $.ajax({
-      url:"../common/remove_item.php",
-       type:"post",
-       data:{category:catid},
-       success:function(response){
-        setTimeout(displaysuccess,1980);
-       }
+  if (from=='null') {
+    from_errorMessage.style.display = 'block';
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: Add smooth scrolling behavior
     });
+    from_errorMessage.focus();
+    event.preventDefault();
+    return;
+  }
 
+  if (from == to || to=='null') {
+    to_errorMessage.style.display = 'block';
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: Add smooth scrolling behavior
+    });
+    to_errorMessage.focus();
+    event.preventDefault();
+    return;
   }
   
-      okButton.addEventListener('click', newOnClick);
-}
-
-function displaysuccess(){
-   // Find the div element with data-has-cancel-button="false" and style="display: block;"
-const divs = document.querySelectorAll('div[data-has-cancel-button="false"][style*="display: block;"]');
-
-// Loop through each matching div element
-for (const div of divs) {
-
-  // Find the h2 element inside the div element
-  const h2 = div.querySelector('h2');
-
-  // If the h2 element contains the text "Ajax request finished!", replace it with "done"
-if (h2 && h2.textContent.trim() === "Ajax request finished!") {
-  h2.textContent = "Category Removed From List";
-  const successDiv = document.createElement("div");
-  successDiv.className = "sa-icon sa-success animate";
-  successDiv.style.display = "block";
-  successDiv.innerHTML = `
-    <span class="sa-line sa-tip"></span>
-    <span class="sa-line sa-long"></span>
-    <div class="sa-placeholder"></div>
-    <div class="sa-fix"></div>
-  `;
-  h2.insertAdjacentElement("afterend", successDiv);
-        setTimeout(checkoks(),50);
-
-}
-
-}
-
-}
-
-
-function checkoks(){
-
-  const okButton = document.querySelector('.sweet-alert .sa-confirm-button-container .confirm');
-  
-  function newOnClick() {
-   window.location="";
-
+  if (product=='null') {
+    product_errorMessage.style.display = 'block';
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: Add smooth scrolling behavior
+    });
+    product_errorMessage.focus();
+    event.preventDefault();
+    return;
   }
-  
-      okButton.addEventListener('click', newOnClick);
-}
-
-</script>
-
-<!--script to auto hide alert-->
-<script>
-// Wait for the document to load
-document.addEventListener("DOMContentLoaded", function() {
-  // Get the Bootstrap alert element
-  var alert = document.querySelector(".alert");
-
-  // If the alert element exists
-  if (alert) {
-    // Hide the alert after 2 seconds
-    setTimeout(function() {
-      alert.style.display = "none";
-    }, 2000);
+  if (qty=='' || qty<1) {
+    qty_errorMessage.style.display = 'block';
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: Add smooth scrolling behavior
+    });
+    qty_errorMessage.focus();
+    event.preventDefault();
+    return;
   }
-});
+
+  formData={
+      date:date,
+      fromBranch:from,
+      toBranch:to,
+      product:product,
+      qty:qty
+    }
+
+
+    $.ajax({
+      url:"../get_ajax/stock_transfer/initiate_transfer.php",
+       type:"post",
+       data:formData,
+       success:function(response){
+          if(response=='qtyError'){
+            qty_errorMessage.innerHTML='Quantity is more than available stock';
+            qty_errorMessage.style.display = 'block';
+          }
+
+          if(response=='success'){
+            window.location.href='transfer_history';
+          }
+       },error: function() {
+            console.log('error occured');
+        }
+    });
+  }
 
 </script>
 <!-- Javascript -->

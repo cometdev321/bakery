@@ -14,7 +14,7 @@ $(document).ready(function() {
   const status = urlParams.get('status');
   if (status === 'success') {
     Toastify({
-      text: " Transfer succesful",
+      text: " sales stored succesfully",
       duration: 3000,
       newWindow: true,
       close: true,
@@ -54,11 +54,11 @@ $(document).ready(function() {
            <div class="block-header">
             <div class="row">
                 <div class="col-lg-5 col-md-8 col-sm-12">                        
-                    <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Transfer History</h2>
+                    <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Transfer Transfer</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                         <li class="breadcrumb-item">Dashboard</li>
-                        <li class="breadcrumb-item active">Transfer History</li>
+                        <li class="breadcrumb-item active">Transfer Transfer</li>
                     </ul>
                 </div>            
                 <div class="col-lg-7 col-md-4 col-sm-12">
@@ -110,7 +110,7 @@ $(document).ready(function() {
                                <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                        <h2>Transfer Reuqests Sent </h2>                            
+                            <h2>TRANSFER LIST </h2>                            
                         </div>
                         <div class="body">
 						<div class="table-responsive">
@@ -144,7 +144,8 @@ $(document).ready(function() {
                                  join tblproducts p on p.id=tt.product
                                  join branch b on b.id=tt.fromBranch
                                  join branch b1 on b1.id=tt.toBranch
-                                 where tt.status='requested' and tt.userID='$session' order by tt.id desc 
+                                 join tblusers tu on b1.id=tu.branch
+                                 where tt.status='requested' and tu.userID='$session'
                                     ";
                                  $result = mysqli_query($conn, $query);
                                  if (mysqli_num_rows($result) > 0) {
@@ -160,7 +161,7 @@ $(document).ready(function() {
                                                  <td><?php echo $row['productname']; ?></td>
                                                  <td><?php echo $row['qty']; ?></td>
                                                  <td>
-                                                     <button type="button" class="btn btn-outline-danger btn-sm" <?php echo $row['status']=='requested'?:'disabled'; ?>  data-toggle="tooltip" data-placement="top" title="Delete Transfer"  onclick="deleteItem('<?php echo $row['id']; ?>')"><i class="icon-trash"></i></button>
+                                                     <button type="button" class="btn btn-outline-success btn-sm"   onclick="submitTransfer('<?php echo $row['id']; ?>')"><i class="icon-eye"></i></button>
                                                  </td>
                                              </tr> 
                                              <?php $slno++;
@@ -180,97 +181,22 @@ $(document).ready(function() {
 							</div>
                         </div>
                     </div>
-
-                    
                 </div>
-                
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>Transfer Reuqests Accepted </h2>                            
-                        </div>
-                        <div class="body">
-						<div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>DATE</th>
-                                        <th>From</th>
-                                        <th>To</th>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>DATE</th>
-                                        <th>From</th>
-                                        <th>To</th>
-                                        <th>Product</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody id="sales-list">
-                                 <?php
-                                 $slno = 1;                                 
-                                 $query = "SELECT tt.*,b.name as branchname,p.productname,b1.name as b1name from tbltransfer tt 
-                                 join tblproducts p on p.id=tt.product
-                                 join branch b on b.id=tt.fromBranch
-                                 join branch b1 on b1.id=tt.toBranch
-                                 where tt.status='transfered' order by tt.id desc 
-                                    ";
-                                 $result = mysqli_query($conn, $query);
-                                 if (mysqli_num_rows($result) > 0) {
-                                     ?>
-                                         <?php while ($row = mysqli_fetch_array($result)) { 
-                                         
-                                             ?>
-                                             <tr>
-                                             <td><?php echo $slno; ?></td>
-                                                 <td><?php echo $row['date']; ?></td>
-                                                 <td><?php echo $row['branchname']; ?></td>
-                                                 <td><?php echo $row['b1name']; ?></td>
-                                                 <td><?php echo $row['productname']; ?></td>
-                                                 <td><?php echo $row['qty']; ?></td>
-                                             </tr> 
-                                             <?php $slno++;
-                                         } ?>
-                                 <?php
-                                 } else {
-                                     ?>
-                                          <tr>
-                                             <td colspan="7" class="text-center">No records found</td>
-                                         </tr>
-                                 <?php
-                                 }
-                                 ?>
-                                 
-                                </tbody>
-                            </table>
-							</div>
-                        </div>
-                    </div>
             </div>
         </div>
     </div>
 </div>
-<script>
-function deleteItem(val){
-    $.ajax({
-        url: "../common/remove_item.php",
-        data: {deleteTransaction:val},
-        type: 'POST',
-        success: function(response) {
-           window.location.href='';
-        },
-        error: function() {
-            console.log("Error occurred while fetching parties.");
-        }
-    });
-}
-</script>
+            <form id="transferReq" action="view_transfer_request" method="POST" style="display: none;">
+                <input type="text" hidden name="id" id="transfer_id">
+            </form>
+
+            <script>
+                function submitTransfer(val) {
+                    document.getElementById('transfer_id').value=val;
+                    document.getElementById('transferReq').submit();
+                }
+            </script>
+
 <!-- Javascript -->
 <script src="../../assets/bundles/libscripts.bundle.js"></script>    
 <script src="../../assets/bundles/vendorscripts.bundle.js"></script>

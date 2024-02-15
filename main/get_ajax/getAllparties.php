@@ -12,8 +12,8 @@ if (mysqli_num_rows($result) > 0) {
         <?php while ($row = mysqli_fetch_array($result)) { 
                 $party=$row['id'];
 
-                $querySalesTotal="select sum(total_balance) as totalSales from tblsalesinvoices where userID='$session' and party_name='$party' and full_paid='NO'";
-                $queryPurchaseTotal="select sum(total_balance) as totalPurchase from tblpurchaseinvoices where userID='$session' and party_name='$party' and full_paid='NO'";
+                $querySalesTotal="select sum(total_balance) as totalSales from tblsalesinvoices where userID='$session' and party_name='$party' and full_paid='No'";
+                $queryPurchaseTotal="select sum(total_balance) as totalPurchase from tblpurchaseinvoices where userID='$session' and party_name='$party' and full_paid='No'";
                 $queryPaymentIn="select sum(paymentAmount)as totalPayIn from tblpaymentin where userID='$session' and partyname='$party' ";
                 $queryPaymentOut="select sum(paymentAmount)as totalPayOut from tblpaymentout where userID='$session' and partyname='$party'";
 
@@ -29,17 +29,9 @@ if (mysqli_num_rows($result) > 0) {
 
                 $recievable=(($fetchSalesTotal['totalSales'])-($fetchPaymentIn['totalPayIn']));
                 $payable=(($fetchPurchaseTotal['totalPurchase'])-($fetchPaymentOut['totalPayOut']));
-                $credit=0;
-                if($recievable>=$payable){
-                    $recievable=$recievable-$payable;
-                    $payable=0;
-                }
-
-                if($payable>=$recievable){
-                    $payable=$payable-$recievable;
-                    $recievable=0;
-                }
-
+                
+                    //receivables are 
+                    $fetchSalesTotal['totalSales'] 
 
             ?>
             <tr>

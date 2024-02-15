@@ -48,7 +48,7 @@ if(isset($_POST["login-submit"])){
 
 
 if (!isset($_SESSION['admin']) && !isset($_SESSION['user'])) {
-    header("Location:$base/auth/page-login.php");
+    header("Location:$base/auth/page-login");
     exit();
 }
 

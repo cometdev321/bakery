@@ -216,8 +216,8 @@ if (isset($_POST['submit'])) {
                                 <?php
                                     $slno=1;
                                     $query = "SELECT tu.*,b.name as branchN FROM tblusers tu
-                                      join branch b on b.userID=tu.superAdminID
-                                       WHERE tu.status = '1' and tu.superAdminID='$session' order by id desc";
+                                      left join branch b on b.id=tu.branch
+                                       WHERE tu.status = '1' and tu.superAdminID='$session'";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

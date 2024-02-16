@@ -388,7 +388,9 @@ date_default_timezone_set('Asia/Kolkata');
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Received</label>
                                                 <div class="input-group">
-                                                    <input type="text"  id="amount_received" name="amount_received"   class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
+                                                    <input type="text"  id="amount_received" 
+                                                    onkeyup = "update_remaining()"
+                                                    name="amount_received"   class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
                                                         <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
                                                             <option selected value="cash">Cash</option>
@@ -401,7 +403,9 @@ date_default_timezone_set('Asia/Kolkata');
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount remaining</label>
-                                                <input type="text" name="amt_remaining"  id="amt_remaining" class="form-control" >
+                                                <input type="text" name="amt_remaining"  id="amt_remaining" 
+                                                readonly
+                                                class="form-control" >
                                             </div>
                      
                                             <div class="col-lg-2 col-md-12 my-2">
@@ -414,8 +418,9 @@ date_default_timezone_set('Asia/Kolkata');
                                     <div class="row">&nbsp;</div>
                                     <div class="row">&nbsp;</div>
                                     <div class="row clearfix" style="float: right;">
-                                      <button type="button" class="btn btn-success mx-2" onclick="create_sales_invoice()">
+                                      <button type="button" class="btn btn-success mx-2" id="save_sales" onclick="create_sales_invoice()">
                                         <i class="fa fa-check-circle"></i> <span>Save Sales Invoice</span>
+                                        
                                       </button>
                                       <button type="button" class="btn btn-primary" onclick="location.reload()">
                                         <i class="icon-refresh"></i> <span></span>
@@ -438,7 +443,7 @@ date_default_timezone_set('Asia/Kolkata');
 <script>
  // document.getElementById("add-row-btn").addEventListener("click", addRow);
 
-  
+  //handling the shortcut key
   function handleKeyPress(event) {
     // Check if the key pressed is 'Enter' (key code 13)
     
@@ -446,6 +451,10 @@ date_default_timezone_set('Asia/Kolkata');
         // Trigger the click event of the button when 'Enter' is pressed
         document.getElementById("add-row-btn").click();
     }
+    if (event.ctrlKey && event.keyCode === 80) {
+      
+    // Your code to handle Ctrl + P
+  }
 }
   document.addEventListener("keydown", handleKeyPress);
 
@@ -689,6 +698,8 @@ function create_sales_invoice() {
             document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
             document.getElementById("received_pay").value="Yes";
             var selectElement = document.getElementById('amount_received_type');
+            document.getElementById('amt_remaining').value = 0;
+
             selectElement.disabled = false;
         } else {
             document.getElementById("received_pay").value="No";
@@ -703,10 +714,11 @@ function create_sales_invoice() {
         const inputField = document.getElementById("amount_received");
 
 
-        inputField.addEventListener("change", function() {
-        // Call your function with the new value
-        update_remaining();
-        });
+        // inputField.addEventListener("change", function() {
+        // // Call your function with the new value
+        // update_remaining();
+        // });
+
 
       function update_remaining(){
       const tot_val = document.getElementById('balance_total').value;
@@ -719,7 +731,13 @@ function create_sales_invoice() {
     const tot_val = document.getElementById('balance_total').value;
     const amt_paid = document.getElementById('amount_received').value;
 
-    document.getElementById('amt_remaining').value = tot_val - amt_paid;
+    let remaining_value = tot_val - amt_paid;
+    if(amt_paid > tot_val){
+        document.getElementById('save_sales').disabled = true;
+    }else{
+      document.getElementById('save_sales').disabled = false;
+    }
+    document.getElementById('amt_remaining').value = remaining_value;
   }
     
     function update_amount(row) {

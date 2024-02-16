@@ -105,20 +105,7 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     getSales();
-    $(document).ready(function() {
-    console.log("here it is");
-    $.ajax({
-      url: '../get_ajax/get_paryreport.php',
-      type: 'POST',
-      success: function(response){
-        $('#table-body').html(response);
-        console.log("success");
-      },
-      error: function(xhr,status,error){
-        console.error(error);
-      }
-    });
-  });
+
 
   });
   document.title='AllParties';

@@ -26,7 +26,7 @@ if ($result) {
 
 $slno = 1;
 $credit;
-$query = "SELECT `id`,`name`,`mobno` from tblparty where userID='$session'";
+//$query = "SELECT `id`,`name`,`mobno` from tblparty where userID='$session'";
 
 $query = "SELECT pr.*,p.name AS pname FROM tblpartyreport pr JOIN tblparty p ON pr.partyname = p.id WHERE pr.userID = '$session'";
 

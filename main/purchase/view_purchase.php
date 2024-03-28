@@ -6,7 +6,6 @@ include('../common/sidebar.php');
 $id=$_POST['purchase_id'];
 
 ?>
-<script>console.log("hello world");</script>
 <?php
 //$query = "SELECT * FROM tblpurchaseinvoices WHERE id ='$id' AND userID= '$session' ";
 
@@ -35,7 +34,7 @@ date_default_timezone_set('Asia/Kolkata');
                             <li class="breadcrumb-item active"> Purchase Invoice</li>
                         </ul>
                         <br>
-                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
+                        <!-- <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button> -->
                     </div>
                     </div>
                 </div>

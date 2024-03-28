@@ -15,11 +15,11 @@ if(isset($_POST['submit'])) {
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Sale Transactions</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Purchase Transactions</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Sale Transactions</li>
+                            <li class="breadcrumb-item active">Purchase Transactions</li>
                         </ul>
                     </div>
                     </div>
@@ -150,7 +150,7 @@ if(isset($_POST['submit'])) {
                             </div>
                         </div> 
                     </div>
-            <form id="edit_salesInvoice" action="../../sales/edit_invoice" method="POST" style="display: none;">
+            <form id="edit_salesInvoice" action="../../purchase/edit_purchase" method="POST" style="display: none;">
                 <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
             </form>
                     <script>
@@ -208,10 +208,11 @@ function get_list(val) {
     }
 
     $.ajax({
-        url: "../../get_ajax/transaction_report/getsales.php",
+        url: "../../get_ajax/transaction_report/getpurchase.php",
         data: formData,
         type: 'POST',
         success: function(response) {
+            console.log(response);
             $("#table-body").html(response);
         },
         error: function() {

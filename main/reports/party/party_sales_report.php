@@ -121,11 +121,11 @@ function getSales() {
 
     $.ajax({
     type: "POST",
-    url: "../../get_ajax/getPartyWiseSales.php",
+    url: "../../get_ajax/partyreport/getPartyWiseSales.php",
     data:formData,
     success: function(response){
       $("#table-body").html(response);
-      loadAdditionalScripts();
+    //   loadAdditionalScripts();
     },
     error:function(){
         loadAdditionalScripts();

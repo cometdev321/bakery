@@ -38,7 +38,8 @@
                         <div class="card planned_task">
                             <div class="body">
                                 <div class="body table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <!-- <table class="table table-bordered table-striped table-hover dataTable js-exportable"> -->
+                                <table class="table table-bordered table-striped table-hover ">
                                         <thead>
                                             <tr>
                                                 <th>#</th>

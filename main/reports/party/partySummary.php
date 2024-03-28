@@ -15,11 +15,11 @@ if(isset($_POST['submit'])) {
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Sale Purchase By Party</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Sale Purchase By Party Report</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Sale Purchase By Party</li>
+                            <li class="breadcrumb-item active">Sale Purchase By Party Report</li>
                         </ul>
                     </div>
                     </div>
@@ -60,7 +60,7 @@ if(isset($_POST['submit'])) {
                                             LEFT JOIN 
                                                 (SELECT 
                                                      party_name,
-                                                     SUM(total_balance) AS totalSales
+                                                     SUM(after_discount_total) AS totalSales
                                                  FROM 
                                                      tblsalesinvoices
                                                  GROUP BY 
@@ -68,7 +68,7 @@ if(isset($_POST['submit'])) {
                                             LEFT JOIN 
                                                 (SELECT 
                                                      party_name,
-                                                     SUM(total_balance) AS totalPurchase
+                                                     SUM(after_discount_total) AS totalPurchase
                                                  FROM 
                                                      tblpurchaseinvoices
                                                  GROUP BY 
@@ -83,8 +83,8 @@ if(isset($_POST['submit'])) {
                                                     <tr>
                                                         <td><?php echo $slno;?></td>
                                                         <td><?php echo $row['party'];?></td>
-                                                        <td><?php echo $row['totalSales']>0?'&#8377;'.$row['totalSales']:'&#8377;'.'0';?></td>
-                                                        <td><?php echo $row['totalPurchase']>0?'&#8377;'.$row['totalPurchase']:'&#8377;'.'0';?></td>
+                                                        <td><span class="green-text">&#8377;<?php echo $row['totalSales']>0?$row['totalSales'] .'&darr;':'0'.'&darr;';?></span></td>
+                                                        <td><span class="red-text">&#8377;<?php echo $row['totalPurchase']>0?$row['totalPurchase'].'&uarr;':'0'.'&uarr;';?></span></td>
                                                     </tr>
                                                     <?php
                                                     $slno++;

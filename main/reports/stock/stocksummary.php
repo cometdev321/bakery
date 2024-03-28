@@ -10,11 +10,11 @@
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Stock Details</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Stock Summary</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Stock Details</li>
+                            <li class="breadcrumb-item active">Stock Summary</li>
                         </ul>
                     </div>
                     </div>
@@ -25,14 +25,11 @@
                         <div class="body">
                              <form id="basic-form" method="post" action="">
                                  <div class="row clearfix">
-                                        <div class="col-lg-6 col-md-12 my-2">
-                                            <label>From Date</label>
-                                            <input type="date" name="fromDate" onkeyup="getDetails()" id="fromDate" value="<?php echo date('Y-m-01'); ?>"   class="form-control" required>
+                                        <div class="col-lg-3 col-md-12 my-2">
+                                            <label>Date</label>
+                                            <input type="date" name="fromDate" onkeyup="getDetails()" id="fromDate" value="<?php echo date('Y-m-d'); ?>"   class="form-control" required>
                                         </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>To Date</label>
-                                            <input type="date" name="toDate" onkeyup="getDetails()" id="toDate" value="<?php echo date('Y-m-d'); ?>"  class="form-control" required>
-                                        </div>
+                                     
                                     </div>
                                 </form>
                             </div>
@@ -47,12 +44,9 @@
                                                 <th>#</th>
                                                 <th>Product</th>
                                                 <th>Sale Price</th>
-                                                <th>Begining Quantity</th>
-                                                <th>Quantity In</th>
-                                                <th>Purchase Amount</th>
-                                                <th>Quantity Out</th>
-                                                <!-- <th>Sale Amount</th> -->
-                                                <th>Close Quantity</th>
+                                                <th>Purchase Price</th>
+                                                <th>Stock Qty</th>
+                                                <th>Stock Value</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -60,16 +54,13 @@
                                                 <th>#</th>
                                                 <th>Product</th>
                                                 <th>Sale Price</th>
-                                                <th>Begining Quantity</th>
-                                                <th>Quantity In</th>
-                                                <th>Purchase Amount</th>
-                                                <th>Quantity Out</th>
-                                                <!-- <th>Sale Amount</th> -->
-                                                <th>Close Quantity</th>
+                                                <th>Purchase Price</th>
+                                                <th>Stock Qty</th>
+                                                <th>Stock Value</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
-                                            
+                                        
                                         </tbody>
                                     </table>
                                 </div>
@@ -92,13 +83,11 @@
 <script>
 function getDetails() {
     var fromDate=document.getElementById('fromDate').value;
-    var toDate=document.getElementById('toDate').value;
     const formData={
         fromDate:fromDate,
-        toDate:toDate
     };
     $.ajax({
-        url: "../../get_ajax/stockreport/stockdetails.php",
+        url: "../../get_ajax/stockreport/stocksummary.php",
         data: formData,
         type: 'POST',
         success: function(response) {

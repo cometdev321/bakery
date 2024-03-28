@@ -48,8 +48,8 @@
             $amount = $val['amount'];
 
             // Perform the INSERT query for tblpurchasesinvoice_details
-            $details_query = "INSERT INTO tblpurchaseinvoice_details (purchase_invoice_number,ItemName,HSN,BatchNo,ExpireDate,ManufactureDate,Size,Qty,Price,Discount,Tax,Amount,userID) 
-              VALUES ('$purchasesInvoiceId', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session')";
+            $details_query = "INSERT INTO tblpurchaseinvoice_details (`purchase_invoice_number`,`ItemName`,`HSN`,`BatchNo`,`ExpireDate`,`ManufactureDate`,`Size`,`Qty`,`Price`,`Discount`,`Tax`,`Amount`,`userID`,`Date`) 
+              VALUES ('$purchasesInvoiceId', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session','$invoiceDate')";
             mysqli_query($conn, $details_query);
         }
         echo "success";

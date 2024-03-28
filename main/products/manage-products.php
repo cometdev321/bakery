@@ -123,13 +123,13 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblproducts WHERE status = '1'  and userID='$session' order by id desc";
+                                    $query = "SELECT tp.*,tc.name FROM tblproducts tp join tblcategory tc on tc.id=tp.category WHERE tp.status = '1'  and tp.userID='$session' order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>
                                     <tr>
                                         <td><?php echo $slno;?></td>
-                                        <td><?php echo $row['category'];?></td>
+                                        <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['productname'];?></td>
                                         <td><?php echo $row['saleprice'];?></td>
                                         <td><?php echo $row['purchaseprice'];?></td>

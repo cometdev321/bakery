@@ -1,6 +1,6 @@
 <?php
-include('../common/cnn.php');
-include('../common/session_control.php');
+include('../../common/cnn.php');
+include('../../common/session_control.php');
 
 
 $slno = 1;
@@ -8,8 +8,8 @@ $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
 $party=$_POST['partyName'];
 
-$query = "SELECT id,purchase_invoice_number,purchase_invoice_date,full_paid,total_balance from tblpurchaseinvoices
-        where `status`=1 and  `party_name`='$party' and `purchase_invoice_date`>='$fromDate' and `purchase_invoice_date`<='$toDate'";
+$query = "SELECT id,sales_invoice_number,sales_invoice_date,full_paid,after_discount_total from tblsalesinvoices
+        where status='1' and  party_name='$party' and sales_invoice_date>='$fromDate' and sales_invoice_date<='$toDate'";
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {
@@ -19,9 +19,9 @@ if (mysqli_num_rows($result) > 0) {
             ?>
             <tr>
                 <td><?php echo $slno; ?></td>
-                <td><?php echo $row['purchase_invoice_date']; ?></td>
-                <td><?php echo $row['purchase_invoice_number']; ?></td>
-                <td><?php echo $row['total_balance']; ?></td>
+                <td><?php echo $row['sales_invoice_date']; ?></td>
+                <td><?php echo $row['sales_invoice_number']; ?></td>
+                <td>&#8377;<?php echo $row['after_discount_total']; ?></td>
                 <td><?php echo $row['full_paid'] == 'Yes' ? 'Paid' : 'Pending'; ?></td>
                 <td>
                     <div class="row">

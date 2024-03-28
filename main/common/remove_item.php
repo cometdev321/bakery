@@ -78,14 +78,18 @@ if(isset($_POST['newcategory_reject'])){
 #remove sales invoice
 if(isset($_POST['sales_invoice'])){
     $id=$_POST['sales_invoice'];
+    $invoice=$_POST['sales_invoice_number'];
     $sql = "UPDATE tblsalesinvoices SET status='0' WHERE id=$id";
+    mysqli_query($conn,"UPDATE tblsalesinvoice_details SET status='0' WHERE sales_invoice_number=$invoice");
     mysqli_query($conn, $sql);
 }
 
 
 if(isset($_POST['purchase_invoice'])){
     $id = $_POST['purchase_invoice'];
+    $invoice = $_POST['purchase_invoice_number'];
     $sql = "UPDATE tblpurchaseinvoices SET status='0' where id = $id";
+    mysqli_query($conn,"UPDATE tblpurchaseinvoice_details SET status='0' WHERE purchase_invoice_number=$invoice");
     mysqli_query($conn,$sql);
 }
 

@@ -2,9 +2,7 @@
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
 
- ?><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+ ?>
 <script>
 $(document).ready(function() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -115,7 +113,7 @@ if(isset($_POST['submit'])) {
 
                     <div class="card planned_task">
                         <div class="header">
-                            <h2>User Details</h2>
+                            <h2>Add Product</h2>
                         </div>
                         <div class="body">
                              <form id="basic-form" method="post" action="">
@@ -125,10 +123,10 @@ if(isset($_POST['submit'])) {
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
                                         <option >Select Category</option>
                                         <?php
-                                        $getct=mysqli_query($conn,"select name from tblcategory where status='1' and userID='$session'");
+                                        $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'");
                                         while($fetchcat=mysqli_fetch_array($getct)){
                                         ?>
-                                        <option value="<?php echo $fetchcat['name']; ?>"><?php echo $fetchcat['name']; ?></option>
+                                        <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
                                         <?php } ?>
                                         </select>                               
                                         </div>

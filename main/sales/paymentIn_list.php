@@ -220,11 +220,11 @@ function get_list(val) {
         };
     }
     $.ajax({
-        url: "../get_ajax/get_paymentIn_list.php",
+        url: "../get_ajax/paymentIn/get_paymentIn_list.php",
         data: formData,
         type: 'POST',
         success: function(response) {
-            $("#paymentin-list").html(response);
+            console.log(formData) ;           $("#paymentin-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");

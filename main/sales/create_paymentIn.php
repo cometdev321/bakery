@@ -15,9 +15,7 @@ date_default_timezone_set('Asia/Kolkata');
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 <script>
   $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -241,13 +239,17 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                   <div class="row clearfix">
                     <div class="col-lg-6">
                       <div class="row">
-                        <div class="col-md-12 my-2">
+                        <div class="col-md-6 my-2">
                           <label>Party</label>
                           
                           <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
                             <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
                           </select>
                           <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
+                        </div>
+                        <div class="col-md-6 my-2">
+                          <label>Remaining Balance</label>
+                          <input type="text" name="RemainingBalance" placeholder="Select Party" readonly id="RemainingBalance" class="form-control" >
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Party Mobile Number</label>

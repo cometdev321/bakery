@@ -278,7 +278,7 @@ $query = "SELECT si.*, p.name AS `name`
                             <li class="breadcrumb-item active"> Sales Invoice</li>
                         </ul>
                         <br>
-                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
+                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>,<?php echo $row['sales_invoice_number']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
                     </div>
                     </div>
                 </div>
@@ -324,7 +324,7 @@ $query = "SELECT si.*, p.name AS `name`
                         <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
                            Add Item&nbsp;<i class="fa fa-plus"></i> 
                         </button>
-                        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
+                        <!-- <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button> -->
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
                                 <thead>
@@ -461,6 +461,7 @@ $query = "SELECT si.*, p.name AS `name`
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <small id="none_errorMessage" class="text-danger" style="display: none;">Select Party</small>
 
                                             </div>
                                             
@@ -583,7 +584,36 @@ function create_sales_invoice() {
       amount_received_type_value = amount_received_type.value;
     }
 
+    if (isNaN(balance_total_value) || balance_total_value.trim() === '') {
+        Toastify({
+            text: 'Values entered not correct',
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top', // top, bottom, left, right
+            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+            backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)', // Use gradient color with red mix
+            marginTop: '202px', // corrected to marginTop
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            onClick: function(){}, // Callback after click
+            style: {
+                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
+            },
+        }).showToast();
+        event.preventDefault();
+    return;
+    }
 
+
+
+    if (amount_received_type_value == 'none') {
+      const errorMessage = document.querySelector(`#none_errorMessage`);
+      errorMessage.style.display = 'block';
+      errorMessage.textContent = 'Select the mode of payment';
+      event.preventDefault();
+      return;
+    }
+ 
 
   var formData = {
     salesId:salesId,
@@ -600,9 +630,7 @@ function create_sales_invoice() {
     balance_total_value: balance_total_value
   };
 
-    // console.log(formData)
-    // event.preventDefault();
-    // return;
+
   const rows = document.querySelectorAll('#table-body tr');
   const data = [];
 
@@ -649,7 +677,7 @@ function create_sales_invoice() {
 
     data.push(rowData);
   }
-  console.log(data);
+  // console.log(data);
   const url = 'functions/update_invoice.php';
   const options = {
     method: 'POST',
@@ -708,7 +736,6 @@ function create_sales_invoice() {
 
             }
         }
-
         document.getElementById('subtotal').value = parseFloat(amount);
         document.getElementById('total').value = parseFloat(amount);
         document.getElementById('balance_total').value = parseFloat(amount);
@@ -732,7 +759,9 @@ function create_sales_invoice() {
 
         if (checkbox.checked) {
             document.getElementById('amount_received').value = document.getElementById('total').value;
-            document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
+            console.log(document.getElementById('amount_received').value)
+            // document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
+            document.getElementById('balance_total').value = 0;
             document.getElementById("received_pay").value="Yes";
             var selectElement = document.getElementById('amount_received_type');
             selectElement.disabled = false;
@@ -787,11 +816,11 @@ function create_sales_invoice() {
     rowElement.remove();
     calculate_total_discount();
   }
-    function deleteInvoice(id) {
+    function deleteInvoice(id,sales_invoice_number) {
     $.ajax({
         url: '../common/remove_item.php',
         type: 'POST',
-        data: { sales_invoice: id }, 
+        data: { sales_invoice: id ,sales_invoice_number:sales_invoice_number}, 
         success: function (response) {
             console.log("removed");
             window.location.href="sales_invoice";

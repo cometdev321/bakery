@@ -61,7 +61,7 @@ if(isset($_POST['submit'])) {
                                                     <tr>
                                                         <td><?php echo $slno;?></td>
                                                         <td><?php echo $row['productname'];?></td>
-                                                        <td><?php echo $row['saleprice'];?></td>
+                                                        <td><?php echo '&#8377;'.$row['saleprice'];?></td>
                                                         <td><?php echo $row['size'];?></td>
                                                         <td><?php echo $row['openingstock'];?></td>
                                                     </tr>

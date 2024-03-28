@@ -3,6 +3,7 @@ session_start();
 include('cnn.php');
 include('base.php');
 
+date_default_timezone_set('Asia/Kolkata');
 
 if(isset($_POST["login-submit"])){
   
@@ -32,7 +33,7 @@ if(isset($_POST["login-submit"])){
                             header("Location:../dashboard");
                             exit();
                         }else{
-                            header("Location:../auth/page-login");
+                            header("Location:../auth/page-login?status=usernotfound");
                             exit();
             
                         }

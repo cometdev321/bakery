@@ -66,7 +66,7 @@ if(mysqli_query($conn,$query)){
                         <div class="body">
                             <?php
                                 $id=$_POST['pid'];
-                                $product=mysqli_query($conn,"Select * from tblproducts where id=$id");
+                                $product = mysqli_query($conn,"SELECT tp.*,tc.name FROM tblproducts tp join tblcategory tc on tc.id=tp.category WHERE tp.status = '1'  and tp.userID='$session' and tp.id='$id' ");
                                 $pro_details=mysqli_fetch_array($product);
                             ?>
                              <form  method="post" action="">
@@ -75,13 +75,13 @@ if(mysqli_query($conn,$query)){
                                             <label>Category</label>
                                              <!--onChange="getSubCat(this.value);updatesub(this.value)"-->
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
-                                        <option value="<?php echo $pro_details['category'];?>"><?php echo $pro_details['category'];?></option>
+                                        <option value="<?php echo $pro_details['category'];?>"><?php echo $pro_details['name'];?></option>
                                         <?php
                                         $present_cat=$pro_details['category'];
-                                        $getct=mysqli_query($conn,"select name from tblcategory where status='1' and name!='$present_cat'");
+                                        $getct=mysqli_query($conn,"select name,id from tblcategory where status='1' and id!='$present_cat'");
                                         while($fetchcat=mysqli_fetch_array($getct)){
                                         ?>
-                                        <option value="<?php echo $fetchcat['name']; ?>"><?php echo $fetchcat['name']; ?></option>
+                                        <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
                                         <?php } ?>
                                         </select>                               
                                         </div>

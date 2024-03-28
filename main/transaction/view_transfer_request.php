@@ -54,7 +54,7 @@ $row = mysqli_fetch_array($result)
                                         <input type="text" id="to" class="form-control" readonly placeholder="Enter quantity" value="<?php echo $row['b1name']; ?>">
                                           </div>
                                           <div class="col-lg-3 col-md-12 my-2">
-                                            <label>Select Product</label>
+                                            <label>Product Name</label>
                                             <input type="text" id="product" class="form-control" readonly placeholder="Enter quantity" value="<?php echo $row['productname']; ?>">
                                         </div>
                                     <div class="col-lg-3 col-md-12 my-2">

@@ -273,7 +273,7 @@ date_default_timezone_set('Asia/Kolkata');
                                              </div>
                                             <div class="col-lg-3 col-md-12 my-2">
                                                 <label>Party Mobile Number</label>
-                                                <input type="text" name="party_mobno" placeholder="Type here" id="party_mobno"class="form-control" >
+                                                <input type="number" name="party_mobno" placeholder="Type here" id="party_mobno"class="form-control" >
                                             </div>
                                             <?php
                                                 include('../common/cnn.php');
@@ -312,7 +312,7 @@ date_default_timezone_set('Asia/Kolkata');
                         <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
                            Add Item&nbsp;<i class="fa fa-plus"></i> 
                         </button>
-                        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
+                        <!-- <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button> -->
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
                                 <thead>
@@ -325,7 +325,7 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>Manuf. Date</th>
                                         <th>Size</th>
                                         <th>Qty</th>
-                                        <th>Price</th>
+                                        <th>Sales Price</th>
                                         <th>Discount</th>
                                         <th>Tax</th>
                                         <th>Amount</th>
@@ -342,7 +342,7 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>Manuf. Date</th>
                                         <th>Size</th>
                                         <th>Qty</th>
-                                        <th>Price</th>
+                                        <th>Sales Price</th>
                                         <th>Discount</th>
                                         <th>Tax</th>
                                         <th>Amount</th>
@@ -433,6 +433,19 @@ date_default_timezone_set('Asia/Kolkata');
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+document.addEventListener('keydown', function(event) {
+  if (event.ctrlKey && event.key === 'y') {
+    event.preventDefault();
+    addRow();
+  }
+  if (event.key === "-") {
+      event.preventDefault();
+      // Optionally, you can provide feedback to the user
+      console.log("The '-' key is disabled in this project.");
+  }
+});
+
+
     let rowCount = 0;
 
     // Function to add a new row to the table
@@ -458,7 +471,7 @@ date_default_timezone_set('Asia/Kolkata');
             '<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="sizetype-' + rowCount + '"  name="size[]" type="text" readonly></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount + '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount + '" name="amount[]" value="0" readonly></td>' +
@@ -508,6 +521,25 @@ function create_sales_invoice() {
       amount_received_type_value = amount_received_type.value;
     }
 
+    if (isNaN(balance_total_value) || balance_total_value.trim() === '' || balance_total_value<0) {
+        Toastify({
+            text: 'Values entered not correct',
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top', // top, bottom, left, right
+            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+            backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)', // Use gradient color with red mix
+            marginTop: '202px', // corrected to marginTop
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            onClick: function(){}, // Callback after click
+            style: {
+                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
+            },
+        }).showToast();
+        event.preventDefault();
+    return;
+    }
  
   if (party === 'null') {
     party_errorMessage.style.display = 'block';

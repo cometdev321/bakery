@@ -1,40 +1,31 @@
 <?php
 session_start();
 include('../common/cnn.php');
-
-if(isset($_POST["login-submit"])){
-  
-
- $username  =   $_POST["username"];
- $password  =   $_POST["password"];
-    
-        $adm=mysqli_query($conn,"SELECT * FROM `admin` WHERE `Email`='$username' AND `Password`='$password'");
-         if($adm->num_rows>0)
-            {
-                $admindetails=mysqli_fetch_array($adm);
-                $_SESSION['admin']=$admindetails['unicode'];
-                $_SESSION['isAdmin']=1;
-                header("Location:../dashboard");
-                exit();
-            }else{
-        
-        $usr=mysqli_query($conn,"SELECT * FROM `tblusers` WHERE `username`='$username' AND `password`='$password' and `status`=1");
-         if($usr->num_rows>0)
-            {
-                $userdetails=mysqli_fetch_array($usr);
-                $_SESSION['user']=$userdetails['userID'];
-                $_SESSION['isAdmin']=0;
-                header("Location:../dashboard");
-                exit();
-            }else{
-                header("Location:page-login");
-                exit();
-
-            }
-        }
-
-}
 ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+  $(document).ready(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    if (status === 'usernotfound') {
+      Toastify({
+        text: "Wrong username or password",
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // top, bottom, left, right
+        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+        stopOnFocus: true, // Prevent dismissing of toast on hover
+        onClick: function() {}, // Callback after click
+      }).showToast();
+    }
+  });
+</script>
 <!doctype html>
 <html lang="en">
 

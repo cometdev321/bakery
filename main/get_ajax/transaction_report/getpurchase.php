@@ -10,18 +10,18 @@ $party=$_POST['party'];
 
 if($party=='all'){
 
-$query = "SELECT si.*, p.name AS party_name 
-          FROM tblsalesinvoices si
-          INNER JOIN tblparty p ON si.party_name = p.id
-          WHERE si.sales_invoice_date >= '$fromDate' AND si.sales_invoice_date <= '$toDate' AND si.userID = '$session' AND si.status = '1' 
-          ORDER BY si.id DESC";
+$query = "SELECT pi.*, p.name AS party_name 
+          FROM tblpurchaseinvoices pi
+          INNER JOIN tblparty p ON pi.party_name = p.id
+          WHERE pi.purchase_invoice_date >= '$fromDate' AND pi.purchase_invoice_date <= '$toDate' AND pi.userID = '$session' AND pi.status = '1' 
+          ORDER BY pi.id DESC";
 }else{
     
-$query = "SELECT si.*, p.name AS party_name 
-FROM tblsalesinvoices si
-INNER JOIN tblparty p ON si.party_name = p.id
-WHERE si.sales_invoice_date >= '$fromDate' AND si.sales_invoice_date <= '$toDate' AND si.userID = '$session' AND si.status = '1' and p.id=$party
-ORDER BY si.id ASC";
+$query = "SELECT pi.*, p.name AS party_name 
+FROM tblpurchaseinvoices pi
+INNER JOIN tblparty p ON pi.party_name = p.id
+WHERE pi.purchase_invoice_date >= '$fromDate' AND pi.purchase_invoice_date <= '$toDate' AND pi.userID = '$session' AND pi.status = '1' and p.id=$party
+ORDER BY pi.id ASC";
 }
 
 
@@ -34,13 +34,13 @@ if (mysqli_num_rows($result) > 0) {
             ?>
             <tr>
                 <td><?php echo $slno; ?></td>
-                <td><?php echo $row['sales_invoice_date']; ?></td>
-                <td><?php echo $row['sales_invoice_number']; ?></td>
+                <td><?php echo $row['purchase_invoice_date']; ?></td>
+                <td><?php echo $row['purchase_invoice_number']; ?></td>
                 <td><?php echo $row['party_name']; ?></td>
-                <td><?php echo strtoupper($row['amount_received_type']); ?></td>
+                <td><?php echo strtoupper($row['amount_paid_type']); ?></td>
                 <td>&#8377;<?php echo $row['full_paid']=='Yes'?$row['after_discount_total']:$row['total_balance']; ?></td>
-                <td><span class="green-text">&#8377;<?php echo $row['full_paid']=='Yes'?'0'.'&darr;':$row['total_balance']-$row['amount_received'].'&darr;';?></span></td>
-                
+                <td><span class="red-text">&#8377;<?php echo $row['full_paid']=='Yes'?'0'.'&uarr;':$row['total_balance']-$row['amount_paid'].'&uarr;';?></span></td>
+
                 <td >
                     <div class="row"> 
 

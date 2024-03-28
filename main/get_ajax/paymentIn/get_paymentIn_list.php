@@ -1,12 +1,14 @@
 <?php
- include('../common/cnn.php');
- include('../common/session_control.php');
+ include('../../common/cnn.php');
+ include('../../common/session_control.php');
 
 
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
-$query = "SELECT pi.*,p.name as `name` FROM tblpaymentIN pi inner join tblparty p on pi.partyName=p.id WHERE pi.entrytime >= '$fromDate' AND pi.entrytime <= '$toDate' AND pi.userID='$session' and pi.status='1' ORDER BY id DESC";
+$query = "SELECT pi.*,p.name as `name` FROM tblpaymentIN pi 
+inner join tblparty p on pi.partyName=p.id WHERE pi.entrytime >= '$fromDate' AND pi.entrytime <= '$toDate'
+ AND pi.userID='$session' and pi.status='1' ORDER BY id DESC";
 $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {

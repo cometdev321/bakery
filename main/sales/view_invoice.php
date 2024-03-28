@@ -3,8 +3,11 @@
 include('../common/header2.php');
 include('../common/sidebar.php');
 $id=$_POST['sale_id'];
-$query = "SELECT * FROM `tblsalesinvoices` WHERE `id`='$id' AND userID='$session'";
-$result = mysqli_query($conn, $query);
+$query = "SELECT si.*, p.name AS `name` 
+          FROM tblsalesinvoices si
+          INNER JOIN tblparty p ON si.party_name = p.id
+          WHERE  si.userID = '$session' AND si.status = '1' and si.id='$id'
+          ORDER BY si.id DESC"; $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_array($result);
 date_default_timezone_set('Asia/Kolkata');
 
@@ -23,7 +26,7 @@ date_default_timezone_set('Asia/Kolkata');
                             <li class="breadcrumb-item active"> Sales Invoice</li>
                         </ul>
                         <br>
-                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
+                        <!-- <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button> -->
                     </div>
                     </div>
                 </div>
@@ -35,7 +38,7 @@ date_default_timezone_set('Asia/Kolkata');
                                  <div class="row clearfix">
                                         <div class="col-lg-3 col-md-12 my-2">
                                             <label>Party</label>
-                                            <input type="text" value="<?php echo $row['party_name']; ?>" class="form-control" >
+                                            <input type="text" value="<?php echo $row['name']; ?>" class="form-control" >
                                              </div>
                                             <div class="col-lg-3 col-md-12 my-2">
                                                 <label>Party Mobile Number</label>

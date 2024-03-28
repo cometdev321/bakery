@@ -122,11 +122,11 @@ function getPurchase() {
 
     $.ajax({
     type: "POST",
-    url: "../../get_ajax/getPartyWisePurchase.php",
+    url: "../../get_ajax/partyreport/getPartyWisePurchase.php",
     data:formData,
     success: function(response){
       $("#table-body").html(response);
-      loadAdditionalScripts();
+    //   loadAdditionalScripts();
     },
     error:function(){
         loadAdditionalScripts();

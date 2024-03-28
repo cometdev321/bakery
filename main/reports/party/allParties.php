@@ -33,7 +33,7 @@
                                                 <th>Mobno</th>
                                                 <th>Receivable Balance</th>
                                                 <th>Payable Balance</th>
-                                                <th>Credit</th>
+                                                <!-- <th>Credit</th> -->
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -43,7 +43,7 @@
                                                 <th>Mobno</th>
                                                 <th>Receivable Balance</th>
                                                 <th>Payable Balance</th>
-                                                <th>Credit</th>
+                                                <!-- <th>Credit</th> -->
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
@@ -64,7 +64,7 @@
       url: "../../get_ajax/getAllparties.php",
       success: function(response) {
         $("#table-body").html(response);
-        loadAdditionalScripts();
+        // loadAdditionalScripts();
       },
     error:function(){
         loadAdditionalScripts();

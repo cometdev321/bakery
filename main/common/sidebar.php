@@ -1,7 +1,37 @@
 <?php include('base.php');?>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <style>
+
     .demo-card label{ display: block; position: relative;}
     .demo-card .col-lg-4{ margin-bottom: 30px;}
+</style>
+<style>
+  .green-text {
+    color: green;
+}
+
+.red-text {
+    color: #FF5617; /* Light red color */
+}
+</style>
+<style>
+    /* Hide default scrollbar
+    body {
+        overflow: hidden;
+    }
+
+    /* Style your custom scrollbar here */
+    /* For WebKit-based browsers */
+    /* ::-webkit-scrollbar {
+        width: 0;  
+        background: transparent; 
+    } */
+    /* For Firefox */
+    /* scrollbar-width: none; */
+    /* For IE and Edge */
+    /* -ms-overflow-style: none; */ 
 </style>
 <body class="theme-cyan">
 
@@ -13,6 +43,69 @@
 <!--    </div>-->
 <!--</div>-->
 <!-- Overlay For Sidebars -->
+
+<?php
+if(isset($_POST['ProductSubmit'])) {
+    $category = $_POST['category'];
+    // $sub_category = $_POST['sub_category'];
+    $productname = $_POST['productname'];
+    $saleprice = $_POST['saleprice'];
+    $purchase = $_POST['purchaseprice'];
+    $size_number = $_POST['size_number'];
+    $size = $_POST['size'];
+    $HSN = $_POST['HSN'];
+    $openingstock = $_POST['openingstock'];
+    $gst = $_POST['gst'];
+    $sizeJoined=$size_number.$size;
+    
+       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$session'";
+    $result = mysqli_query($conn, $query);
+    
+    if(mysqli_num_rows($result) > 0) {
+        echo"<script>window.location.href='add-product?status=exists'</script>";
+    } else {
+      // If the record does not exist, insert the new record
+      $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`,`purchaseprice`, `HSN`, `openingstock`, `gst`, `size`,`sizetype`,`userID`) 
+        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$session')";
+      
+      if(mysqli_query($conn, $query)) {
+        echo "<script> Toastify({
+            text: 'Product added successfully',
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top', // top, bottom, left, right
+            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+            backgroundColor: 'linear-gradient(to right, #84fab0, #8fd3f4)', // Use gradient color
+            marginTop: '202px', // corrected to marginTop
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            onClick: function(){}, // Callback after click
+            style: {
+                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
+            },
+        }).showToast();</script>";
+        
+      } else {
+        echo "<script> Toastify({
+            text: 'Error occured try later',
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top', // top, bottom, left, right
+            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+            backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)', // Use gradient color with red mix
+            marginTop: '202px', // corrected to marginTop
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            onClick: function(){}, // Callback after click
+            style: {
+                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
+            },
+        }).showToast();</script>";
+      }
+    }
+
+}
+?>
     <?php
     if(isset($_SESSION['admin'])){
         $getadmin=mysqli_query($conn,"select * from admin where unicode='$session'");
@@ -22,6 +115,100 @@
         $fetchadmin=mysqli_fetch_array($getadmin);        
     }
     ?>
+
+<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userDetailsModalLabel">Product Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="basic-form" method="post" action="">
+                    <div class="row clearfix">
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>Category</label>
+                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="category">
+                                <option>Select Category</option>
+                                <?php   
+                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'");
+                                while($fetchcat=mysqli_fetch_array($getct)){
+                                ?>
+                                <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-md-12 my-2">
+                                            <label>Product Name</label>
+                                            <input type="text" name="productname" placeholder="Type Here" class="form-control" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Sale Price</label>
+                                            <input type="number" name="saleprice" placeholder="Type Here"  class="form-control" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Purchase Price</label>
+                                            <input type="number" name="purchaseprice" placeholder="Type Here"  class="form-control" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>HSN Code</label>
+                                            <input type="text" name="HSN" placeholder="Type Here" class="form-control" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Opening Stock</label>
+                                            <input type="text" name="openingstock" placeholder="Type Here" class="form-control" >
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Size</label>
+                                            <input type="number" name="size_number" placeholder="Type Here" class="form-control" >
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Size-Type </label>
+                                            <select class="form-control show-tick ms select2" name="size">
+                                              <option value="GM">Gram (g)</option>
+                                              <option value="KG">Kilo Gram (kg)</option>
+                                              <option value="ML">Milli Liter (ml)</option>
+                                              <option value="L">Liter (L)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>GST Level</label>
+                                            <div>
+                                                <label class="fancy-radio">
+                                                    <input name="gst" value="5" type="radio" checked>
+                                                    <span><i></i>5%</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input name="gst" value="12" type="radio">
+                                                    <span><i></i>12%</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input name="gst" value="18" type="radio">
+                                                    <span><i></i>18%</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input name="gst" value="28" type="radio">
+                                                    <span><i></i>28%</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input name="gst" value="0" type="radio">
+                                                    <span><i></i>Exempted</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div class="form-group my-2">
+                                    <button type="submit" name="ProductSubmit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
+                                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div id="wrapper">
 
     <nav class="navbar navbar-fixed-top">
@@ -29,10 +216,7 @@
             <div class="navbar-btn">
                 <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
             </div>
-          <style>
 
-
-          </style>
             <div class="navbar-brand">
                 <a href="<?php echo $base ?>/dashboard" class="text-dark">
                     &nbsp; &nbsp; &nbsp; &nbsp; ADMIN
@@ -49,86 +233,25 @@
                 <div id="navbar-menu">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="<?php echo $base ?>/party/add-party" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-users"></i></a>
+                            <a href="<?php echo $base ?>/party/add-party" title="New New Party"  class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-users"></i></a>
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/products/add-product" target="_blank" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-grid"></i></a>
+                            <a href="#" data-toggle="modal" data-target="#userDetailsModal" title="Add New Product" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-briefcase"></i></a>
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/sales/create_sales_invoice" class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
+                            <a href="<?php echo $base ?>/sales/create_sales_invoice"  title="Sales Invoice"  class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/purchase/purchase_invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
+                            <a href="<?php echo $base ?>/purchase/purchase_invoice"  title="Purchase Invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
                             <!-- <span class="notification-dot"></span> -->
                         </li>
-                        <!-- <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-                                <i class="icon-bell"></i>
-                                <span class="notification-dot"></span>
-                            </a>
-                            <ul class="dropdown-menu notifications">
-                                <li class="header"><strong>You have 4 new Notifications</strong></li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <i class="icon-info text-warning"></i>
-                                            </div>
-                                            <div class="media-body">
-                                                <p class="text">Campaign <strong>Holiday Sale</strong> is nearly reach budget limit.</p>
-                                                <span class="timestamp">10:00 AM Today</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>                               
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <i class="icon-like text-success"></i>
-                                            </div>
-                                            <div class="media-body">
-                                                <p class="text">Your New Campaign <strong>Holiday Sale</strong> is approved.</p>
-                                                <span class="timestamp">11:30 AM Today</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                    <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <i class="icon-pie-chart text-info"></i>
-                                            </div>
-                                            <div class="media-body">
-                                                <p class="text">Website visits from Twitter is 27% higher than last week.</p>
-                                                <span class="timestamp">04:00 PM Today</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <i class="icon-info text-danger"></i>
-                                            </div>
-                                            <div class="media-body">
-                                                <p class="text">Error on website analytics configurations</p>
-                                                <span class="timestamp">Yesterday</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li class="footer"><a href="javascript:void(0);" class="more">See all notifications</a></li>
-                            </ul>
-                        </li> -->
+                        
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
                             <ul class="dropdown-menu user-menu menu-icon">
                                 <li class="menu-heading">Transaction Report</li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/sale"><i class="icon-note"></i> <span>Sale</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/"><i class="icon-note"></i> <span>Purchase</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/transaction/purchase"><i class="icon-note"></i> <span>Purchase</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/daybook"><i class="icon-note"></i> <span>Day Book</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/transaction/alltransaction"><i class="icon-note"></i> <span>All Transaction</span></a></li>
                                 <li class="menu-heading">Party Reports</li>
@@ -138,8 +261,8 @@
                                 <li><a href="<?php echo $base ?>/reports/party/partySummary"><i class="icon-credit-card"></i> <span>Sale Purchase By Party</span></a></li>
                                 <li class="menu-heading">Item/Stock Report</li>
                                 <li><a href="<?php echo $base ?>/reports/stock/stockDetails"><i class="icon-credit-card"></i> <span>Stock Details</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/stock/allParties"><i class="icon-credit-card"></i> <span>Item Report By Party</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/stock/party_sales_report"><i class="icon-credit-card"></i> <span>Stock Summary</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/stock/itemreport"><i class="icon-credit-card"></i> <span>Item Report By Party</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/stock/stocksummary"><i class="icon-credit-card"></i> <span>Stock Summary</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/stock/lowStock"><i class="icon-credit-card"></i> <span>Low Stock Summary</span></a></li>
                             </ul>
                         </li>
@@ -277,7 +400,7 @@
                                         <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
                                         <ul>
                                             <li><a href="<?php echo $base ?>/reports/transaction/sale">Sale</a></li>
-                                            <li><a href="">Purchase</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/transaction/purchase">Purchase</a></li>
                                             <li><a href="<?php echo $base ?>/reports/transaction/daybook">Day Book</a></li>
                                             <li><a href="<?php echo $base ?>/reports/transaction/alltransaction">All Transaction</a></li>
                                         </ul>

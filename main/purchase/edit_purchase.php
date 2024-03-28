@@ -281,7 +281,7 @@ $query = "SELECT si.*, p.name AS `name`
                             <li class="breadcrumb-item active"> purchase Invoice</li>
                         </ul>
                         <br>
-                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
+                        <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>,<?php echo $row['purchase_invoice_number']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
                     </div>
                     </div>
                 </div>
@@ -805,11 +805,11 @@ function create_purchase_invoice() {
     rowElement.remove();
     calculate_total_discount();
   }
-    function deleteInvoice(id) {
+    function deleteInvoice(id,purchase_invoice_number) {
     $.ajax({
         url: '../common/remove_item.php',
         type: 'POST',
-        data: { purchase_invoice: id }, 
+        data: { purchase_invoice: id,purchase_invoice_number:purchase_invoice_number }, 
         success: function (response) {
             console.log("removed");
             window.location.href="purchase_invoice";

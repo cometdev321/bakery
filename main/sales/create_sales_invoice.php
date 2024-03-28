@@ -388,7 +388,9 @@ date_default_timezone_set('Asia/Kolkata');
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Received</label>
                                                 <div class="input-group">
-                                                    <input type="text"  id="amount_received" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
+                                                    <input type="text"  id="amount_received" 
+                                                    onkeyup = "update_remaining()"
+                                                    name="amount_received"   class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
                                                         <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
                                                             <option selected value="cash">Cash</option>
@@ -399,7 +401,12 @@ date_default_timezone_set('Asia/Kolkata');
                                                 </div>
 
                                             </div>
-                                            
+                                            <div class="col-lg-2 col-md-12 my-2">
+                                                <label>Amount remaining</label>
+                                                <input type="text" name="amt_remaining"  id="amt_remaining" 
+                                                readonly
+                                                class="form-control" >
+                                            </div>
                      
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Total Balance</label>
@@ -411,8 +418,9 @@ date_default_timezone_set('Asia/Kolkata');
                                     <div class="row">&nbsp;</div>
                                     <div class="row">&nbsp;</div>
                                     <div class="row clearfix" style="float: right;">
-                                      <button type="button" class="btn btn-success mx-2" onclick="create_sales_invoice()">
+                                      <button type="button" class="btn btn-success mx-2" id="save_sales" onclick="create_sales_invoice()">
                                         <i class="fa fa-check-circle"></i> <span>Save Sales Invoice</span>
+                                        
                                       </button>
                                       <button type="button" class="btn btn-primary" onclick="location.reload()">
                                         <i class="icon-refresh"></i> <span></span>
@@ -447,6 +455,7 @@ document.addEventListener('keydown', function(event) {
 
 
     let rowCount = 0;
+   
 
     // Function to add a new row to the table
     function addRow() {
@@ -484,7 +493,7 @@ document.addEventListener('keydown', function(event) {
         // Initialize Select2 for the new select element
         const selectElement = newRow.querySelector('select[name="itemname[]"]');
         $(selectElement).select2();
-
+        //addRow();
         document.getElementById('add-row-btn').disabled = true;
         getproducts(rowCount);
         calculate_total_discount();
@@ -564,6 +573,7 @@ function create_sales_invoice() {
     after_discount_total_value: after_discount_total_value,
     check_payment_received: check_payment_received,
     amount_received_value: amount_received_value,
+    amount_remaining_value: amount_remaining,
     amount_received_type_value: amount_received_type_value,
     balance_total_value: balance_total_value
   };
@@ -699,6 +709,8 @@ function create_sales_invoice() {
             document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
             document.getElementById("received_pay").value="Yes";
             var selectElement = document.getElementById('amount_received_type');
+            document.getElementById('amt_remaining').value = 0;
+
             selectElement.disabled = false;
         } else {
             document.getElementById("received_pay").value="No";
@@ -709,6 +721,36 @@ function create_sales_invoice() {
         }
     }
 
+
+        const inputField = document.getElementById("amount_received");
+
+
+        // inputField.addEventListener("change", function() {
+        // // Call your function with the new value
+        // update_remaining();
+        // });
+
+
+      function update_remaining(){
+      const tot_val = document.getElementById('balance_total').value;
+      const amt_paid = document.getElementById('amount_received').value;
+
+      document.getElementById('amt_remaining').value = tot_val - amt_paid;
+      }
+
+  function update_remaining(){
+    const tot_val = document.getElementById('balance_total').value;
+    const amt_paid = document.getElementById('amount_received').value;
+
+    let remaining_value = tot_val - amt_paid;
+    if(amt_paid > tot_val){
+        document.getElementById('save_sales').disabled = true;
+    }else{
+      document.getElementById('save_sales').disabled = false;
+    }
+    document.getElementById('amt_remaining').value = remaining_value;
+  }
+    
     function update_amount(row) {
         const qtyInput = document.getElementById(`qty-${row}`);
         const priceInput = document.getElementById(`price-${row}`);

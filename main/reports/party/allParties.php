@@ -20,9 +20,7 @@
                     </div>
                 </div>
             </div>
-
-                     
-                        <div class="card planned_task">
+            <div class="card planned_task">
                             <div class="body">
                                 <div class="body table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -107,8 +105,14 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     getSales();
+
+
   });
   document.title='AllParties';
+
+
+  
+
 </script>
 
 

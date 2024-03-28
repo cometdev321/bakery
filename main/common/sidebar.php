@@ -274,7 +274,7 @@ if(isset($_POST['ProductSubmit'])) {
             </div>
         </div>
     </nav>
-    <div id="left-sidebar" class="sidebar">
+    <div id="left-sidebar" class="sb sidebar">
         <div class="sidebar-scroll">
             <div class="user-account">
                 <!--<img src="Images/<?php
@@ -380,6 +380,7 @@ if(isset($_POST['ProductSubmit'])) {
                                 <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li>
+                                    <li><a href="<?php echo $base ?>/vendors/vendor.php">Vendor</a></li>
                                     <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
                                 </ul>
                             </li>

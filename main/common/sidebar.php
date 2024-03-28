@@ -52,7 +52,7 @@
                             <a href="<?php echo $base ?>/party/add-party" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-users"></i></a>
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/products/add-product" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-grid"></i></a>
+                            <a href="<?php echo $base ?>/products/add-product" target="_blank" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-grid"></i></a>
                         </li>
                         <li>
                             <a href="<?php echo $base ?>/sales/create_sales_invoice" class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
@@ -266,6 +266,7 @@
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/transaction/transfer">Transfer Stock</a></li>
                                     <li><a href="<?php echo $base ?>/transaction/transfer_history">Transfer History</a></li>
+                                    <li><a href="<?php echo $base ?>/transaction/transfer_requests">Transfer Requests</a></li>
                               
                                 </ul>
                             </li>

@@ -116,3 +116,9 @@ if(isset($_POST['remove_paymentIn'])){
     $sql = "UPDATE tblpaymentin SET status='0' WHERE id=$id";
     mysqli_query($conn, $sql);
 }
+#remove deleteTransaction
+if(isset($_POST['deleteTransaction'])){
+    $id=$_POST['deleteTransaction'];
+    $sql = "UPDATE `tbltransfer` SET status='0' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}

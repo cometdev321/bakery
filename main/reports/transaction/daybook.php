@@ -75,7 +75,6 @@
                     <script>
   function get_list() {
     var date=document.getElementById('date').value;
-    console.log(date)
    $.ajax({
     url: "../../get_ajax/transaction_report/getdaybook.php",
       type: "POST",

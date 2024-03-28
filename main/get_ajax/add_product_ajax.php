@@ -1,7 +1,6 @@
 <?php
  include('../common/cnn.php');
  include('../common/session_control.php');
- session_start();
 
 
 if(isset($_POST['category']) && isset($_POST['productName']) && isset($_POST['salePrice'])) {

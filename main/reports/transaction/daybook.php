@@ -10,17 +10,32 @@
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> All Parties</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Day Book</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">All Parties</li>
+                            <li class="breadcrumb-item active">Day Book</li>
                         </ul>
                     </div>
                     </div>
                 </div>
             </div>
-            <div class="card planned_task">
+            <div class="row clearfix">
+            <div class="col-lg-12 col-md-12">
+                <div class="card planned_task">
+                    <div class="body row">
+                        <div class="form-group"  style="padding-left:40px">
+                            <label>Day</label>
+                            <div class="input-group">
+                                    <input type="date" style="width:250px" class="form-control" id="date" value="<?php echo date('Y-m-d');?>" onchange="get_list()">
+                            </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+                     
+                        <div class="card planned_task">
                             <div class="body">
                                 <div class="body table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -28,20 +43,22 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>PartyName</th>
-                                                <th>Mobno</th>
-                                                <th>Receivable Balance</th>
-                                                <th>Payable Balance</th>
-                                                <th>Credit</th>
+                                                <th>Ref NO</th>
+                                                <th>Type</th>
+                                                <th>Total</th>
+                                                <th>Money In</th>
+                                                <th>Money Out</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>#</th>
                                                 <th>PartyName</th>
-                                                <th>Mobno</th>
-                                                <th>Receivable Balance</th>
-                                                <th>Payable Balance</th>
-                                                <th>Credit</th>
+                                                <th>Ref NO</th>
+                                                <th>Type</th>
+                                                <th>Total</th>
+                                                <th>Money In</th>
+                                                <th>Money Out</th>
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
@@ -56,10 +73,13 @@
                     </div>
   
                     <script>
-  function getSales() {
-    $.ajax({
-      type: "GET",
-      url: "../../get_ajax/getAllparties.php",
+  function get_list() {
+    var date=document.getElementById('date').value;
+    console.log(date)
+   $.ajax({
+    url: "../../get_ajax/transaction_report/getdaybook.php",
+      type: "POST",
+      data:{date:date},
       success: function(response) {
         $("#table-body").html(response);
         loadAdditionalScripts();
@@ -68,6 +88,7 @@
         loadAdditionalScripts();
     }
     });
+    
   }
 
   function loadAdditionalScripts() {
@@ -104,15 +125,8 @@
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    getSales();
-
-
+    get_list();
   });
-  document.title='AllParties';
-
-
-  
-
 </script>
 
 
@@ -122,14 +136,7 @@
 <script src="../../../assets/bundles/libscripts.bundle.js"></script>    
 <script src="../../../assets/bundles/libscripts.bundle.js"></script>    
 <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
-
-<script src="../../../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
-<script src="../../../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
-<script src="../../../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-<script src="../../../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
-<script src="../../../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
-
-<script src="../../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
+<!--  -->
     
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../../assets/js/pages/forms/advanced-form-elements.js"></script>

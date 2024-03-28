@@ -3,6 +3,20 @@
  include('common/sidebar.php'); 
 
  ?>
+ <style>
+    .graph-container{
+        width:80%;
+        height: 50%;
+
+    }
+    #salesChart{
+        display:block;
+        width:80%;
+        height: 50%;
+    }
+ </style>
+   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <div id="main-content">
         <div class="container-fluid">
             <div class="block-header">
@@ -22,11 +36,21 @@
                     <div class="card overflowhidden number-chart">
                         <div class="body">
                             <div class="number">
-                                <h6>Session of :  <?php if(isset($_SESSION['admin'])){ echo $_SESSION['admin']; echo ' admin';
-                                }else{ echo $_SESSION['user'];  echo ' user';}?></h6>
-                                <span>$22,500</span>
+
+
+                                <?php
+                                $currentMonth = date("n");
+                                $query = "SELECT SUM(total_balance) AS total_sales 
+                                FROM tblsalesinvoices 
+                                WHERE MONTH(timestamp) = $currentMonth AND userID = '$session'";
+                                $querySalesResult = mysqli_query($conn, $query);
+                                $rowSales = mysqli_fetch_array($querySalesResult);
+                                ?>
+                                <h4>Sales</h4>
+                                <span><?php echo $rowSales['total_sales']; ?></span>
+
                             </div>
-                            <small class="text-muted">19% compared to last week</small>
+                             <small class="text-muted">Total sales of all time</small>
                         </div>
                         <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
                         data-line-Width="1" data-line-Color="#f79647" data-fill-Color="#fac091">1,4,1,3,7,1</div>
@@ -37,14 +61,14 @@
                         <div class="body">
                             <div class="number">
                                 <?php
-                                $querySales = "SELECT sum(total_balance) as total FROM tblsalesinvoices where userID='$session'"; 
+                                $querySales = "SELECT sum(total_balance) as total FROM tblpurchaseinvoices where userID='$session'"; 
                                 $querySalesResult = mysqli_query($conn, $querySales);
                                 $rowSales = mysqli_fetch_array($querySalesResult);
                           ?>
-                                <h6>SALES</h6>
-                                <span>&#8377;&nbsp;<?php echo $rowSales['total']?$rowSales['total']:'0.00';?></span>
+                                <h6>Purchase</h6>
+                                <span>&#8377;&nbsp;<?php echo $rowSales['total']?></span>
                             </div>
-                            <small class="text-muted">19% compared to last week</small>
+                            <small class="text-muted">Total purchase of all time</small>
                         </div>
                         <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
                         data-line-Width="1" data-line-Color="#604a7b" data-fill-Color="#a092b0">1,4,2,3,6,2</div>
@@ -54,10 +78,15 @@
                     <div class="card overflowhidden number-chart">
                         <div class="body">
                             <div class="number">
-                                <h6>VISITS</h6>
-                                <span>$21,215</span>
+                            <?php
+                                $querySales = "SELECT sum(r_balance) as total FROM tblpartyreport where userID='$session'"; 
+                                $querySalesResult = mysqli_query($conn, $querySales);
+                                $rowSales = mysqli_fetch_array($querySalesResult);
+                          ?>
+                                <h6>Receiable Amount</h6>
+                                <span>&#8377;&nbsp;<?php echo $rowSales['total']?></span>
                             </div>
-                            <small class="text-muted">19% compared to last week</small>
+                            <small class="text-muted">total amount to be received</small>
                         </div>
                         <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
                         data-line-Width="1" data-line-Color="#4aacc5" data-fill-Color="#92cddc">1,4,2,3,1,5</div>
@@ -67,13 +96,38 @@
                     <div class="card overflowhidden number-chart">
                         <div class="body">
                             <div class="number">
-                                <h6>LIKES</h6>
-                                <span>$421,215</span>
+                            <?php
+                                $querySales = "SELECT sum(p_balance) as total FROM tblpartyreport where userID='$session'"; 
+                                $querySalesResult = mysqli_query($conn, $querySales);
+                                $rowSales = mysqli_fetch_array($querySalesResult);
+                          ?>
+                                <h6>Payable remaining</h6>
+                                <span>&#8377;&nbsp;<?php echo $rowSales['total']?></span>
                             </div>
-                            <small class="text-muted">19% compared to last week</small>
+                            <small class="text-muted">total amount to be paid</small>
                         </div>
                         <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
                         data-line-Width="1" data-line-Color="#4f81bc" data-fill-Color="#95b3d7">1,3,5,1,4,2</div>
+
+                        <div class="graph-container">
+                            <?php
+                                $sql = "SELECT MONTH(timestamp) AS month, YEAR(timestamp) AS year, SUM(total_balance) AS total_sales
+                                FROM tblsalesinvoices
+                                GROUP BY YEAR(timestamp), MONTH(timestamp)
+                                ORDER BY YEAR(timestamp), MONTH(timestamp)";
+
+                                $result = mysqli_query($conn, $sql);
+                                $data = [];
+                                while ($row = mysqli_fetch_array($result)){
+                                    $data[] = [
+                                        'label' => date("F", mktime(0, 0, 0, $row['month'], 1)) . ' ' . $row['year'],
+                                        'value' => $row['total_sales']
+                                    ];
+                                }
+                                
+                            ?>
+                            <canvas id="salesChart" ></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -84,8 +138,58 @@
     
 </div>
 
+<script>
+     $(document).ready(function(){
+      $('#monthSelect').change(function(){
+        var selectedMonth = $(this).val();
+
+        $.ajax({
+          type: 'POST',
+          url: './get_ajax/get_monthsales.php',
+          data: { month: selectedMonth },
+          success: function(response){
+            $('#salesResult').html(response);
+          }
+        });
+      });
+
+      // Trigger initial call to load sales data for the default selected month
+      $('#monthSelect').change();
+    });
+</script>
+<script>
+        // Prepare data for Chart.js
+        var data = <?php echo json_encode($data); ?>;
+
+        // Initialize Chart.js
+        var ctx = document.getElementById('salesChart').getContext('2d');
+        var salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.map(item => item.label),
+                datasets: [{
+                    label: 'Total Sales',
+                    data: data.map(item => item.value),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 <!-- Javascript -->
 <script src="../assets/bundles/libscripts.bundle.js"></script>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script src="../assets/bundles/vendorscripts.bundle.js"></script>
 
 <script src="../assets/bundles/chartist.bundle.js"></script>

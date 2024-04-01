@@ -388,7 +388,7 @@ date_default_timezone_set('Asia/Kolkata');
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Paid</label>
                                                 <div class="input-group">
-                                                    <input type="text"  id="amount_received" name="amount_received"
+                                                    <input type="text" readonly  id="amount_received" name="amount_received"
                                                      class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
                                                         <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
@@ -401,10 +401,10 @@ date_default_timezone_set('Asia/Kolkata');
 
                                             </div>
                                             
-                                            <div class="col-lg-2 col-md-12 my-2">
+                                            <!-- <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount remaining</label>
                                                 <input type="text" name="amt_remaining"  id="amt_remaining" readonly  onclick="update_paid();" class="form-control" >
-                                            </div>
+                                            </div> -->
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Total Balance</label>
                                                 <input type="text" name="balance_total"  id="balance_total" readonly class="form-control" >
@@ -468,7 +468,7 @@ date_default_timezone_set('Asia/Kolkata');
             '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount + '" name="amount[]" value="0" readonly></td>' +
+            '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount + '" readonly name="amount[]" value="0" readonly></td>' +
             '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
 
 
@@ -510,9 +510,9 @@ function create_Purchase_invoice() {
   let amount_received_value = amount_received.value;
   let balance_total_value = balance_total.value;
   var  amount_received_type_value;
-  let amount_remaining = amt_remaining.value;
+  // let amount_remaining = amt_remaining.value;
 
-    if (isNaN(balance_total_value) || balance_total_value.trim() === '') {
+    if (isNaN(balance_total_value) || balance_total_value.trim() === ''|| balance_total_value<0) {
         Toastify({
             text: 'Values entered not correct',
             duration: 3000,
@@ -555,7 +555,7 @@ function create_Purchase_invoice() {
     after_discount_total_value: after_discount_total_value,
     check_payment_received: check_payment_received,
     amount_received_value: amount_received_value,
-    amount_remaining_value: amount_remaining,
+    // amount_remaining_value: amount_remaining,
     amount_received_type_value: amount_received_type_value,
     balance_total_value: balance_total_value
   };
@@ -620,34 +620,11 @@ function create_Purchase_invoice() {
   fetch(url, options)
     .then(response => response.text())
     .then(result => {
+      console.log(result);
       if (result === 'error') {
-        Toastify({
-          text: " Error Occurred",
-          duration: 3000,
-          newWindow: true,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)",
-          margin: "70px 15px 10px 15px",
-          stopOnFocus: true,
-          onClick: function() {},
-        }).showToast();
-        window.location.href = "purchase_invoice";
+        window.location.href = "purchase_invoice?status=error";
       } else if (result === 'success') {
-        Toastify({
-          text: "Invoice added successfully",
-          duration: 3000,
-          newWindow: true,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)",
-          margin: "70px 15px 10px 15px",
-          stopOnFocus: true,
-          onClick: function() {},
-        }).showToast();
-        window.location.href = "purchase_invoice";
+        window.location.href = "purchase_invoice?status=success";
       }
     })
     .catch(error => {
@@ -687,6 +664,7 @@ function create_Purchase_invoice() {
         update_paid();
     }
 
+   
     function update_paid() {
         var checkbox = document.getElementById("received_pay");
 
@@ -695,6 +673,8 @@ function create_Purchase_invoice() {
             document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
             document.getElementById("received_pay").value="Yes";
             var selectElement = document.getElementById('amount_received_type');
+            // document.getElementById('amt_remaining').value = 0;
+
             selectElement.disabled = false;
         } else {
             document.getElementById("received_pay").value="No";
@@ -703,24 +683,7 @@ function create_Purchase_invoice() {
              var selectElement = document.getElementById('amount_received_type');
             selectElement.disabled = true;
         }
-        // const total_amt = document.getElementById('balance_total').value;
-        //     const amt_paid = document.getElementById('amount_received').value;
-        //     console.log(amt_paid);
-        //     document.getElementById('amt_remaining').value = total_amt - amt_paid;
-        // calculating the paid and remaining amount part
-        const checkox = document.getElementById('received_pay');
-
-        checkbox.addEventListener("change",function(){
-          if(this.checked){
-            //update_paid();
-            console.log("working");
-            document.getElementById('amt_remaining').value = 0;
-          }else{
-            update_paid();
-          }
-        })
     }
-
     const inputField = document.getElementById("amount_received");
 
 // Add an onchange event listener to the input field

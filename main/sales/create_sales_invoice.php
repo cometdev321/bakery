@@ -389,8 +389,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                 <label>Amount Received</label>
                                                 <div class="input-group">
                                                     <input type="text"  id="amount_received" 
-                                                    onkeyup = "update_remaining()"
-                                                    name="amount_received"   class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
+                                                   name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
                                                         <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
                                                             <option selected value="cash">Cash</option>
@@ -401,12 +400,12 @@ date_default_timezone_set('Asia/Kolkata');
                                                 </div>
 
                                             </div>
-                                            <div class="col-lg-2 col-md-12 my-2">
+                                            <!-- <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount remaining</label>
                                                 <input type="text" name="amt_remaining"  id="amt_remaining" 
                                                 readonly
                                                 class="form-control" >
-                                            </div>
+                                            </div> -->
                      
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Total Balance</label>
@@ -573,20 +572,19 @@ function create_sales_invoice() {
     after_discount_total_value: after_discount_total_value,
     check_payment_received: check_payment_received,
     amount_received_value: amount_received_value,
-    amount_remaining_value: amount_remaining,
+    // amount_remaining_value: amount_remaining,
     amount_received_type_value: amount_received_type_value,
     balance_total_value: balance_total_value
   };
 
-    // console.log(formData)
-    // event.preventDefault();
-    // return;
+  // event.preventDefault();
+  // return;
   const rows = document.querySelectorAll('#table-body tr');
   const data = [];
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
-
+    
     const itemname = row.querySelector('[name="itemname[]"]').value;
     const hsn = row.querySelector('[name="hsn[]"]').value;
     const batchno = row.querySelector('[name="batchno[]"]').value;
@@ -598,17 +596,17 @@ function create_sales_invoice() {
     const discount = row.querySelector('[name="discount[]"]').value;
     const tax = row.querySelector('[name="tax[]"]').value;
     const amount = row.querySelector('[name="amount[]"]').value;
-
+    
     if (itemname === 'null') {
         showError=i+1;//because i start from 0 and rowCount starts from 1
-      const errorMessage = document.querySelector(`#product_errorMessage-${showError}`);
-      errorMessage.style.display = 'block';
-      errorMessage.textContent = 'Select the product';
-      event.preventDefault();
-      return;
-    }
-
-    const rowData = {
+        const errorMessage = document.querySelector(`#product_errorMessage-${showError}`);
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = 'Select the product';
+        event.preventDefault();
+        return;
+      }
+      
+      const rowData = {
       itemname,
       hsn,
       batchno,
@@ -632,11 +630,13 @@ function create_sales_invoice() {
     },
     body: JSON.stringify({ formData: formData, data: data })
   };
-
+  
   // Send the AJAX request and handle the response
   fetch(url, options)
     .then(response => response.text())
+    
     .then(result => {
+      console.log(result  )
       if (result === 'error') {
         Toastify({
           text: "Party could not be added. Error Occurred",
@@ -709,7 +709,7 @@ function create_sales_invoice() {
             document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
             document.getElementById("received_pay").value="Yes";
             var selectElement = document.getElementById('amount_received_type');
-            document.getElementById('amt_remaining').value = 0;
+            // document.getElementById('amt_remaining').value = 0;
 
             selectElement.disabled = false;
         } else {
@@ -722,7 +722,7 @@ function create_sales_invoice() {
     }
 
 
-        const inputField = document.getElementById("amount_received");
+        // const inputField = document.getElementById("amount_received");
 
 
         // inputField.addEventListener("change", function() {

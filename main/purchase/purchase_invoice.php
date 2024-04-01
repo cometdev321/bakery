@@ -4,7 +4,47 @@
 date_default_timezone_set('Asia/Kolkata');
 
 ?>
+<script>
+$(document).ready(function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  if (status === 'success') {
+    Toastify({
+      text: " purchase stored succesfully",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top",
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
+      margintop:"202px",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
 
+ 
+   if (status === 'error') {
+    Toastify({
+      text: "Something Went Wrong",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
+});
+</script>
     <div id="main-content">
         <div class="container-fluid">
            <div class="block-header">

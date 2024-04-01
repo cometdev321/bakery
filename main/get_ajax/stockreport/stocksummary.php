@@ -11,7 +11,7 @@ include('../../common/session_control.php');
         $queryForsales=mysqli_query($conn,"select COALESCE(SUM(Qty), 0) as qty from tblsalesinvoice_details where  ItemName='$prid' and date<='$fromDate' and status='1' and userID='$session'");
         $fetchsold=mysqli_fetch_array($queryForsales);
         
-        $closeQty=$fetchBought['qty']-$fetchsold['qty'];
+        $closeQty=($row['openingstock']+$fetchBought['qty'])-$fetchsold['qty'];
         ?>
             <tr>        
                 <td><?php echo $slno;?></td>

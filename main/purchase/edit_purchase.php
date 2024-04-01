@@ -6,11 +6,11 @@
     $id=$_POST['edit_purchase_id'];
 
     
-$query = "SELECT si.*, p.name AS `name` 
-          FROM tblpurchaseinvoices si
-          INNER JOIN tblparty p ON si.party_name = p.id
-          WHERE  si.userID = '$session' AND si.status = '1' 
-          ORDER BY si.id DESC"; 
+$query = "SELECT pi.*, p.name AS `name` 
+          FROM tblpurchaseinvoices pi
+          INNER JOIN tblparty p ON pi.party_name = p.id
+          WHERE  pi.userID = '$session' AND pi.status = '1' 
+          ORDER BY pi.id DESC"; 
           
           $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($result);
@@ -291,6 +291,7 @@ $query = "SELECT si.*, p.name AS `name`
                   <form action="" method="post">
                         <div class="body">
                                  <div class="row clearfix">
+
                                         <div class="col-lg-3 col-md-12 my-2">
                                             <label>Party</label>
                                             <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()"> 
@@ -333,7 +334,6 @@ $query = "SELECT si.*, p.name AS `name`
                         <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
                            Add Item&nbsp;<i class="fa fa-plus"></i> 
                         </button>
-                        <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button>
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
                                 <thead>
@@ -376,7 +376,7 @@ $query = "SELECT si.*, p.name AS `name`
                                 $purchaseInvoiceNum = $row['purchase_invoice_number'];
                                 $query1 = "SELECT ts.*, tp.productname AS pname 
                                 FROM tblpurchaseinvoice_details ts
-                                INNER JOIN tblproducts tp ON tp.productname = ts.ItemName
+                                INNER JOIN tblproducts tp ON tp.id = ts.ItemName
                                 WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
                                   AND ts.userID = '$session' 
                                   AND ts.status = '1' 
@@ -412,7 +412,7 @@ $query = "SELECT si.*, p.name AS `name`
                                             <td><input type="number" style="width:100px" class="form-control" id="price-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" readonly value="<?php echo $row1['Price']; ?>" name="price[]"></td>
                                             <td><input type="number" style="width:100px" class="form-control" id="discount-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Discount']; ?>" name="discount[]"></td>
                                             <td><input type="number" style="width:100px" class="form-control" id="tax-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Tax']; ?>" name="tax[]"></td>
-                                            <td><input type="number" style="width:100px" class="form-control" id="amount-<?php echo $slno; ?>" value="<?php echo $row1['Amount']; ?>" name="amount[]" ></td>
+                                            <td><input type="number" style="width:100px" class="form-control" readonly id="amount-<?php echo $slno; ?>" value="<?php echo $row1['Amount']; ?>" name="amount[]" ></td>
                                             <td><button type="button" onclick="deletepurchase(<?php echo $slno; ?>,<?php echo $row1['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i></button></td>
                                         </tr>
                                         <?php
@@ -466,21 +466,23 @@ $query = "SELECT si.*, p.name AS `name`
                                                 </center>
                                             </div>
                                             
-                                            <!-- <div class="col-lg-2 col-md-12 my-2">
+                                                   
+                                            <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Amount Received</label>
                                                 <div class="input-group">
-                                                    <input type="text"  id="amount_received"  value="<?php echo $row['amount_received']; ?>" name="amount_received" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
+                                                    <input type="text"  id="amount_paid"  value="<?php echo $row['amount_paid']; ?>" name="amount_paid" readonly  class="form-control" aria-label="Text input with select button" fdprocessedid="nnp09r">
                                                     <div class="input-group-append">
-                                                        <select class="custom-select" required name="amount_received_type" disabled id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
-                                                            <option selected value="<?php echo $row['amount_received_type']; ?>"><?php echo strtoupper($row['amount_received_type']); ?></option>
+                                                        <select class="custom-select" required name="amount_paid_type" disabled id="amount_paid_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
+                                                            <option selected value="<?php echo $row['amount_paid_type']; ?>"><?php echo strtoupper($row['amount_paid_type']); ?></option>
                                                             <option  value="cash">Cash</option>
                                                             <option value="bank">Bank</option>
                                                             <option value="cheque">Cheque</option>
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <small id="none_errorMessage" class="text-danger" style="display: none;">Select Party</small>
 
-                                            </div> -->
+                                            </div>
                                             
                      
                                             <div class="col-lg-2 col-md-12 my-2">
@@ -551,7 +553,7 @@ $query = "SELECT si.*, p.name AS `name`
             '<td><input type="number" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="number" style="width:100px" class="form-control" id="amount-' + rowCount + '" name="amount[]" value="0" readonly></td>' +
+            '<td><input type="number" style="width:100px" class="form-control" id="amount-' + rowCount + '" readonly name="amount[]" value="0" readonly></td>' +
             '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
 
 
@@ -589,18 +591,47 @@ function create_purchase_invoice() {
   let party = party_name.value;
   let party_mob = party_mobno.value;
   let purchase_invoice_no = purchase_invoice_number.value;
-  let purchase_invoice_date = purchase_invoice_date.value;
+  let purchases_invoice_date = purchase_invoice_date.value;
   let subtotal_value = subtotal.value;
   let discount_value = discount.value;
   let after_discount_total_value = total.value;
   let check_payment_received = received_pay.value;
- // let amount_received_value = amount_received.value;
+ let amount_paid_value = amount_paid.value;
   let balance_total_value = balance_total.value;
- // var  amount_received_type_value;
-    // if (!amount_received_type.disabled) {
-    //   amount_received_type_value = amount_received_type.value;
-    // }
+ var  amount_paid_type_value;
+    if (!amount_paid_type.disabled) {
+      amount_paid_type_value = amount_paid_type.value;
+    }
+    
+    if (isNaN(balance_total_value) || balance_total_value.trim() === '' || balance_total_value<0) {
+        Toastify({
+            text: 'Values entered not correct',
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top', // top, bottom, left, right
+            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+            backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)', // Use gradient color with red mix
+            marginTop: '202px', // corrected to marginTop
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            onClick: function(){}, // Callback after click
+            style: {
+                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
+            },
+        }).showToast();
+        event.preventDefault();
+    return;
+    }
 
+
+
+    if (amount_paid_type_value == 'none') {
+      const errorMessage = document.querySelector(`#none_errorMessage`);
+      errorMessage.style.display = 'block';
+      errorMessage.textContent = 'Select the mode of payment';
+      event.preventDefault();
+      return;
+    }
 
     //console.log(party_mob);
   var formData = {
@@ -608,13 +639,13 @@ function create_purchase_invoice() {
     party: party,
     party_mob: party_mob,
     purchase_invoice_no: purchase_invoice_no,
-    purchase_invoice_date: purchase_invoice_date,
+    purchase_invoice_date: purchases_invoice_date,
     subtotal_value: subtotal_value,
     discount_value: discount_value,
     after_discount_total_value: after_discount_total_value,
     check_payment_received: check_payment_received,
-   // amount_received_value: amount_received_value,
-   // amount_received_type_value: amount_received_type_value,
+   amount_paid_value: amount_paid_value,
+   amount_paid_type_value: amount_paid_type_value,
     balance_total_value: balance_total_value
   };
 
@@ -667,7 +698,6 @@ function create_purchase_invoice() {
 
     data.push(rowData);
   }
-  console.log(data);
   const url = './functions/update_invoice.php';
   const options = {
     method: 'POST',
@@ -681,6 +711,7 @@ function create_purchase_invoice() {
   fetch(url, options)
     .then(response => response.text())
     .then(result => {
+      console.log(result)
       if (result === 'error') {
         Toastify({
           text: "Party could not be added. Error Occurred",
@@ -749,16 +780,16 @@ function create_purchase_invoice() {
         var checkbox = document.getElementById("received_pay");
 
         if (checkbox.checked) {
-            document.getElementById('amount_received').value = document.getElementById('total').value;
-            document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
+            document.getElementById('amount_paid').value = document.getElementById('total').value;
+            document.getElementById('balance_total').value -= document.getElementById('amount_paid').value;
             document.getElementById("received_pay").value="Yes";
-            var selectElement = document.getElementById('amount_received_type');
+            var selectElement = document.getElementById('amount_paid_type');
             selectElement.disabled = false;
         } else {
             document.getElementById("received_pay").value="No";
-            document.getElementById('amount_received').value = '0';
+            document.getElementById('amount_paid').value = '0';
             document.getElementById('balance_total').value = document.getElementById('total').value;
-             var selectElement = document.getElementById('amount_received_type');
+             var selectElement = document.getElementById('amount_paid_type');
             selectElement.disabled = true;
         }
     }

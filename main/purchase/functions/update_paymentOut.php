@@ -2,21 +2,27 @@
  include('../../common/cnn.php');
  include('../../common/session_control.php');
 
-
+ 
+$PayOutId = $_POST['payOutId'];
 $partySelect = $_POST['partySelect'];
 $partyMobno = $_POST['partyMobno'];
 $paymentAmount = $_POST['paymentAmount'];
-$paymentOUTNumber = $_POST['Payment_Out_number'];
+$paymentOutNumber = $_POST['paymentOutNumber'];
 $paymentDate = $_POST['paymentDate'];
 $paymentMode = $_POST['paymentMode'];
 $note = $_POST['note'];
 
 
 
-// Prepare the INSERT query
-$query = "INSERT INTO tblpaymentOUT (partyName, partyMobno, paymentAmount, paymentDate, paymentMode, paymentOutNumber, Notes,userID)
-          VALUES ('$partySelect', '$partyMobno', '$paymentAmount', '$paymentDate', '$paymentMode', '$paymentOUTNumber', '$note','$session')";
-
+$query = "UPDATE tblpaymentout
+          SET partyName = '$partySelect',
+              partyMobno = '$partyMobno',
+              paymentAmount = '$paymentAmount',
+              paymentDate = '$paymentDate',
+              paymentMode = '$paymentMode',
+              paymentOutNumber = '$paymentOutNumber',
+              Notes = '$note'
+          WHERE id = $PayOutId";
 // Execute the query
 if (mysqli_query($conn, $query)) {
     echo "Data inserted successfully";

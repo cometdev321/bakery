@@ -14,4 +14,3 @@ while($party = mysqli_fetch_array($getParties)){
 <?php
 }
 ?>
-<option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>

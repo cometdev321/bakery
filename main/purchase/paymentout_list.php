@@ -105,23 +105,31 @@ date_default_timezone_set('Asia/Kolkata');
             </div>
         </div>
     </div>
-            <form id="salesOUTvoice" action="sale_OUTvoce" method="POST" style="display: none;">
-                <input type="text" hidden name="sale_id" id="sale_id">
-            </form>
-            <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
-                <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
+    
+            <form id="edit_purchaseOut" action="edit_invoice" method="POST" style="display: none;">
+                <input type="text"  name="edit_payment" id="edit_payment">
             </form>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
            <script>
-                function submitSaleInvoiceForm(val) {
-                    document.getElementById('sale_id').value=val;
-                    document.getElementById('salesInvoice').submit();
+                function edit_paymentOUT(val) {
+                    document.getElementById('edit_payment').value=val;
+                    document.getElementById('edit_purchaseOut').submit();
                 }
-                function edit_invoice(val) {
-                    document.getElementById('edit_sale_id').value=val;
-                    document.getElementById('edit_salesInvoice').submit();
+
+                function delete_paymentOUT(val) {
+                    $.ajax({
+                        url: "../common/remove_item.php",
+                        data: {remove_paymentOUT:val},
+                        type: 'POST',
+                        success: function(response) {
+                            window.location.reload();
+                        },
+                        error: function() {
+                            console.log("Error occurred while fetching parties.");
+                        }
+                    });
                 }
             </script>
 
@@ -168,7 +176,7 @@ function get_list(val) {
         };
     }
     $.ajax({
-        url: "../get_ajax/get_paymentout_list.php",
+        url: "../get_ajax/paymentOut/get_paymentout_list.php",
         data: formData,
         type: 'POST',
         success: function(response) {

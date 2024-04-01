@@ -2,7 +2,13 @@
     include('../common/header2.php');
     include('../common/sidebar.php');
 date_default_timezone_set('Asia/Kolkata');
-
+$paymentInID=$_POST['edit_payment'];
+$query = "SELECT pi.*, p.name AS `name`
+          FROM tblpaymentout pi
+          INNER JOIN tblparty p ON pi.partyName = p.id
+          WHERE pi.id = '$paymentInID' AND pi.userID = '$session'";
+          $result = mysqli_query($conn, $query);
+$row = mysqli_fetch_array($result);
 ?>
 <style>
   .required {
@@ -13,21 +19,21 @@ date_default_timezone_set('Asia/Kolkata');
     margin-top: -10px;
   }
 </style>
-
-
 <script>
+    
   
-  function handleSelectChange(selectElement,val) {
-        if (selectElement === 'add_new') {
-            $('#myModal').modal('show');
-        }else{
+  
+    function handleSelectChange(selectElement,val) {     
+            party_name.value=selectElement;
             party_mobno.value=val;
-        }
+        
         
     }
 
-</script>
 
+
+    
+</script>
 
  <div id="main-content">
         <div class="container-fluid">
@@ -44,19 +50,7 @@ date_default_timezone_set('Asia/Kolkata');
                     </div>
                 </div>
             </div>
-<?php
 
-                                                // Retrieve the last invoice number from tblsalesinvoices
-$query1 = "SELECT paymentOutNumber FROM tblpaymentOUT where userID='$session' and status='1' ORDER BY id DESC LIMIT 1";
-$result1 = mysqli_query($conn, $query1);
-if ($result1 && mysqli_num_rows($result1) > 0) {
-    $row = mysqli_fetch_assoc($result1);
-    $lastInvoiceNumber = $row['paymentOutNumber'];
-    $nextInvoiceNumber = $lastInvoiceNumber + 1;
-}else{
-  $nextInvoiceNumber=1;
-}
-?>
             <div class="card planned_task">
               <form action="" method="post">
                 <div class="body">
@@ -65,18 +59,20 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                       <div class="row">
                         <div class="col-md-12 my-2">
                           <label>Party</label>
-                          
+                          <input id="party_name" value="<?php echo $row['partyName']; ?>" hidden>
+                          <input id="payOutId" value="<?php echo $paymentInID;?>" hidden>
                           <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
-                            <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
-                          </select>
+                          <option selected value="<?php echo $row['partyName']; ?>" class="btn btn-secondary btn-sm"><?php echo $row['name']; ?></option>
+                         
+                        </select>
                           <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Party Mobile Number</label>
-                          <input type="text" name="party_mobno" placeholder="Type here" id="party_mobno" class="form-control" >
+                          <input type="text" name="party_mobno" value="<?php echo $row['partyMobno']; ?>" placeholder="Type here" id="party_mobno" readonly class="form-control" >
                         </div>
                        <div class="col-md-12 my-2">
-                          <label>Amount Paid</label>
+                          <label>Amount Received</label>
                           <style>
                             #payment_amount {
                               height: 60px;
@@ -92,7 +88,7 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                             <div class="input-group-prepend">
                               <span class="input-group-text rupee-sign"></span>
                             </div>
-                            <input type="number" name="payment_amount" id="payment_amount" placeholder="Type Here" class="form-control" onkeyup="clear_product_error()" required>
+                            <input type="number" name="payment_amount" id="payment_amount" value="<?php echo $row['paymentAmount']; ?>" placeholder="Type Here" class="form-control" onkeyup="clear_product_error()" required>
                           </div>
                           <small id="payamount_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                         </div>
@@ -102,31 +98,32 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                     <div class="col-lg-6">
                       <div class="row">
                         <div class="col-md-12 my-2">
-                          <label>Payment Out Number</label>
-                          <input type="number" readonly name="Payment_Out_number" id="Payment_Out_number" value="<?php echo $nextInvoiceNumber ? $nextInvoiceNumber : '1'; ?>" class="form-control" required>
+                          <label>Receipt Number</label>
+                          <input type="number" name="paymentIN_number" id="paymentIN_number" value="<?php echo $row['paymentOutNumber']; ?>" class="form-control" readonly>
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Payment Out Date</label>
-                          <input type="date" name="payment_date" id="payment_date" value="<?php echo date("Y-m-d") ?>" class="form-control" required>
+                          <input type="date" name="payment_date" id="payment_date" value="<?php echo $row['paymentDate']; ?>" class="form-control" required>
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Payment Mode</label>
                           <select class="form-control show-tick ms select2" data-placeholder="Select" name="payment_mode" id="payment_mode">
-                            <option selected value="cash">Cash</option>
+                            <option selected value="<?php echo $row['paymentMode']; ?>"><?php echo $row['paymentMode']; ?></option>
+                            <option  value="cash">Cash</option>
                             <option value="bank">Bank</option>
                             <option value="cheque">Cheque</option>
                           </select>
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Note</label>
-                          <textarea name="note" placeholder="Type here" id="note" class="form-control" ></textarea>
+                          <textarea name="note" placeholder="Type here" id="note" class="form-control" ><?php echo $row['Notes']; ?></textarea>
                         </div>
                       </div>
                     </div>
                   </div>
                      <div class="row">&nbsp;</div>
                     <div class="row clearfix" style="float: right;">
-                    <button type="button" class="btn btn-success mx-2" onclick="check_purchasein()">
+                    <button type="button" class="btn btn-success mx-2" onclick="check_salesOut()">
                         <i class="fa fa-check-circle"></i> <span>Save</span>
                     </button>
                     <button type="button" class="btn btn-primary" onclick="location.reload()">
@@ -164,11 +161,12 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
       
   }
 
-    function check_purchasein() {
-          var party = partySelect.value;
+    function check_salesOut() {
+            var payOutId = document.getElementById("payOutId").value;
+          var party = document.getElementById("party_name").value;
           var partyMobno = document.getElementById("party_mobno").value;
           var paymentAmount = document.getElementById("payment_amount").value;
-          var Payment_Out_number = document.getElementById("Payment_Out_number").value;
+          var paymentOutNumber = document.getElementById("paymentIN_number").value;
           var paymentDate = document.getElementById("payment_date").value;
           var paymentMode = document.getElementById("payment_mode").value;
           var note = document.getElementById("note").value;
@@ -198,24 +196,25 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
           }
 
           var data = {
+            payOutId: payOutId,
             partySelect: party,
             partyMobno: partyMobno,
             paymentAmount: paymentAmount,
-            Payment_Out_number: Payment_Out_number,
+            paymentOutNumber: paymentOutNumber,
             paymentDate: paymentDate,
             paymentMode: paymentMode,
             note: note
           };
-          
+          console.log(data);
           $.ajax({
-            url: 'functions/add_paymentOUT.php',
+            url: 'functions/update_paymentOut.php',
             method: 'POST',
             data: data,
              success: function(response) {
-                window.location.href='paymentout_list'
+                window.location.href='paymentout_list?status=success'
             },
             error: function() {
-                console.log("Error occurred ");
+              window.location.href='paymentout_list?status=error'
             }
           })
        

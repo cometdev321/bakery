@@ -175,6 +175,17 @@ $(document).ready(function() {
                         }
                     });
                 }
+                
+            </script>
+                 <script>
+                function submitSaleInvoiceForm(val) {
+                    document.getElementById('sale_id').value=val;
+                    document.getElementById('salesInvoice').submit();
+                }
+                function edit_invoice(val) {
+                    document.getElementById('edit_sale_id').value=val;
+                    document.getElementById('edit_salesInvoice').submit();
+                }
             </script>
 
 <script>

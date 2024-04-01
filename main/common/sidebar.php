@@ -242,7 +242,7 @@ if(isset($_POST['ProductSubmit'])) {
                             <a href="<?php echo $base ?>/sales/create_sales_invoice"  title="Sales Invoice"  class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/purchase/purchase_invoice"  title="Purchase Invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
+                            <a href="<?php echo $base ?>/purchase/create_purchase_invoice   "  title="Purchase Invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
                             <!-- <span class="notification-dot"></span> -->
                         </li>
                         
@@ -380,7 +380,7 @@ if(isset($_POST['ProductSubmit'])) {
                                 <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li>
-                                    <li><a href="<?php echo $base ?>/vendors/vendor.php">Vendor</a></li>
+                                    <!-- <li><a href="<?php echo $base ?>/vendors/vendor.php">Vendor</a></li> -->
                                     <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
                                 </ul>
                             </li>
@@ -418,9 +418,9 @@ if(isset($_POST['ProductSubmit'])) {
                                     <li>
                                         <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
                                         <ul>
-                                            <li><a href="">Stock Details</a></li>
-                                            <li><a href="">Item Report By Party</a></li>
-                                            <li><a href="">Stock Summary</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/stock/stockDetails">Stock Details</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/stock/itemreport">Item Report By Party</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/stock/stocksummary">Stock Summary</a></li>
                                             <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li>
                                         </ul>
                                     </li>

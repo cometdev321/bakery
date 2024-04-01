@@ -16,12 +16,12 @@
     $totalDiscount = $postData['formData']['discount_value'];
     $afterDiscountTotal = $postData['formData']['after_discount_total_value'];
     $fullyPaid = $postData['formData']['check_payment_received'];
-    // $amountReceived = $postData['formData']['amount_received_value'];
+     $amount_paid_value = $postData['formData']['amount_paid_value'];
     $totalBalance = $postData['formData']['balance_total_value'];
-    // $amountReceivedtype='none';
-    // if (isset($postData['formData']['amount_received_type_value'])) {
-    //     $amountReceivedtype = $postData['formData']['amount_received_type_value'];
-    // }
+    $amount_paid_type_value='none';
+    if (isset($postData['formData']['amount_paid_type_value'])) {
+        $amount_paid_type_value = $postData['formData']['amount_paid_type_value'];
+    }
     
     // Prepare and execute the query for tblsalesinvoices
     $query = "UPDATE tblpurchaseinvoices 
@@ -33,15 +33,15 @@
         discount = '$totalDiscount', 
         after_discount_total = '$afterDiscountTotal', 
         full_paid = '$fullyPaid', 
-        -- amount_received = '$amountReceived', 
-        -- amount_received_type = '$amountReceivedtype',
+        amount_paid = '$amount_paid_value', 
+        amount_paid_type = '$amount_paid_type_value',
         total_balance = '$totalBalance'
         WHERE id = $purchaseId;
     ";
 
     // Perform the database query
     $result = mysqli_query($conn, $query);
-  //  $purchaseID =$invoiceNumber;
+    $purchaseIDs =$invoiceNumber;
 
     if ($result) {
         // Insertion successful
@@ -82,7 +82,7 @@
 
             if($type=='new'){
                 $details_query = "INSERT INTO tblpurchaseinvoice_details (`purchase_invoice_number`,`ItemName`,`HSN`,`BatchNo`,`ExpireDate`,`ManufactureDate`,`Size`,`Qty`,`Price`,`Discount`,`Tax`,`Amount`,`userID`) 
-                VALUES ('$purchaseInvoiceId', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session')";
+                VALUES ('$purchaseIDs', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session')";
             }
 
             mysqli_query($conn, $details_query);

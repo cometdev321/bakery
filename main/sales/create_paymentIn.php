@@ -15,181 +15,7 @@ date_default_timezone_set('Asia/Kolkata');
 </style>
 
 
-
 <script>
-  $(document).ready(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    if (status === 'success') {
-      Toastify({
-        text: "Party added successfully",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-    if (status === 'error') {
-      Toastify({
-        text: "Party could not be added",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-    if (status === 'alreadyexists') {
-      Toastify({
-        text: "Party details already exist!",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-  });
-</script>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="myModalLabel">Create New Party</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <label for="nameInput"><span class="required">*</span> Name:</label>
-          <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter name" required>
-        </div>
-        <div class="modal-body">
-          <label for="mobileInput"><span class="required">*</span> Mobile Number:</label>
-          <input type="number" class="form-control" id="mob1" name="mobile" placeholder="Enter mobile number" required onkeyup="update();">
-          <small id="mobile_errorMessage" class="text-danger" style="display: none;">Invalid Mobile Number</small>
-        </div>
-        <div class="modal-body">
-          <label for="gstInput">GST Number (Optional):</label>
-          <input type="number" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
-          <small id="gstHelpText" class="form-text text-muted">Example: GSTIN-12**34**56*78ZA</small>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm" id="saveButton" onclick="check_data();" name="add_party">Save</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-  </div>
-</div>
-
-
-<script>
-  function update() {
-    mobile_errorMessage.style.display = 'none';
-    mob1.style.borderColor = "initial";
-  }
-
-  function check_data() {
-    let mobno = mob1.value;
-    let firstChar = mobno.charAt(0);
-
-    if (mobno.length !== 10) {
-      mobile_errorMessage.style.display = 'block';
-      mob1.style.borderColor = "red";
-      mob1.focus();
-      event.preventDefault();
-      return;
-    }else if (firstChar !== '6' && firstChar !== '7' && firstChar !== '8' && firstChar !== '9') {
-      mobile_errorMessage.style.display = 'block';
-      mob1.style.borderColor = "red";
-      mob1.focus();
-      event.preventDefault();
-      return;
-    }else{
-        let name=nameInput.value;
-        let gst=gstInput.value;
-
-        var formdata={
-            name:name,
-            mobno:mobno,
-            gstno:gst
-        }
-        
-              $.ajax({
-                url: 'functions/create_party_ajax.php',
-                type: 'POST',
-                data: formdata,
-                success: function(response) {
-                if(response=='alreadyexists'){
-                    Toastify({
-                        text: "Party already exists",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                
-                if(response=='error'){
-                    Toastify({
-                        text: "Party could not be added.Error Occured",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                if(response=='success'){
-                     Toastify({
-                        text: "Party added successfully",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                
-                
-                
-                $('#myModal').modal('hide');
-                getparties();
-                },
-                error: function(xhr, status, error) {
-                  console.error('Error: ' + error);
-                }
-              });
-            }
-
-    }
-    
-    
   
   
     function handleSelectChange(selectElement,val) {
@@ -223,7 +49,7 @@ date_default_timezone_set('Asia/Kolkata');
 <?php
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-$query1 = "SELECT `paymentInNumber` FROM `tblpaymentIN` where `userID`='$session' ORDER BY id DESC LIMIT 1";
+$query1 = "SELECT `paymentInNumber` FROM `tblpaymentIN` where `userID`='$session' and status='1' ORDER BY id DESC LIMIT 1";
 $result1 = mysqli_query($conn, $query1);
 if ($result1 && mysqli_num_rows($result1) > 0) {
     $row = mysqli_fetch_assoc($result1);
@@ -283,7 +109,7 @@ if ($result1 && mysqli_num_rows($result1) > 0) {
                       <div class="row">
                         <div class="col-md-12 my-2">
                           <label>Receipt Number</label>
-                          <input type="number" name="paymentIN_number" id="paymentIN_number" value="<?php echo $nextInvoiceNumber ?>" class="form-control" required>
+                          <input type="number" readonly name="paymentIN_number" id="paymentIN_number" value="<?php echo $nextInvoiceNumber ?>" class="form-control" required>
                         </div>
                         <div class="col-md-12 my-2">
                           <label>Payment IN Date</label>

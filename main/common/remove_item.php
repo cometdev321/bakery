@@ -99,6 +99,12 @@ if(isset($_POST['sales_invoice_item'])){
     $sql = "UPDATE tblsalesinvoice_details SET status='0' WHERE id=$id";
     mysqli_query($conn, $sql);
 }
+#remove the purchase invoice product from the list
+if(isset($_POST['purchase_invoice_item'])){
+    $id=$_POST['purchase_invoice_item'];
+    $sql = "UPDATE tblpurchaseinvoice_details SET status='0' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}
 
 #remove the party
 if(isset($_POST['remove_party'])){
@@ -120,6 +126,14 @@ if(isset($_POST['remove_paymentIn'])){
     $sql = "UPDATE tblpaymentin SET status='0' WHERE id=$id";
     mysqli_query($conn, $sql);
 }
+
+#remove paymentOut
+if(isset($_POST['remove_paymentOUT'])){
+    $id=$_POST['remove_paymentOUT'];
+    $sql = "UPDATE tblpaymentout SET status='0' WHERE id=$id";
+    mysqli_query($conn, $sql);
+}
+
 #remove deleteTransaction
 if(isset($_POST['deleteTransaction'])){
     $id=$_POST['deleteTransaction'];

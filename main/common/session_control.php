@@ -18,7 +18,6 @@ if(isset($_POST["login-submit"])){
                    $_SESSION['admin']=$admindetails['unicode'];
                    $_SESSION['isAdmin']=1;
 
-                   
 
                    header("Location:../dashboard");
                    exit();

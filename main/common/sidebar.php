@@ -2,47 +2,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<style>
-
-    .demo-card label{ display: block; position: relative;}
-    .demo-card .col-lg-4{ margin-bottom: 30px;}
-</style>
-<style>
-  .green-text {
-    color: green;
-}
-
-.red-text {
-    color: #FF5617; /* Light red color */
-}
-</style>
-<style>
-    /* Hide default scrollbar
-    body {
-        overflow: hidden;
-    }
-
-    /* Style your custom scrollbar here */
-    /* For WebKit-based browsers */
-    /* ::-webkit-scrollbar {
-        width: 0;  
-        background: transparent; 
-    } */
-    /* For Firefox */
-    /* scrollbar-width: none; */
-    /* For IE and Edge */
-    /* -ms-overflow-style: none; */ 
-</style>
-<body class="theme-cyan">
-
-    <!-- Page Loader -->
-<!--<div class="page-loader-wrapper">-->
-<!--    <div class="loader">-->
-<!--        <div class="m-t-30"><img src="https://www.wrraptheme.com/templates/lucid/html/assets/images/logo-icon.svg" width="48" height="48" alt="Lucid"></div>-->
-<!--        <p>Please wait...</p>        -->
-<!--    </div>-->
-<!--</div>-->
-<!-- Overlay For Sidebars -->
 
 <?php
 if(isset($_POST['ProductSubmit'])) {
@@ -116,404 +75,156 @@ if(isset($_POST['ProductSubmit'])) {
     }
     ?>
 
-<div class="modal fade" id="userDetailsModal" tabindex="-1" role="dialog" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="userDetailsModalLabel">Product Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+<header>
+    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+            <a href="https://flowbite.com" class="flex items-center">
+                <img src="https://flowbite.com/docs/images/logo.svg" class="mr-3 h-6 sm:h-9" alt="Flowbite Logo" />
+                <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+            </a>
+            <div class="flex items-center lg:order-2">
+                <a href="#" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</a>
+                <a href="#" class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">Get started</a>
+                <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu-2" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                    <svg class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="basic-form" method="post" action="">
-                    <div class="row clearfix">
-                        <div class="col-lg-6 col-md-12 my-2">
-                            <label>Category</label>
-                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="category">
-                                <option>Select Category</option>
-                                <?php   
-                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'");
-                                while($fetchcat=mysqli_fetch_array($getct)){
-                                ?>
-                                <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-lg-6 col-md-12 my-2">
-                                            <label>Product Name</label>
-                                            <input type="text" name="productname" placeholder="Type Here" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Sale Price</label>
-                                            <input type="number" name="saleprice" placeholder="Type Here"  class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Purchase Price</label>
-                                            <input type="number" name="purchaseprice" placeholder="Type Here"  class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>HSN Code</label>
-                                            <input type="text" name="HSN" placeholder="Type Here" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Opening Stock</label>
-                                            <input type="text" name="openingstock" placeholder="Type Here" class="form-control" >
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Size</label>
-                                            <input type="number" name="size_number" placeholder="Type Here" class="form-control" >
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Size-Type </label>
-                                            <select class="form-control show-tick ms select2" name="size">
-                                              <option value="GM">Gram (g)</option>
-                                              <option value="KG">Kilo Gram (kg)</option>
-                                              <option value="ML">Milli Liter (ml)</option>
-                                              <option value="L">Liter (L)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>GST Level</label>
-                                            <div>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="5" type="radio" checked>
-                                                    <span><i></i>5%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="12" type="radio">
-                                                    <span><i></i>12%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="18" type="radio">
-                                                    <span><i></i>18%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="28" type="radio">
-                                                    <span><i></i>28%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="0" type="radio">
-                                                    <span><i></i>Exempted</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <div class="form-group my-2">
-                                    <button type="submit" name="ProductSubmit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
-                                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div id="wrapper">
-
-    <nav class="navbar navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-btn">
-                <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
-            </div>
-
-            <div class="navbar-brand">
-                <a href="<?php echo $base ?>/dashboard" class="text-dark">
-                    &nbsp; &nbsp; &nbsp; &nbsp; ADMIN
-                    <!--<img src="Images/img1.png"  height="33" class="img-responsive logo">-->
-                    </a>                
-            </div>
-            
-            <div class="navbar-right">
-                <form id="navbar-search" class="navbar-form search-form">
-                    <input value="" class="form-control" placeholder="Search here..." type="text">
-                    <button type="button" class="btn btn-default"><i class="icon-magnifier"></i></button>
-                </form>
-
-                <div id="navbar-menu">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a href="<?php echo $base ?>/party/add-party" title="New New Party"  class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-users"></i></a>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="modal" data-target="#userDetailsModal" title="Add New Product" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-briefcase"></i></a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $base ?>/sales/create_sales_invoice"  title="Sales Invoice"  class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
-                        </li>
-                        <li>
-                            <a href="<?php echo $base ?>/purchase/create_purchase_invoice   "  title="Purchase Invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
-                            <!-- <span class="notification-dot"></span> -->
-                        </li>
-                        
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"><i class="icon-equalizer"></i></a>
-                            <ul class="dropdown-menu user-menu menu-icon">
-                                <li class="menu-heading">Transaction Report</li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/sale"><i class="icon-note"></i> <span>Sale</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/purchase"><i class="icon-note"></i> <span>Purchase</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/daybook"><i class="icon-note"></i> <span>Day Book</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/transaction/alltransaction"><i class="icon-note"></i> <span>All Transaction</span></a></li>
-                                <li class="menu-heading">Party Reports</li>
-                                <li><a href="<?php echo $base ?>/reports/party/party_sales_report"><i class="icon-credit-card"></i> <span>PartyWise Sales Report</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/party/party_purchase_report"><i class="icon-credit-card"></i> <span>PartyWise Purchase Report</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/party/allParties"><i class="icon-credit-card"></i> <span>All Parties</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/party/partySummary"><i class="icon-credit-card"></i> <span>Sale Purchase By Party</span></a></li>
-                                <li class="menu-heading">Item/Stock Report</li>
-                                <li><a href="<?php echo $base ?>/reports/stock/stockDetails"><i class="icon-credit-card"></i> <span>Stock Details</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/stock/itemreport"><i class="icon-credit-card"></i> <span>Item Report By Party</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/stock/stocksummary"><i class="icon-credit-card"></i> <span>Stock Summary</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/stock/lowStock"><i class="icon-credit-card"></i> <span>Low Stock Summary</span></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="<?php echo $base ?>/auth/logout" class="icon-menu"><i class="icon-login"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div id="left-sidebar" class="sb sidebar">
-        <div class="sidebar-scroll">
-            <div class="user-account">
-                <!--<img src="Images/<?php
-                if(isset($_SESSION['admin'])){
-                    echo $fetchadmin['image'];
-                }
-                  
-                  ?>" class="rounded-circle user-photo" alt="User Profile Picture">-->
-                <div class="dropdown">
-                    <span>Welcome,</span>
-                    <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>
-                        <?php 
-                        if(isset($_SESSION['admin'])){
-                            echo strtoupper($fetchadmin['Name']); 
-                    }else if(isset($_SESSION['user'])){
-                            echo strtoupper($fetchadmin['username']);
-                        }
-                        
-                        ?>&nbsp;
-                    </strong></a>
-                    <ul class="dropdown-menu dropdown-menu-right account">
-                        <li><a href="<?php echo $base ?>/profile/page-profile"><i class="icon-user"></i>My Profile</a></li>
-                        <!--<li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>-->
-                        <li><a href="<?php echo $base ?>/profile/page-profile"><i class="icon-settings"></i>Settings</a></li>
-                        <li class="divider"></li>
-                        <li><a href="<?php echo $base ?>/auth/logout"><i class="icon-power"></i>Logout</a></li>
-                    </ul>
-                </div>
-                <hr>
-                <ul class="row list-unstyled">
-                    <li class="col-4">
-                        <small>Sales</small>
-                        <h6>0</h6>
+            <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
+                    <li>
+                        <a href="#" class="block py-2 pr-4 pl-3 text-white rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 dark:text-white" aria-current="page">Home</a>
                     </li>
-                    <li class="col-4">
-                        <small>Order</small>
-                        <h6>0</h6>
+                    <li>
+                        <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Company</a>
                     </li>
-                    <li class="col-4">
-                        <small>Revenue</small>
-                        <h6>0</h6>
+                    <li>
+                        <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Marketplace</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Features</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Team</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
                     </li>
                 </ul>
             </div>
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#menu">Menu</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#setting"><i class="icon-settings"></i></a></li>
-            </ul>
-                
-            <!-- Tab panes -->
-            <div class="tab-content p-l-0 p-r-0">
-                <div class="tab-pane active" id="menu">
-                    <nav id="left-sidebar-nav" class="sidebar-nav">
-                        <ul id="main-menu" class="metismenu">                            
-                            <li>
-                                <a href="#Dashboard" class="has-arrow"><i class="icon-home"></i> <span>Dashboard</span></a>
-                               <?php
-                                   if(isset($_SESSION['admin'])){
-                                ?>
-                                <ul>
-                                    <li><a href="<?php echo $base ?>/branches/mybranches"><i class="fa fa-building-o"></i> My Branch</a></li>
-                                    <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
-                                </ul>
-                                <?php } ?>
-                            </li>
-                            <li>
-                                <a href="#App" class="has-arrow"><i class="icon-basket"></i> <span>Category</span></a>
-                                <ul>
-                               
-                                    <li><a href="<?php echo $base ?>/category/add-category"><i class="fa icon-mouse"></i> Add New Category</a></li>
-                                    <li><a href="new-category"><i class="fa icon-mouse"></i>Category Requests</a></li>
-                                    <!--<li><a href="add-subcategory"><i class="fa icon-mouse"></i> Add Sub-Category</a></li>-->
-
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#App" class="has-arrow"><i class=" icon-users"></i> <span>Party</span></a>
-                                <ul>
-                              
-                                    <li><a href="<?php echo $base ?>/party/add-party"><i class="fa icon-mouse"></i> Add New Party</a></li>
-                                    <li><a href="<?php echo $base ?>/party/manage-party"><i class="fa icon-mouse"></i> Manage Party</a></li>
-                               
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Products</span></a>
-                                <ul>
-                              
-                                    <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
-                                    <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
-                               
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#FileManager" class="has-arrow"><i class="icon-tag"></i> <span>Sales</span></a>
-                                <ul>                                    
-                                    <li><a href="<?php echo $base ?>/sales/sales_invoice">Sales Invoices</a></li>
-                                    <li><a href="<?php echo $base ?>/sales/paymentIn_list">Payment In</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
-                                <ul>                                    
-                                    <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li>
-                                    <!-- <li><a href="<?php echo $base ?>/vendors/vendor.php">Vendor</a></li> -->
-                                    <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#FileManager" class="has-arrow"><i class="icon-plane"></i> <span>Transport</span></a>
-                                <ul>                                    
-                                    <li><a href="<?php echo $base ?>/transaction/transfer">Transfer Stock</a></li>
-                                    <li><a href="<?php echo $base ?>/transaction/transfer_history">Transfer History</a></li>
-                                    <li><a href="<?php echo $base ?>/transaction/transfer_requests">Transfer Requests</a></li>
-                              
-                                </ul>
-                            </li>
-
-                            <li>
-                                <a href="#menu-level-1" class="has-arrow"><i class="icon-book-open"></i> <span>Reports</span></a>
-                                <ul>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/sale">Sale</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/purchase">Purchase</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/daybook">Day Book</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/alltransaction">All Transaction</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Party Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/reports/party/party_sales_report">PartyWise Sales Report</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/party_purchase_report">PartyWise Sales Report</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/allParties">All Parties</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/partySummary">Sale Purchase By Party</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/reports/stock/stockDetails">Stock Details</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/itemreport">Item Report By Party</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/stocksummary">Stock Summary</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Expense Report</a>
-                                        <ul>
-                                            <li><a href="">Expense Details</a></li>
-                                        </ul>
-                                    </li>
-                                    
-                                </ul>
-                            </li>
-                            <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="tab-pane p-l-15 p-r-15" id="setting">
-                    <h6>Choose Skin</h6>
-                    <ul class="choose-skin list-unstyled">
-                        <li data-theme="purple">
-                            <div class="purple"></div>
-                            <span>Purple</span>
-                        </li>                   
-                        <li data-theme="blue">
-                            <div class="blue"></div>
-                            <span>Blue</span>
-                        </li>
-                        <li data-theme="cyan" class="active">
-                            <div class="cyan"></div>
-                            <span>Cyan</span>
-                        </li>
-                        <li data-theme="green">
-                            <div class="green"></div>
-                            <span>Green</span>
-                        </li>
-                        <li data-theme="orange">
-                            <div class="orange"></div>
-                            <span>Orange</span>
-                        </li>
-                        <li data-theme="blush">
-                            <div class="blush"></div>
-                            <span>Blush</span>
-                        </li>
-                    </ul>
-                    <hr>
-                </div>
-            </div>          
         </div>
-    </div>
-    
-            <!-- Input Slider -->
-            <div class="row clearfix" hidden>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>Input Slider <small>Taken from <a href="http://refreshless.com/nouislider" target="_blank">refreshless.com/nouislider</a> & <a href="http://materializecss.com/" target="_blank">materializecss.com</a></small> </h2>
-                            <ul class="header-dropdown">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another Action</a></li>
-                                        <li><a href="javascript:void(0);">Something else</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="body">
-                            <div class="row clearfix">
-                                <div class="col-lg-6 col-md-12">
-                                    <p><b>Basic Example</b></p>
-                                    <div id="nouislider_basic_example"></div>
-                                    <div class="m-t-20 font-12"><b>Value: </b><span class="js-nouislider-value"></span></div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <p><b>Range Example</b></p>
-                                    <div id="nouislider_range_example"></div>
-                                    <div class="m-t-20 font-12"><b>Value: </b><span class="js-nouislider-value"></span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-  <style>
-      input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+    </nav>
+</header>
 
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
-}
-  </style>
+<button data-drawer-target="separator-sidebar" data-drawer-toggle="separator-sidebar" aria-controls="separator-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+   <span class="sr-only">Open sidebar</span>
+   <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+   <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+   </svg>
+</button>
+
+<aside id="separator-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+   <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+      <ul class="space-y-2 font-medium">
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 21">
+                  <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
+                  <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
+               </svg>
+               <span class="ms-3">Dashboard</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                  <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Kanban</span>
+               <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Inbox</span>
+               <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                  <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Users</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                  <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Products</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Sign In</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"/>
+                  <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z"/>
+                  <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z"/>
+               </svg>
+               <span class="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
+            </a>
+         </li>
+      </ul>
+      <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 17 20">
+                  <path d="M7.958 19.393a7.7 7.7 0 0 1-6.715-3.439c-2.868-4.832 0-9.376.944-10.654l.091-.122a3.286 3.286 0 0 0 .765-3.288A1 1 0 0 1 4.6.8c.133.1.313.212.525.347A10.451 10.451 0 0 1 10.6 9.3c.5-1.06.772-2.213.8-3.385a1 1 0 0 1 1.592-.758c1.636 1.205 4.638 6.081 2.019 10.441a8.177 8.177 0 0 1-7.053 3.795Z"/>
+               </svg>
+               <span class="ms-3">Upgrade to Pro</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                  <path d="M16 14V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2v15a3 3 0 0 0 3 3h12a1 1 0 0 0 0-2h-1v-2a2 2 0 0 0 2-2ZM4 2h2v12H4V2Zm8 16H3a1 1 0 0 1 0-2h9v2Z"/>
+               </svg>
+               <span class="ms-3">Documentation</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                  <path d="M18 0H6a2 2 0 0 0-2 2h14v12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Z"/>
+                  <path d="M14 4H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2ZM2 16v-6h12v6H2Z"/>
+               </svg>
+               <span class="ms-3">Components</span>
+            </a>
+         </li>
+         <li>
+            <a href="#" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
+               <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 21 21">
+                  <path d="m5.4 2.736 3.429 3.429A5.046 5.046 0 0 1 10.134 6c.356.01.71.06 1.056.147l3.41-3.412c.136-.133.287-.248.45-.344A9.889 9.889 0 0 0 10.269 1c-1.87-.041-3.713.44-5.322 1.392a2.3 2.3 0 0 1 .454.344Zm11.45 1.54-.126-.127a.5.5 0 0 0-.706 0l-2.932 2.932c.029.023.049.054.078.077.236.194.454.41.65.645.034.038.078.067.11.107l2.927-2.927a.5.5 0 0 0 0-.707Zm-2.931 9.81c-.024.03-.057.052-.081.082a4.963 4.963 0 0 1-.633.639c-.041.036-.072.083-.115.117l2.927 2.927a.5.5 0 0 0 .707 0l.127-.127a.5.5 0 0 0 0-.707l-2.932-2.931Zm-1.442-4.763a3.036 3.036 0 0 0-1.383-1.1l-.012-.007a2.955 2.955 0 0 0-1-.213H10a2.964 2.964 0 0 0-2.122.893c-.285.29-.509.634-.657 1.013l-.01.016a2.96 2.96 0 0 0-.21 1 2.99 2.99 0 0 0 .489 1.716c.009.014.022.026.032.04a3.04 3.04 0 0 0 1.384 1.1l.012.007c.318.129.657.2 1 .213.392.015.784-.05 1.15-.192.012-.005.02-.013.033-.018a3.011 3.011 0 0 0 1.676-1.7v-.007a2.89 2.89 0 0 0 0-2.207 2.868 2.868 0 0 0-.27-.515c-.007-.012-.02-.025-.03-.039Zm6.137-3.373a2.53 2.53 0 0 1-.35.447L14.84 9.823c.112.428.166.869.16 1.311-.01.356-.06.709-.147 1.054l3.413 3.412c.132.134.249.283.347.444A9.88 9.88 0 0 0 20 11.269a9.912 9.912 0 0 0-1.386-5.319ZM14.6 19.264l-3.421-3.421c-.385.1-.781.152-1.18.157h-.134c-.356-.01-.71-.06-1.056-.147l-3.41 3.412a2.503 2.503 0 0 1-.443.347A9.884 9.884 0 0 0 9.732 21H10a9.9 9.9 0 0 0 5.044-1.388 2.519 2.519 0 0 1-.444-.348ZM1.735 15.6l3.426-3.426a4.608 4.608 0 0 1-.013-2.367L1.735 6.4a2.507 2.507 0 0 1-.35-.447 9.889 9.889 0 0 0 0 10.1c.1-.164.217-.316.35-.453Zm5.101-.758a4.957 4.957 0 0 1-.651-.645c-.033-.038-.077-.067-.11-.107L3.15 17.017a.5.5 0 0 0 0 .707l.127.127a.5.5 0 0 0 .706 0l2.932-2.933c-.03-.018-.05-.053-.078-.076ZM6.08 7.914c.03-.037.07-.063.1-.1.183-.22.384-.423.6-.609.047-.04.082-.092.129-.13L3.983 4.149a.5.5 0 0 0-.707 0l-.127.127a.5.5 0 0 0 0 .707L6.08 7.914Z"/>
+               </svg>
+               <span class="ms-3">Help</span>
+            </a>
+         </li>
+      </ul>
+   </div>
+</aside>
+
+

@@ -1,3 +1,3 @@
 <script>
-    window.location.href='dashboard'
+    window.location.href='sales/sales_invoice'
 </script>

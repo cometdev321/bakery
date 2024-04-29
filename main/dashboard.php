@@ -1,101 +1,202 @@
-<?php
- include('common/header.php'); 
- include('common/sidebar.php'); 
+<?php 
+include('common/header.php');
 
- ?>
-    <div id="main-content">
-        <div class="container-fluid">
-            <div class="block-header">
-                <div class="row">
-                    <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Dashboard</h2>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index-2.html"><i class="icon-home"></i></a></li>                            
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ul>
-                    </div>            
-                </div>
+include('common/sidebar.php');
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Dashboard</title>
+  </head>
+  <style>
+    body{
+      font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style:normal;
+    background-color:rgb(249,249,249),
+    }
+  </style>
+  <body>
+    <section class="text-gray-600 body-font">
+      <div class="container px-5 py-24 mx-auto lg:ml-1/5 mt-10">
+        <!-- Adjusted container div to leave space for the sidebar and added mt-10 for margin-top -->
+        <div class="flex flex-wrap -m-4">
+          <!-- Sidebar -->
+          <div class="lg:w-1/5">
+            <!-- Sidebar content goes here -->
+          </div>
+
+          <!-- First Card -->
+          <div class="p-4 lg:w-3/5 lg:h-98 bg-white rounded-lg">
+            <!-- Set width of the first card to 2/3 and add padding -->
+            <!-- <div class="h-full bg-gray-300 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative"> -->
+              <h2 class="tracking-widest text-xs title-font font-medium text-gray-400 mb-1 text-centers">
+                Sales
+              </h2>
+              <h1 class="title-font sm:text-2xl text-xl font-medium text-gray-900 mb-3"></h1>
+              <canvas id="salesChart" class="w-full h-full"></canvas> <!-- Adjusted canvas class -->
+            <!-- </div> -->
+          </div>
+          
+
+          <!-- Second Card -->
+          <div class="p-4 lg:w-1/5 lg:h-98 ">
+            <!-- Set width of the second card to 1/3 and add padding -->
+            <div style="background-color: rgb(231, 1, 19); color: white;"
+              class="h-full   bg-opacity-75 px-8 pt-16 pb-24 rounded-lg shadow-lg overflow-hidden text-center relative"
+            >
+              <h2
+                class="tracking-widest text-xl text-white-500 title-font font-medium mb-1 absolute top-6 left-6"
+              >
+                Sales Today
+              </h2>
+              <div
+                class="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4"
+              ></div>
             </div>
+          </div>
+          <div class="lg:w-1/4">
+            <!-- Sidebar content goes here -->
+          </div>
 
-            <div class="row clearfix">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card overflowhidden number-chart">
-                        <div class="body">
-                            <div class="number">
-                                <h6>Session of :  <?php if(isset($_SESSION['admin'])){ echo $_SESSION['admin']; echo ' admin';
-                                }else{ echo $_SESSION['user'];  echo ' user';}?></h6>
-                                <span>$22,500</span>
-                            </div>
-                            <small class="text-muted">19% compared to last week</small>
-                        </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#f79647" data-fill-Color="#fac091">1,4,1,3,7,1</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card overflowhidden number-chart">
-                        <div class="body">
-                            <div class="number">
-                                <?php
-                                $querySales = "SELECT sum(total_balance) as total FROM tblsalesinvoices where userID='$session'"; 
-                                $querySalesResult = mysqli_query($conn, $querySales);
-                                $rowSales = mysqli_fetch_array($querySalesResult);
-                          ?>
-                                <h6>SALES</h6>
-                                <span>&#8377;&nbsp;<?php echo $rowSales['total']?$rowSales['total']:'0.00';?></span>
-                            </div>
-                            <small class="text-muted">19% compared to last week</small>
-                        </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#604a7b" data-fill-Color="#a092b0">1,4,2,3,6,2</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card overflowhidden number-chart">
-                        <div class="body">
-                            <div class="number">
-                                <h6>VISITS</h6>
-                                <span>$21,215</span>
-                            </div>
-                            <small class="text-muted">19% compared to last week</small>
-                        </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#4aacc5" data-fill-Color="#92cddc">1,4,2,3,1,5</div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card overflowhidden number-chart">
-                        <div class="body">
-                            <div class="number">
-                                <h6>LIKES</h6>
-                                <span>$421,215</span>
-                            </div>
-                            <small class="text-muted">19% compared to last week</small>
-                        </div>
-                        <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
-                        data-line-Width="1" data-line-Color="#4f81bc" data-fill-Color="#95b3d7">1,3,5,1,4,2</div>
-                    </div>
-                </div>
+          <!-- Third Card -->
+          <div class="p-4 lg:w-1/4 lg:pl-4 lg:h-64 ">
+            <!-- Set width of the third card to 1/3 and add padding -->
+            <div
+              class="h-full mt-10 bg-white-300 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative bg-white"
+            >
+              <h2
+                class="tracking-widest text-xl title-font font-medium text-black-400 mb-1 absolute top-6 left-6 text-black"
+              >
+                You'll Receive
+              </h2>
+              <div
+                class="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4"
+              ></div>
             </div>
+          </div>
 
-            
+          <!-- Fourth Card -->
+          <div class="p-4 lg:w-1/4 lg:pl-4 lg:h-64  ">
+            <!-- Set width of the fourth card to 1/3 and add padding -->
+            <div
+              class="h-full mt-10   bg-white-300 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative bg-white"
+            >
+              <h2
+                class="tracking-widest text-xl title-font font-medium text-400 mb-1 text-black absolute top-6 left-6"
+              >
+                <!-- You'll Pay -->
+                i am not paying 
+              </h2>
+              <div
+                class="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4"
+              ></div>
+            </div>
+          </div>
+          <!-- Fifth Card -->
+          <div class="p-4 lg:w-1/4 lg:pl-4 lg:h-64  ">
+            <!-- Set width of the fifth card to 1/3 and add padding -->
+            <div
+              class="h-full bg-white-300 mt-10 bg-opacity-75 px-8 pt-16 pb-24 rounded-lg overflow-hidden text-center relative bg-white"
+            >
+              <h2
+                class="tracking-widest  text-xl title-font font-medium text-400 mb-1 absolute text-black top-6 left-6"
+              >
+                Purchase
+              </h2>
+              <div
+                class="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4"
+              ></div>
+            </div>
+          </div>
         </div>
-    </div>
-    
-</div>
+      </div>
+    </section>
+  </body>
+  <script>
+    // Mock sales data
+    var ctx = document.getElementById("salesChart").getContext("2d");
 
-<!-- Javascript -->
-<script src="../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../assets/bundles/vendorscripts.bundle.js"></script>
+// Define the data
+var data = {
+      labels: ["January", "February", "March", "April", "May", "June", "July"],
+      datasets: [{
+        label: "Sales",
+        data: [65, 59, 80, 81, 56, 55, 40],
+        fill: false,
+        borderColor: "rgb(231, 1, 19)", // Line color with transparency
+        backgroundColor: "rgba(75, 192, 192, 0.2)", // Background color with transparency
+        borderWidth: 1,
+        pointBackgroundColor:  "rgba(75, 192, 192, 0.2)",// Point color
+        pointRadius: 1,
+        // pointBorderWidth: 2,
+        // pointBorderColor: "#fff", // Point border color
+        // pointHoverRadius: 8,
+        pointHoverBackgroundColor: "rgba(75, 192, 192, 1)", // Point hover color
+        pointHoverBorderColor: "#fff", // Point hover border color
+      }]
+    };
 
-<script src="../assets/bundles/chartist.bundle.js"></script>
-<script src="../assets/bundles/knob.bundle.js"></script> <!-- Jquery Knob-->
-<!--<script src="../assets/vendor/toastr/toastr.js"></script>-->
+// Define chart options
+var options = {
+  responsive: true,
+  title: {
+    display: true,
+    text: 'Sales Performance',
+    fontSize: 25,
+    fontColor: '#333'
+  },
+  scales: {
+        y: {
+          ticks: {
+            beginAtZero: true,
+            fontColor: '#666' // Y-axis label color
+          },
+          grid: {
+            display: false // Hide Y-axis grid lines
+          }
+        },
+        x: {
+          ticks: {
+            fontColor: '#666' // X-axis label color
+          },
+          grid: {
+            display: false // Hide X-axis grid lines
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: 'Poppins', // Change font family
+              size: 16, // Change font size
+              // style: 'italic', // Change font style
+              weight: 'bold' // Change font weight
+            },
+            boxWidth: 20, // Change width of the label rectangle box
+            boxHeight: 20, // Change height of the label rectangle box
+            backgroundColor: 'red'
+          }
+        }
+      }
+};
 
-<script src="../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../assets/js/index.js"></script>
-</body>
-
-<!-- Mirrored from www.wrraptheme.com/templates/lucid/html/light/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Mar 2023 05:09:54 GMT -->
+// Create the line chart
+var myLineChart = new Chart(ctx, {
+  type: 'line',
+  data: data,
+  options: options
+});
+  </script>
 </html>
-<!-- 7Yn0Lw1A -->

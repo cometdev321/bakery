@@ -36,6 +36,7 @@
                     <div class="card overflowhidden number-chart">
                         <div class="body">
                             <div class="number">
+                            <h6>Session of :  <?php if(isset($_SESSION['subSession'])){ echo $_SESSION['subSession'];}?></h6>
                                 <?php
                                 $querySales = "SELECT sum(total_balance) as total FROM tblsalesinvoices where userID='$session'"; 
                                 $querySalesResult = mysqli_query($conn, $querySales);

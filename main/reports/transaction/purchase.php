@@ -7,7 +7,7 @@
 <?php
 if(isset($_POST['submit'])) {
   
-}
+} 
 ?>
 
  <div id="main-content">
@@ -212,7 +212,6 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
-            console.log(response);
             $("#table-body").html(response);
         },
         error: function() {

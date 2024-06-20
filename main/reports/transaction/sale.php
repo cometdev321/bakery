@@ -11,7 +11,7 @@ if(isset($_POST['submit'])) {
 ?>
 
  <div id="main-content">
-        <div class="container-fluid">
+        <div class="container-fluid"> 
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
@@ -180,12 +180,12 @@ function get_list(val) {
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-1');?> ",
+            fromDate: "<?php echo date('Y-m-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> ",
+            fromDate: "<?php echo date('Y-4-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Last-7-days') {
@@ -206,7 +206,6 @@ function get_list(val) {
     if(formData.party=='null'){
         formData.party='all';
     }
-
     $.ajax({
         url: "../../get_ajax/transaction_report/getsales.php",
         data: formData,

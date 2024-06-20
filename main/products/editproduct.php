@@ -19,6 +19,7 @@ $openingstock = $_POST['openingstock'];
 $gst = $_POST['gst'];
 $sizeJoined=$size_number.$size;
 
+
 $query = "UPDATE tblproducts SET category = '$category', sub_category = '$sub_category', productname = '$productname', saleprice = '$saleprice', purchaseprice = '$purchase', HSN = '$HSN', openingstock = '$openingstock', gst = '$gst', size = '$sizeJoined', sizetype = '$size' WHERE id = '$id'";
 
 if(mysqli_query($conn,$query)){
@@ -66,7 +67,7 @@ if(mysqli_query($conn,$query)){
                         <div class="body">
                             <?php
                                 $id=$_POST['pid'];
-                                $product = mysqli_query($conn,"SELECT tp.*,tc.name FROM tblproducts tp join tblcategory tc on tc.id=tp.category WHERE tp.status = '1'  and tp.userID='$session' and tp.id='$id' ");
+                                $product = mysqli_query($conn,"SELECT tp.*,tc.name FROM tblproducts tp join tblcategory tc on tc.id=tp.category WHERE tp.status = '1'  and  tp.id='$id' ");
                                 $pro_details=mysqli_fetch_array($product);
                             ?>
                              <form  method="post" action="">

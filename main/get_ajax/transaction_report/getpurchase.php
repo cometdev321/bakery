@@ -6,7 +6,7 @@ include('../../common/session_control.php');
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
-$party=$_POST['party'];
+$party=$_POST['party']; 
 
 if($party=='all'){
 

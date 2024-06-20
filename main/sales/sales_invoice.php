@@ -75,10 +75,10 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label>Time</label>
                                 <select class="form-control" name="time_period" id="time_period" onchange="get_list(this.value)">
-                                    <option selected value="Today">Today</option>
+                                    <option  value="Today">Today</option>
                                     <option value="Yesterday">Yesterday</option>
                                     <option value="This-Week">This-Week</option>
-                                    <option value="This-Month">This-Month</option>
+                                    <option selected value="This-Month">This-Month</option>
                                     <option value="Current-Fiscal-Year">Current Fiscal Year </option>
                                     <option value="Last-7-days">Last 7 days</option>
                                 </select>
@@ -189,12 +189,12 @@ function get_list(val) {
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-m-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Last-7-days') {
@@ -224,7 +224,7 @@ function get_list(val) {
     });
 }
 
-  get_list("Today");
+  get_list("This-Month");
 </script>
 <script>
     document.title="NAYAN"

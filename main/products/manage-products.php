@@ -123,12 +123,20 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT tp.*,tc.name FROM tblproducts tp join tblcategory tc on tc.id=tp.category WHERE tp.status = '1'  and tp.userID='$session' order by tp.id desc";
+                                    if(isset($_SESSION['subSession'])){
+                                        $userID=$_SESSION['subSession'];
+                                      }else{
+                                        $userID=$session;
+                                      }
+                                    $query = "SELECT tp.*,tc.name FROM tblproducts tp
+                                     join tblcategory tc on tc.id=tp.category 
+                                     WHERE tp.status = '1'  and tp.userID='$userID'
+                                      order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>
                                     <tr>
-                                        <td><?php echo $slno;?></td>
+                                        <td><?php echo $slno;?></td>    
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['productname'];?></td>
                                         <td><?php echo $row['saleprice'];?></td>
@@ -195,7 +203,12 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblproducts WHERE status = 'bin'  and userID='$session' order by id desc";
+                                    if(isset($_SESSION['subSession'])){
+                                        $userID=$_SESSION['subSession'];
+                                      }else{
+                                        $userID=$session;
+                                      }
+                                    $query = "SELECT * FROM tblproducts WHERE status = 'bin'  and userID='$userID' order by id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

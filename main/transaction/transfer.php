@@ -110,11 +110,37 @@ if(isset($_POST['submit'])){
                              <form  method="post" action="">
                                <div class="form-group">
                                 <div class="row clearfix">
-                                <div class="col-lg-3 col-md-12 my-2">
+                                    <div class="col-lg-3 col-md-12 my-2">
                                         <label>Date</label>
                                         <input type="date"  id="date" class="form-control" value="<?php echo date('Y-m-d');?>">
+                                    </div>
+                                  <?php 
+                                  if(isset($_SESSION['subSession'])){
+                                  ?>
+                                      <div class="col-lg-3 col-md-12 my-2">
+                                        <label>Select From Branches</label>
+                                        <select class="form-control show-tick ms select2" data-placeholder="Select" name="from" id="from" onchange="getProductsOfBranches()" >                                        >
+                                        <?php
+                                            $slno=1;
+                                            if(isset($_SESSION['admin'])){
+                                              $queryBatch="select b.name as Bname,b.id as `branchID` from branch b
+                                              join tblusers tu on tu.branch=b.id
+                                              where b.status='1' and tu.status=1";
+                                            }else{
+                                              $queryBatch="select name as Bname,id as branchID from branch where status='1' and id in
+                                              (select branch from tblusers where userID='$session' )";
+                                            }
+                                            $getct=mysqli_query($conn,$queryBatch);
+                                            while($fetchcat=mysqli_fetch_array($getct)){
+                                            ?>
+                                            <option value="<?php echo $fetchcat['branchID']; ?>"><?php echo strtoupper($fetchcat['Bname']); ?></option>
+                                            <?php } ?>
+                                            </select>  
+                                            <small id="from_errorMessage" class="text-danger" style="display: none;">Select different batch</small> 
+                                        </div>
+                                  <?php
+                                  }else{ ?>
 
-                                      </div>
                                     <div class="col-lg-3 col-md-12 my-2">
                                         <label>From Branch</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="from" id="from"onchange="updateError()" >                                        >
@@ -142,6 +168,8 @@ if(isset($_POST['submit'])){
                                             </select>  
                                             <small id="from_errorMessage" class="text-danger" style="display: none;">Select different batch</small> 
                                         </div>
+                                        <?php } ?>
+                                        
                                         <div class="col-lg-6 col-md-12  my-2">
                                         <label>To Branch</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="to" id="to" onchange="updateError()">

@@ -11,7 +11,7 @@ $(document).ready(function() {
     Toastify({
       text: "Product added succesfully",
       duration: 3000,
-      newWindow: true,
+      newWindow: true, 
       close: true,
       gravity: "top", // top, bottom, left, right
       position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
@@ -72,8 +72,13 @@ if(isset($_POST['submit'])) {
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
     $sizeJoined=$size_number.$size;
+    if(isset($_POST['branch'])){
+      $userID=$_POST['branch'];
+    }else{
+      $userID=$session;
+    }
     
-       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$session'";
+       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$userID'";
     $result = mysqli_query($conn, $query);
     
     if(mysqli_num_rows($result) > 0) {
@@ -81,7 +86,7 @@ if(isset($_POST['submit'])) {
     } else {
       // If the record does not exist, insert the new record
       $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`,`purchaseprice`, `HSN`, `openingstock`, `gst`, `size`,`sizetype`,`userID`) 
-        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$session')";
+        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$userID')";
       
       if(mysqli_query($conn, $query)) {
         echo"<script>window.location.href='add-product?status=success'</script>";
@@ -118,12 +123,36 @@ if(isset($_POST['submit'])) {
                         <div class="body">
                              <form id="basic-form" method="post" action="">
                                  <div class="row clearfix">
+                                 <?php if(isset($_SESSION['admin'])){?>
+                                  <div class="col-lg-6 col-md-6 my-2">
+                                  <label>Branch</label>
+                                  <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
+                                          <?php
+                                                $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
+                                                    join tblusers tu on tu.branch=b.id
+                                                where b.status='1' and b.userID='$session'";
+                                                $getbrx=mysqli_query($conn,$branchQ);
+                                                while($fetchbx=mysqli_fetch_array($getbrx)){
+                                            ?>
+                                                <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
+                                            <?php   
+                                                }
+                                            ?>
+                                        </select> 
+                                        </div>
+                                        <?php } ?>
                                         <div class="col-lg-6 col-md-12 my-2">
                                             <label>Category</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
                                         <option >Select Category</option>
                                         <?php
-                                        $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'");
+                                          
+                                          if(isset($_SESSION['subSession'])){
+                                            $userID=$_SESSION['subSession'];
+                                          }else{
+                                            $userID=$session;
+                                          }
+                                        $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$userID'");
                                         while($fetchcat=mysqli_fetch_array($getct)){
                                         ?>
                                         <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>

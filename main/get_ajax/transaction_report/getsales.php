@@ -9,7 +9,7 @@ $toDate = $_POST['toDate'];
 $party=$_POST['party'];
 
 if($party=='all'){
-
+ 
 $query = "SELECT si.*, p.name AS party_name 
           FROM tblsalesinvoices si
           INNER JOIN tblparty p ON si.party_name = p.id
@@ -17,14 +17,14 @@ $query = "SELECT si.*, p.name AS party_name
           ORDER BY si.id DESC";
 }else{
     
-$query = "SELECT si.*, p.name AS party_name 
-FROM tblsalesinvoices si
-INNER JOIN tblparty p ON si.party_name = p.id
-WHERE si.sales_invoice_date >= '$fromDate' AND si.sales_invoice_date <= '$toDate' AND si.userID = '$session' AND si.status = '1' and p.id=$party
-ORDER BY si.id ASC";
+            $query = "SELECT si.*, p.name AS party_name 
+            FROM tblsalesinvoices si
+            INNER JOIN tblparty p ON si.party_name = p.id
+            WHERE si.sales_invoice_date >= '$fromDate' AND si.sales_invoice_date <= '$toDate' AND si.userID = '$session' AND si.status = '1' and p.id=$party
+            ORDER BY si.id ASC";
 }
 
-
+            echo $query;
           $result = mysqli_query($conn, $query);
 
 if (mysqli_num_rows($result) > 0) {

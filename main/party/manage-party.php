@@ -75,9 +75,6 @@ $(document).ready(function() {
                                         <th>Slno</th>
                                         <th>Name</th>
                                         <th>Contact</th>
-                                        <th>Sales</th>
-                                        <th>Paid</th>
-                                        <th>Balance</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
                                     </tr>
@@ -87,9 +84,6 @@ $(document).ready(function() {
                                         <th>Slno</th>
                                         <th>Name</th>
                                         <th>Contact</th>
-                                        <th>Sales</th>
-                                        <th>Paid</th>
-                                        <th>Balance</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
                                     </tr>
@@ -97,41 +91,28 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblparty WHERE status = '1'  and userID='$session' order by id desc";
+                                    if(!isset($_SESSION['admin'])){
+                                        $query = "SELECT * FROM tblparty WHERE status = '1'  and userID='$session' order by id desc";
+                                    }else{
+                                        $selectedBranch=$_SESSION['subSession'];
+                                        if($selectedBranch=='All'){
+                                            $Csession=$_SESSION['admin'];
+                                            $query = "SELECT * FROM tblparty WHERE status = '1'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
+                                        }else{
+                                            $query = "SELECT * FROM tblparty WHERE status = '1'  and userID='$selectedBranch' order by id desc";
+
+                                        }
+
+                                    }
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
-                                        $pid=$row['id'];
-                                        $cal = "SELECT 
-                                        SUM(ts.total_balance) as salesTotal,
-                                        SUM(tp.paymentAmount) as totalPaid,
-                                        SUM(ts.total_balance) - SUM(tp.paymentAmount) as balance
-                                    FROM 
-                                        tblparty tbp
-                                        LEFT JOIN tblsalesinvoices ts ON tbp.id = ts.party_name AND ts.status = 1
-                                        LEFT JOIN tblpaymentin tp ON tbp.id = tp.partyName AND tp.status = 1
-                                    WHERE 
-                                        tbp.id = $pid";
-                                            $resultP = mysqli_query($conn, $cal);
-                                            $cp=mysqli_fetch_array($resultP);
                                         
                                 ?>
                                     <tr>
                                         <td><?php echo $slno;?></td>
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['mobno'];?></td>
-                                        <td><?php echo $cp['salesTotal']?$cp['salesTotal']:0;?></td>
-                                        <td><?php echo $cp['totalPaid']?$cp['totalPaid']:0;?></td>
-                                        <td style="color: <?php echo $cp['balance'] > 0 ? 'green' : 'black'; ?>">
-                                                <?php 
-                                                    if($cp['totalPaid']>$cp['salesTotal']){
-                                                        echo  '&plus;&nbsp;'.abs($cp['balance']);
-                                                    }else{
-                                                        echo $cp['balance'] ? '&darr;&nbsp;'.$cp['balance'] : 0; 
-                                                    }
-                                                
-                                                ?>
-                                            </td>         
-                                            <td>
+                                        <td>
                                             <form action="editParty" method="post">
                                             <input name="pid" value="<?php echo $row['id'];?>" hidden>
                                             <button type="submit" class="btn btn-success btn-sm "><i class="icon-pencil"></i><span></span></button>
@@ -181,8 +162,19 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID='$session' order by id desc";
-                                    $result = mysqli_query($conn, $query);
+                                    if(!isset($_SESSION['admin'])){
+                                        $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID='$session' order by id desc";
+                                    }else{
+                                        $selectedBranch=$_SESSION['subSession'];
+                                        if($selectedBranch=='All'){
+                                            $Csession=$_SESSION['admin'];
+                                            $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
+                                        }else{
+                                            $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID='$selectedBranch' order by id desc";
+
+                                        }
+
+                                    }$result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>
                                     <tr>

@@ -10,7 +10,7 @@ $(document).ready(function() {
   const urlParams = new URLSearchParams(window.location.search);
   const status = urlParams.get('status');
   if (status === 'user_created') {
-    Toastify({
+    Toastify({ 
       text: "User Created succesfully",
       duration: 3000,
       newWindow: true,

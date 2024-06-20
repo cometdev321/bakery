@@ -4,11 +4,7 @@
 
  ?>
 
-<?php
-if(isset($_POST['submit'])) {
-  
-}
-?>
+
 
  <div id="main-content">
         <div class="container-fluid">

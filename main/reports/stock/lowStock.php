@@ -50,33 +50,41 @@ if(isset($_POST['submit'])) {
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
-                                            <?php
-                                                $slno=1;
-                                                $query="select productname,saleprice,size,openingstock from tblproducts where status='1' and openingstock<=10 and userID='$session'";
-                                                $fetchProducts=mysqli_query($conn,$query);
-                                                $row=mysqli_fetch_array($fetchProducts);
-                                                if($row['openingstock']>0){
-                                                    while($row=mysqli_fetch_array($fetchProducts)){
-                                                    ?>
-                                                    <tr>
-                                                        <td><?php echo $slno;?></td>
-                                                        <td><?php echo $row['productname'];?></td>
-                                                        <td><?php echo '&#8377;'.$row['saleprice'];?></td>
-                                                        <td><?php echo $row['size'];?></td>
-                                                        <td><?php echo $row['openingstock'];?></td>
-                                                    </tr>
-                                                    <?php
-                                                    $slno++;
-                                                    }
-
-                                                }else{
-                                            ?>
-                                            <tr>
-                                                <td colspan="6" class="text-center">No records found</td>
-                                            </tr>
                                         <?php
-                                            }
-                                        ?>
+                                                $slno = 1;
+                                                
+                                                $query = "SELECT p.productname, p.saleprice, p.size, p.openingstock AS opstock, SUM(tpi.Qty) AS totalpurchased, SUM(tsi.Qty) AS totalsold FROM tblproducts p
+                                                 JOIN tblpurchaseinvoice_details tpi ON tpi.ItemName = p.id 
+                                                 JOIN tblsalesinvoice_details tsi ON tsi.ItemName = p.id 
+                                                 WHERE p.status = '1' AND p.userID = '$session' 
+                                                 GROUP BY p.productname, p.saleprice, p.size, p.openingstock
+                                                 HAVING (SUM(tpi.Qty) + p.openingstock) - SUM(tsi.Qty) < 10
+                                            ";
+                                            
+                                                $fetchProducts = mysqli_query($conn, $query);
+                                                
+                                                if (mysqli_num_rows($fetchProducts) > 0) {
+                                                    while ($row = mysqli_fetch_array($fetchProducts)) {
+                                            ?>
+                                                        <tr>
+                                                            <td><?php echo $slno; ?></td>
+                                                            <td><?php echo $row['productname']; ?></td>
+                                                            <td><?php echo '&#8377;' . $row['saleprice']; ?></td>
+                                                            <td><?php echo $row['size']; ?></td>
+                                                            <td><?php echo $row['opstock']; ?></td>
+                                                        </tr>
+                                            <?php
+                                                        $slno++;
+                                                    }
+                                                } else {
+                                            ?>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">No records found</td>
+                                                    </tr>
+                                            <?php
+                                                }
+                                            ?>
+
                                         </tbody>
                                     </table>
                                 </div>

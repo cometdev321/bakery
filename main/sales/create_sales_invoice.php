@@ -637,7 +637,7 @@ function create_sales_invoice() {
     
     .then(result => {
       console.log(result  )
-      if (result === 'error') {
+      if (result == 'error') {
         Toastify({
           text: "Party could not be added. Error Occurred",
           duration: 3000,
@@ -651,7 +651,7 @@ function create_sales_invoice() {
           onClick: function() {},
         }).showToast();
         window.location.href = "sales_invoice?status=error";
-      } else if (result === 'success') {
+      } else if (result == 'success' || result == '   success') {
         Toastify({
           text: "Party added successfully",
           duration: 3000,

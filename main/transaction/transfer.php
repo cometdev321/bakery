@@ -115,11 +115,12 @@ if(isset($_POST['submit'])){
                                         <input type="date"  id="date" class="form-control" value="<?php echo date('Y-m-d');?>">
                                     </div>
                                   <?php 
-                                  if(isset($_SESSION['subSession'])){
+                                  if(isset($_SESSION['subSession']) || isset($_SESSION['admin'])){
                                   ?>
                                       <div class="col-lg-3 col-md-12 my-2">
                                         <label>Select From Branches</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="from" id="from" onchange="getProductsOfBranches()" >                                        >
+                                        <option >Select Branch</option>
                                         <?php
                                             $slno=1;
                                             if(isset($_SESSION['admin'])){
@@ -187,6 +188,16 @@ if(isset($_POST['submit'])){
                                             </select>  
                                             <small id="to_errorMessage" class="text-danger" style="display: none;">Select different batch</small> 
                                           </div>
+                                          <?php 
+                                          if(isset($_SESSION['subSession']) || isset($_SESSION['admin'])){ ?>
+                                          <div class="col-lg-6 col-md-12 my-2">
+                                            <label>Select Product</label>
+                                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="product" id="product"  onchange="updateError()">
+                                           
+                                          </select>  
+                                          <small id="product_errorMessage" class="text-danger" style="display: none;">Select Product</small> 
+                                        </div>
+                                         <?php }else{ ?>
                                           <div class="col-lg-6 col-md-12 my-2">
                                             <label>Select Product</label>
                                             <select class="form-control show-tick ms select2" data-placeholder="Select" name="product" id="product"  onchange="updateError()">
@@ -202,6 +213,9 @@ if(isset($_POST['submit'])){
                                           </select>  
                                           <small id="product_errorMessage" class="text-danger" style="display: none;">Select Product</small> 
                                         </div>
+                                            <?php
+                                          }
+                                          ?>
                                     <div class="col-lg-6 col-md-12 my-2">
                                         <label>Quantity</label>
                                         <input type="number" value="1" id="qty" class="form-control" placeholder="Enter quantity" onkeyup="updateError()">
@@ -305,11 +319,26 @@ function updateError(){
        type:"post",
        data:formData,
        success:function(response){
+        response = response.trim(); 
+        console.log(response)
           if(response=='qtyError'){
+              Toastify({
+                text: "Something Went Wrong",
+                duration: 3000,
+                newWindow: true,
+                close: true,
+                gravity: "top", // top, bottom, left, right
+                position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+                backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                onClick: function(){}, // Callback after click
+                style: {
+                  margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+                },
+              }).showToast();
             qty_errorMessage.innerHTML='Quantity is more than available stock';
             qty_errorMessage.style.display = 'block';
           }
-
           if(response=='success'){
             window.location.href='transfer_history';
           }

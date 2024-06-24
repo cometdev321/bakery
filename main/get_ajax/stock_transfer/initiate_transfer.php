@@ -5,20 +5,29 @@ include('../../common/session_control.php');
 $date=$_POST['date'];
 $fromBranch=$_POST['fromBranch'];
 $toBranch=$_POST['toBranch'];
-$product=$_POST['product'];
-$qty=$_POST['qty'];
+$product=$_POST['product']; 
+$requestQty=$_POST['qty'];
 
-$checkQty="select openingstock from tblproducts where id='$product'";
+$checkQty="select p.openingstock,tpi.Qty as qty,tt.qty as transfered from tblproducts p
+            join tblpurchaseinvoice_details tpi on tpi.ItemName=p.id
+            join tbltransfer tt on tt.product=p.id
+            where p.id='$product' ";
+
 $exeCheckQty=mysqli_query($conn,$checkQty);
 $fetchCheckqty=mysqli_fetch_array($exeCheckQty);
 
-$availableQty=$fetchCheckqty['openingstock'];
-if($qty>$availableQty){
-    echo "qtyError";
+$openingstock=$fetchCheckqty['openingstock'];
+$purchase=$fetchCheckqty['qty'];
+$transfered=$fetchCheckqty['transfered'];
+$availableQty=($openingstock+$purchase)-$transfered;
+
+
+if($requestQty>$availableQty){
+    echo $availableQty;
 }else{
     //request transfer
     $insertQuery = "INSERT INTO tbltransfer (`userID`,`date`,`fromBranch`, `ToBranch`, `product`,`qty`,`status`) 
-    VALUES ('$session','$date','$fromBranch', '$toBranch', '$product','$qty','requested')";
+    VALUES ('$session','$date','$fromBranch', '$toBranch', '$product','$requestQty','requested')";
     $result=mysqli_query($conn,$insertQuery);
 
     if ($result) {
@@ -27,3 +36,4 @@ if($qty>$availableQty){
         echo 'error';
     }
 }
+?>

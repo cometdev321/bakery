@@ -208,7 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="../../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../../assets/js/pages/tables/jquery-datatable.js"></script>
-<script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../../assets/js/pages/forms/advanced-form-elements.js"></script>
 </body>
 </html>

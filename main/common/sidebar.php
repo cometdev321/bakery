@@ -382,8 +382,7 @@ if(isset($_POST['ProductSubmit'])) {
                                 <ul>
                                
                                     <li><a href="<?php echo $base ?>/category/add-category"><i class="fa icon-mouse"></i> Add New Category</a></li>
-                                    <!-- <li><a href="new-category"><i class="fa icon-mouse"></i>Category Requests</a></li> -->
-                                    <!--<li><a href="add-subcategory"><i class="fa icon-mouse"></i> Add Sub-Category</a></li>-->
+                                    <li><a href="<?php echo $base ?>/category/import-category"><i class="fa icon-mouse"></i>Import/Export Category</a></li>
 
                                 </ul>
                             </li>
@@ -393,6 +392,7 @@ if(isset($_POST['ProductSubmit'])) {
                               
                                     <li><a href="<?php echo $base ?>/party/add-party"><i class="fa icon-mouse"></i> Add New Party</a></li>
                                     <li><a href="<?php echo $base ?>/party/manage-party"><i class="fa icon-mouse"></i> Manage Party</a></li>
+                                    <li><a href="<?php echo $base ?>/party/import-party"><i class="fa icon-mouse"></i> Import/Export Party</a></li>
                                
                                 </ul>
                             </li>
@@ -403,6 +403,7 @@ if(isset($_POST['ProductSubmit'])) {
                               
                                     <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
                                     <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
+                                    <li><a href="<?php echo $base ?>/products/import-products"><i class="fa icon-mouse"></i> Import/Export Products</a></li>
                                
                                 </ul>
                             </li>

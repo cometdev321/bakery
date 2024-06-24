@@ -621,9 +621,9 @@ function create_Purchase_invoice() {
     .then(response => response.text())
     .then(result => {
       console.log(result);
-      if (result === 'error') {
+      if (result == 'error') { 
         window.location.href = "purchase_invoice?status=error";
-      } else if (result === 'success') {
+      } else if (result == 'inserted'|| result == '   inserted') {
         window.location.href = "purchase_invoice?status=success";
       }
     })

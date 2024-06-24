@@ -10,7 +10,7 @@ $fetchGetTransfer=mysqli_fetch_array($exeGetTrans);
 
 
 $deductQtyFromProduct=$fetchGetTransfer['product'];
-$transferQty=$fetchGetTransfer['qty'];
+$transferQty=$fetchGetTransfer['qty']; 
 
 
 $getavailablestock1="select * from tblproducts where id='$deductQtyFromProduct'";

@@ -60,8 +60,8 @@
             <div class="card planned_task">
                 <div class="body">
                     <div class="body table-responsive">
-                        <!-- <button class="btn btn-primary btn-sm my-4" id="exportButton">Excel Export</button>
-                        <button class="btn btn-primary btn-sm my-4" id="pdfButton">Pdf</button> -->
+                        <button class="btn btn-primary btn-sm my-4" id="exportButton">Excel Export</button>
+                        <button class="btn btn-primary btn-sm my-4" id="pdfButton">Pdf</button>
                         <table class="table table-bordered table-striped table-hover" id="salesTable">
                             <thead>
                                 <tr>
@@ -159,10 +159,8 @@
                 data: formData,
                 type: 'POST',
                 success: function(response) {
-                    $("#table-body").empty();
-
                     $("#table-body").html(response);
-                    
+
                     // Parse response and store in ajaxData
                     ajaxData = [];
                     $("#table-body tr").each(function() {
@@ -174,8 +172,28 @@
                     });
 
                     $('#salesTable').DataTable({
-                        destroy: false,
+                        destroy: true,
                         dom: 'Bfrtip',
+                        buttons: [
+                            {
+                                extend: 'excelHtml5',
+                                text: 'Export to Excel',
+                                exportOptions: {
+                                    modifier: {
+                                        page: 'all'
+                                    }
+                                }
+                            },
+                            {
+                                extend: 'pdfHtml5',
+                                text: 'Export to PDF',
+                                exportOptions: {
+                                    modifier: {
+                                        page: 'all'
+                                    }
+                                }
+                            }
+                        ],
                         paging: true,
                         searching: true,
                         ordering: true,

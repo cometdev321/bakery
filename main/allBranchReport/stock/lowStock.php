@@ -27,7 +27,7 @@ if (isset($_POST['submit'])) {
         <div class="card planned_task">
             <div class="body">
                 <div class="body table-responsive">
-                    <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                    <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                         <thead>
                             <tr>
                                 <th>Sl.No</th>
@@ -104,15 +104,8 @@ if (isset($_POST['submit'])) {
         </div> 
     </div>
 </div>
-
-<script src="../../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
-<script src="../../../assets/bundles/datatablescripts.bundle.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-<script src="../../../assets/vendor/sweetalert/sweetalert.min.js"></script>
+<script>loadTabledata();</script>
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../../assets/js/pages/tables/jquery-datatable.js"></script>
+<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
+</body>
+</html>

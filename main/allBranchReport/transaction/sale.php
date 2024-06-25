@@ -4,9 +4,7 @@
 ?>
 <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="../../../assets/css/main.css">
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css">
+
 
 <div id="main-content">
     <div class="container-fluid">
@@ -62,7 +60,7 @@
                     <div class="body table-responsive">
                         <!-- <button class="btn btn-primary btn-sm my-4" id="exportButton">Excel Export</button>
                         <button class="btn btn-primary btn-sm my-4" id="pdfButton">Pdf</button> -->
-                        <table class="table table-bordered table-striped table-hover" id="salesTable">
+                        <table class="table table-bordered table-striped table-hover" id="exportTable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -100,7 +98,7 @@
     </div>
 
     <script>
-        let ajaxData = [];
+        // let ajaxData = [];
 
         function edit_invoice(val) {
             document.getElementById('edit_sale_id').value = val;
@@ -160,28 +158,20 @@
                 type: 'POST',
                 success: function(response) {
                     $("#table-body").empty();
+                    loadTabledata();
 
                     $("#table-body").html(response);
                     
                     // Parse response and store in ajaxData
-                    ajaxData = [];
-                    $("#table-body tr").each(function() {
-                        var row = [];
-                        $(this).find("td").each(function() {
-                            row.push($(this).text().trim());
-                        });
-                        ajaxData.push(row);
-                    });
+                    // ajaxData = [];
+                    // $("#table-body tr").each(function() {
+                    //     var row = [];
+                    //     $(this).find("td").each(function() {
+                    //         row.push($(this).text().trim());
+                    //     });
+                    //     ajaxData.push(row);
+                    // });
 
-                    $('#salesTable').DataTable({
-                        destroy: false,
-                        dom: 'Bfrtip',
-                        paging: true,
-                        searching: true,
-                        ordering: true,
-                        lengthChange: true,
-                        pageLength: 10,
-                    });
                 },
                 error: function() {
                     console.log("Error occurred while fetching sales data.");
@@ -193,86 +183,13 @@
             get_list("This-Month");
         });
 
-        document.getElementById("exportButton").addEventListener("click", function () {
-            exportTableToCSV("sales_transactions.csv");
-        });
-
-        function exportTableToCSV(filename) {
-    var csv = [];
-    // Extract table headers dynamically
-    var headers = [];
-    $("#salesTable thead tr th").each(function() {
-        headers.push(cleanData($(this).text().trim()));
-    });
-    csv.push(headers.join(","));
-
-    // Add CSV content
-    ajaxData.forEach(function(row) {
-        var cleanedRow = row.map(function(cell) {
-            return cleanData(cell);
-        });
-        csv.push(cleanedRow.join(","));
-    });
-
-    downloadCSV(csv.join("\n"), filename);
-}
-
-
-        function downloadCSV(csv, filename) {
-            var csvFile;
-            var downloadLink;
-
-            csvFile = new Blob([csv], { type: "text/csv" });
-
-            downloadLink = document.createElement("a");
-            downloadLink.download = filename;
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-        }
-
-        document.getElementById("pdfButton").addEventListener("click", function () {
-            exportTableToPDF("sales_transactions.pdf");
-        });
-
-        function exportTableToPDF(filename) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    // Extract table headers dynamically
-    var headers = [];
-    $("#salesTable thead tr th").each(function() {
-        headers.push($(this).text().trim());
-    });
-
-    var tableData = ajaxData.map(function(row) {
-        return row.map(function(cell) {
-            return cleanData(cell);
-        });
-    });
-
-    doc.autoTable({
-        head: [headers],
-        body: tableData,
-    });
-
-    doc.save(filename);
-}
-
-
-        function cleanData(data) {
-            return data.replace(/₹/g, "").replace(/↓/g, "").trim();
-        }
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
+<script>
+      
+    </script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script> -->
+  
     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
     <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
 </body>

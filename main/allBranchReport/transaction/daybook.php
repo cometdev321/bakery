@@ -39,7 +39,7 @@
                             <div class="body">
                                 <div class="body table-responsive">
                                 <!-- <table class="table table-bordered table-striped table-hover dataTable js-exportable"> -->
-                                <table class="table table-bordered table-striped table-hover ">
+                                <table class="table table-bordered table-striped table-hover " id="exportTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -83,48 +83,17 @@
       type: "POST",
       data:{date:date},
       success: function(response) {
+        $("#table-body").empty();
+        loadTabledata();
         $("#table-body").html(response);
-        loadAdditionalScripts();
       },
     error:function(){
-        loadAdditionalScripts();
     }
     });
     
   }
 
-  function loadAdditionalScripts() {
-    // Load additional scripts after a delay using setTimeout
-    // setTimeout(function() {
-
-    var scriptElements = [
-      "../../../assets/bundles/libscripts.bundle.js",
-      "../../../assets/bundles/vendorscripts.bundle.js",
-      "../../../assets/bundles/datatablescripts.bundle.js",
-      "../../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js",
-      "../../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js",
-      "../../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js",
-      "../../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js",
-      "../../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js",
-      "../../../assets/bundles/mainscripts.bundle.js",
-      "../../../assets/js/pages/tables/jquery-datatable.js",
-      "../../../assets/bundles/mainscripts.bundle.js",
-      "../../../assets/js/pages/forms/advanced-form-elements.js"
-    ];
-
-    // Dynamically create script elements and append them to the document
-    scriptElements.forEach(function(src) {
-      // Check if the script already exists, if yes, remove it
-      var existingScript = document.querySelector('script[src="' + src + '"]');
-      if (existingScript) {
-        existingScript.remove();
-      }
-      var script = document.createElement('script');
-      script.src = src;
-      document.body.appendChild(script);
-    });
-    // }, 2000);
-  }
+  
 
   document.addEventListener('DOMContentLoaded', function() {
     get_list();
@@ -133,15 +102,8 @@
 
 
 
-
-<!-- Javascript -->
-<script src="../../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
-<!--  -->
-    
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../../assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
 
 
 

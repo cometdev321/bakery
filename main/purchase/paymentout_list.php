@@ -48,7 +48,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <label>Time</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
-                                        <input type="date" class="form-control" id="startDate" value="date-range" onchange="get_list(this.value)">
+                                        <input type="date" class="form-control" id="startDate" value="date-range" >
                                     </div>
                                     <span class="input-group-addon">TO</span>
                                     <div class="col-lg-4" style="width:250px">
@@ -70,7 +70,7 @@ date_default_timezone_set('Asia/Kolkata');
                         </div>
                         <div class="body">
 						<div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                                 <thead>
                                     <tr>
                                         <th>SLNO</th>
@@ -111,7 +111,6 @@ date_default_timezone_set('Asia/Kolkata');
             </form>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
            <script>
                 function edit_paymentOUT(val) {
                     document.getElementById('edit_payment').value=val;
@@ -171,8 +170,8 @@ function get_list(val) {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-            fromDate: start,
-            toDate: end 
+        fromDate: start + " 00:00:00",
+        toDate: end + " 23:59:59"
         };
     }
     $.ajax({
@@ -180,6 +179,7 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            loadTabledata();
             $("#paymentout-list").html(response);
         },
         error: function() {
@@ -194,24 +194,8 @@ function get_list(val) {
     document.title="NAYAN"
 </script>
 <!-- Javascript -->
-<script src="../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
-
-<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-
-<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
-
-<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
 <script src="../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 </body>
 
 </html>

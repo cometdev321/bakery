@@ -41,7 +41,7 @@
                         <div class="card planned_task">
                             <div class="body">
                                 <div class="body table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -79,17 +79,7 @@
                         </div> 
                     </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-           <script>
-                function submitSaleInvoiceForm(val) {
-                    document.getElementById('sale_id').value=val;
-                    document.getElementById('salesInvoice').submit();
-                }
-                function edit_invoice(val) {
-                    document.getElementById('edit_sale_id').value=val;
-                    document.getElementById('edit_salesInvoice').submit();
-                }
-            </script>
+
 
 <script>
 function getDetails() {
@@ -104,6 +94,7 @@ function getDetails() {
         data: formData,
         type: 'POST',
         success: function(response) {
+            loadTabledata();
             $("#table-body").html(response);
         },
         error: function() {
@@ -117,19 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 </script>
-
-<script src="../../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
-
-<script src="../../../assets/bundles/datatablescripts.bundle.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-
-<script src="../../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
-
-
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../../assets/js/pages/tables/jquery-datatable.js"></script>
+<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
+</body>
+</html>

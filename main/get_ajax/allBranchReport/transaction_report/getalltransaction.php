@@ -19,12 +19,12 @@ if ($selectedBranch == 'All') {
     join tblusers tu on tu.userID=tpi.userID
     where   tpi.purchase_invoice_date>='$fromDate' and  tpi.purchase_invoice_date<='$toDate' and tpi.status='1' union
 
-    select tpin.paymentDate,tp.name,tu.username as username,tpin.paymentInNumber  as refno,tpin.recordType,tpin.paymentAmount,tpin.full_paid from tblpaymentin as tpin
+    select tpin.paymentDate,tu.username as username,tp.name,tpin.paymentInNumber  as refno,tpin.recordType,tpin.paymentAmount,tpin.full_paid from tblpaymentin as tpin
     join tblparty tp on tp.id=tpin.partyName  
     join tblusers tu on tu.userID=tpin.userID
     where    tpin.paymentDate>='$fromDate' and tpin.paymentDate<='$toDate' and tpin.status='1' union 
 
-    select tpou.paymentDate,tp.name,tu.username as username,tpou.paymentOutNumber  as refno,tpou.recordType,tpou.paymentAmount,tpou.full_paid from tblpaymentout as tpou
+    select tpou.paymentDate,tu.username as username,tp.name,tpou.paymentOutNumber  as refno,tpou.recordType,tpou.paymentAmount,tpou.full_paid from tblpaymentout as tpou
     join tblparty tp on tp.id=tpou.partyName
     join tblusers tu on tu.userID=tpou.userID 
     where   tpou.paymentDate>='$fromDate' and tpou.paymentDate<='$toDate' and tpou.status='1'";
@@ -42,12 +42,12 @@ if ($selectedBranch == 'All') {
     join tblusers tu on tu.userID=tpi.userID 
     where tpi.userID='$selectedBranch' and tpi.purchase_invoice_date>='$fromDate' and  tpi.purchase_invoice_date<='$toDate' and tpi.status='1' union
 
-    select tpin.paymentDate,tp.name,tu.username as username,tpin.paymentInNumber  as refno,tpin.recordType,tpin.paymentAmount,tpin.full_paid from tblpaymentin as tpin
+    select tpin.paymentDate,tu.username as username,tp.name,tpin.paymentInNumber  as refno,tpin.recordType,tpin.paymentAmount,tpin.full_paid from tblpaymentin as tpin
     join tblparty tp on tp.id=tpin.partyName 
     join tblusers tu on tu.userID=tpin.userID 
     where tpin.userID='$selectedBranch'  and tpin.paymentDate>='$fromDate' and tpin.paymentDate<='$toDate' and tpin.status='1' union 
 
-    select tpou.paymentDate,tp.name,tu.username as username,tpou.paymentOutNumber  as refno,tpou.recordType,tpou.paymentAmount,tpou.full_paid from tblpaymentout as tpou
+    select tpou.paymentDate,tu.username as username,tp.name,tpou.paymentOutNumber  as refno,tpou.recordType,tpou.paymentAmount,tpou.full_paid from tblpaymentout as tpou
     join tblparty tp on tp.id=tpou.partyName 
     join tblusers tu on tu.userID=tpou.userID
     where tpou.userID='$selectedBranch' and tpou.paymentDate>='$fromDate' and tpou.paymentDate<='$toDate' and tpou.status='1'";

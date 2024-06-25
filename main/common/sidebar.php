@@ -3,6 +3,78 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<!-- DataTables CSS -->
+ <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include DataTables -->
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<script>
+       
+       function loadScript(url, callback) {
+            // Check if script already exists
+            let existingScript = document.querySelector(`script[src="${url}"]`);
+            if (existingScript) {
+                existingScript.remove();
+            }
+            let script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = url;
+            script.onload = callback;
+            document.head.appendChild(script);
+        }
+
+        function loadStylesheet(url) {
+            // Check if stylesheet already exists
+            let existingLink = document.querySelector(`link[href="${url}"]`);
+            if (existingLink) {
+                existingLink.remove();
+            }
+            let link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = url;
+            document.head.appendChild(link);
+        }
+
+        function destroyExistingTable() {
+            if ($.fn.DataTable.isDataTable('#exportTable')) {
+                $('#exportTable').DataTable().clear().destroy();
+            }
+        }
+
+        function loadTabledata() {
+            // Destroy any existing DataTable instance
+            destroyExistingTable();
+
+            // Load CSS files
+            loadStylesheet("https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css");
+            loadStylesheet("https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css");
+
+            // Load JS files in sequence
+            loadScript("https://code.jquery.com/jquery-3.6.0.min.js", function() {
+                loadScript("https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js", function() {
+                    loadScript("https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js", function() {
+                        loadScript("https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js", function() {
+                            loadScript("https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js", function() {
+                                // Initialize DataTable after all scripts are loaded
+                                $('#exportTable').DataTable({
+                                    destroy: true,
+                                    dom: 'Bfrtip',
+                                    paging: true,
+                                    searching: true,
+                                    ordering: true,
+                                    lengthChange: true,
+                                    pageLength: 10,
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }
+    
+    </script>
 <style>
 
     .demo-card label{ display: block; position: relative;}

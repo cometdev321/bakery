@@ -1,6 +1,13 @@
 <?php 
+
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
+if (!isset($_SESSION['admin'])) {
+    echo '<script type="text/javascript">
+    window.location.href = "../dashboard";
+  </script>';
+}
+
 ?>
 <?php
 // Check if the form has been submitted

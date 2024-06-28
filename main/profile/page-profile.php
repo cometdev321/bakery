@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <form action="" method="post" enctype="multipart/form-data">
                                 <div class="body">
                                     <h6>Company Logo</h6>
-                                    <div class="media">
+                                    <div class="media"> 
                                         <div class="media-left m-r-15">
                                             <img src="../../Images/<?php  echo $fetchadmin['image']; ?>" class="user-photo media-object" alt="User">
                                         </div>

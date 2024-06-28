@@ -92,9 +92,7 @@ $query = "SELECT pi.*, p.name AS `name`
 
                 <div class="card planned_task">
                     <div class="body">
-                        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-                           Add Item&nbsp;<i class="fa fa-plus"></i> 
-                        </button>
+                     
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
                                 <thead>
@@ -195,6 +193,9 @@ $query = "SELECT pi.*, p.name AS `name`
                                 <input type="text" id="lastslno" hidden value="<?php echo $slno; ?>">
                             </tbody>
                             </table>
+                            <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
+                           Add Item&nbsp;<i class="fa fa-plus"></i> 
+                        </button>
                         </div>
                     </div>
                 </div> 
@@ -473,7 +474,7 @@ function create_purchase_invoice() {
     .then(response => response.text())
     .then(result => {
       console.log(result)
-      if (result === 'error') {
+      if (result == 'error' || result == '   error') {
         Toastify({
           text: "Party could not be added. Error Occurred",
           duration: 3000,
@@ -487,7 +488,7 @@ function create_purchase_invoice() {
           onClick: function() {},
         }).showToast();
         window.location.href = "purchase_invoice?status=error";
-      } else if (result === 'success') {
+      } else if (result === 'success' || result == '   success') {
         Toastify({
           text: "Party added successfully",
           duration: 3000,
@@ -618,6 +619,19 @@ function create_purchase_invoice() {
             },
             error: function() {
                 console.log("Error occurred while fetching parties.");
+            }
+        });
+    }
+
+    function getproducts(val) {
+        $.ajax({
+            url: "../get_ajax/get_products_purchase.php",
+            method: "GET",
+            success: function(response) {
+                $("#select_products-" + val).append(response);
+            },
+            error: function() {
+                console.log("Error occurred while fetching products.");
             }
         });
     }

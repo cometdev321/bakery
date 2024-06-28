@@ -309,9 +309,7 @@ date_default_timezone_set('Asia/Kolkata');
 
                 <div class="card planned_task">
                     <div class="body">
-                        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-                           Add Item&nbsp;<i class="fa fa-plus"></i> 
-                        </button>
+                        
                         <!-- <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button> -->
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
@@ -353,7 +351,11 @@ date_default_timezone_set('Asia/Kolkata');
                 
                                 </tbody>
                             </table>
+                             <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
+                           Add Item&nbsp;<i class="fa fa-plus"></i> 
+                        </button>
                         </div>
+                       
                     </div>
                 </div> 
                 

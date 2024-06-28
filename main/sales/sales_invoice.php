@@ -148,7 +148,7 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-            <form id="salesInvoice" action="view_invoice" method="POST" style="display: none;">
+            <form id="salesInvoice" action="../invoice/print" method="POST" style="display: none;">
                 <input type="text" hidden name="sale_id" id="sale_id">
             </form>
             <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">

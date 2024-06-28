@@ -104,7 +104,7 @@ date_default_timezone_set('Asia/Kolkata');
             </div>
         </div>
     </div>
-            <form id="PurchaseInvoice" action="view_purchase" method="POST" style="display: none;">
+            <form id="PurchaseInvoice" action="../invoice/print" method="POST" style="display: none;">
                 <input type="text" hidden name="purchase_id" id="purchase_id">
             </form>
             <form id="edit_PurchaseInvoice" action="edit_purchase" method="POST" style="display: none;">

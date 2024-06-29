@@ -281,7 +281,7 @@ function fetchProductStock(productId, quantity) {
         }
     };
 
-    xhr.open('GET', 'fetch_product_stock.php?product_id=' + productId, true);
+    xhr.open('GET', '../get_ajax/stock_transfer/fetch_product_stock.php?product_id=' + productId, true);
     xhr.send();
   }
 
@@ -304,7 +304,7 @@ function validateBranchSelection() {
   var fromBranch = document.getElementById('from').value;
   if (fromBranch !== 'null') {
     $.ajax({
-      url: 'fetch_products.php',
+      url: '../get_ajax/stock_transfer/fetch_products.php',
       type: 'POST',
       data: { branch_id: fromBranch },
       success: function(response) {

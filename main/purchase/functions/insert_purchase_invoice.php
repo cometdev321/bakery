@@ -40,7 +40,7 @@
             $itemName = $val['itemname'];
             $hsn = $val['hsn'];
             $batchNo = $val['batchno'];
-            $expireDate = $val['expiredate'];
+            $expireDate = $val['expiredate']; 
             $manufactureDate = $val['mafdate'];
             $qty = $val['qty'];
             $size = $val['size'];
@@ -66,7 +66,7 @@
         //     $query2 = "INSERT INTO tblpartyreport (userID, partyname, mobno, p_balance) VALUES ('$session', '$partyName', '$partyMobNo', '$amount_remaining')";
         //     mysqli_query($conn, $query2);
         // }
-        echo "success";
+        echo "inserted";
     } else {
         // Insertion failed
         echo "error";

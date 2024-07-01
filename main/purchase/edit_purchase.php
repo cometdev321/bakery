@@ -9,8 +9,8 @@
 $query = "SELECT pi.*, p.name AS `name` 
           FROM tblpurchaseinvoices pi
           INNER JOIN tblparty p ON pi.party_name = p.id
-          WHERE  pi.userID = '$session' AND pi.status = '1' 
-          ORDER BY pi.id DESC"; 
+          WHERE  pi.userID = '$session' AND pi.status = '1' AND  pi.id='$id'
+          ORDER BY pi.id DESC "; 
           
           $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($result);
@@ -28,246 +28,7 @@ $query = "SELECT pi.*, p.name AS `name`
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script>
-  $(document).ready(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    if (status === 'success') {
-      Toastify({
-        text: "Party added successfully",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-    if (status === 'error') {
-      Toastify({
-        text: "Party could not be added",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-    if (status === 'alreadyexists') {
-      Toastify({
-        text: "Party details already exist!",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-  });
-</script>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="myModalLabel">Create New Party</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <label for="nameInput"><span class="required">*</span> Name:</label>
-          <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter name" required>
-        </div>
-        <div class="modal-body">
-          <label for="mobileInput"><span class="required">*</span> Mobile Number:</label>
-          <input type="number" class="form-control" id="mob1" name="mobile" placeholder="Enter mobile number" required onkeyup="update();">
-          <small id="mobile_errorMessage" class="text-danger" style="display: none;">Invalid Mobile Number</small>
-        </div>
-        <div class="modal-body">
-          <label for="gstInput">GST Number (Optional):</label>
-          <input type="text" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
-          <small id="gstHelpText" class="form-text text-muted">Example: GSTIN-12**34**56*78ZA</small>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm" id="saveButton" onclick="check_data();" name="add_party">Save</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="product_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="myModalLabel">Create New Product</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <label for="categorySelect"><span class="required">*</span> Category:</label>
-            <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" id="category" required onchange="clear_product_error();">
-                <option value="null">Select Category</option>
-                <?php
-                    $getct=mysqli_query($conn,"select name from tblcategory where status='1'  and userID='$session'");
-                    while($fetchcat=mysqli_fetch_array($getct)){
-                    ?>
-                    <option value="<?php echo $fetchcat['name']; ?>"><?php echo $fetchcat['name']; ?></option>
-                <?php } ?>
-            </select>
-            <small id="category_errorMessage" class="text-danger" style="display: none;">Select Category</small>
-        </div>
-        <div class="modal-body">
-          <label for="productNameInput"><span class="required">*</span> Product Name:</label>
-          <input type="text" class="form-control" id="productNameInput" name="product_name" placeholder="Enter product name" required onkeyup="clear_product_error();"> 
-          <small id="product_errorMessage" class="text-danger" style="display: none;">Type Product Name</small>
-        </div>
-        <div class="modal-body">
-          <label for="purchasePriceInput"><span class="required">*</span> purchase Price:</label>
-          <input type="number" class="form-control" id="purchasePriceInput" name="purchase_price" placeholder="Enter purchase price" required onkeyup="clear_product_error();">
-          <small id="purchase_errorMessage" class="text-danger" style="display: none;">Type purchase Price</small>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-sm" id="saveButton" onclick="check_product_data();" name="add_product">Save</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  function update() {
-    mobile_errorMessage.style.display = 'none';
-    mob1.style.borderColor = "initial";
-  }
-
-  function check_data() {
-    let mobno = mob1.value;
-    let firstChar = mobno.charAt(0);
-
-    if (mobno.length !== 10) {
-      mobile_errorMessage.style.display = 'block';
-      mob1.style.borderColor = "red";
-      mob1.focus();
-      event.preventDefault();
-      return;
-    }else if (firstChar !== '6' && firstChar !== '7' && firstChar !== '8' && firstChar !== '9') {
-      mobile_errorMessage.style.display = 'block';
-      mob1.style.borderColor = "red";
-      mob1.focus();
-      event.preventDefault();
-      return;
-    }else{
-        let name=nameInput.value;
-        let gst=gstInput.value;
-
-        var formdata={
-            name:name,
-            mobno:mobno,
-            gstno:gst
-        }
-        
-              $.ajax({
-                url: '../get_ajax/create_party_ajax.php',
-                type: 'POST',
-                data: formdata,
-                success: function(response) {
-                if(response=='alreadyexists'){
-                    Toastify({
-                        text: "Party already exists",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                
-                if(response=='error'){
-                    Toastify({
-                        text: "Party could not be added.Error Occured",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                if(response=='success'){
-                     Toastify({
-                        text: "Party added successfully",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                
-                
-                
-                $('#myModal').modal('hide');
-                getparties();
-                },
-                error: function(xhr, status, error) {
-                  console.error('Error: ' + error);
-                }
-              });
-            }
-
-    }
-    
-    
-  
-  
-    function handleSelectChange(selectElement,val) {
-        if (selectElement === 'add_new') {
-            $('#myModal').modal('show');
-        }else{
-          party_name.value=selectElement;
-            party_mobno.value=val;
-        }
-        
-    }
-   function getproducts(val) {
-        $.ajax({
-            url: "../get_ajax/get_products_purchase.php",
-            method: "GET",
-            success: function(response) {
-                $("#select_products-" + val).append(response);
-            },
-            error: function() {
-                console.log("Error occurred while fetching products.");
-            }
-        });
-    }
-
-    
-</script>
 
  <div id="main-content">
         <div class="container-fluid">
@@ -331,9 +92,7 @@ $query = "SELECT pi.*, p.name AS `name`
 
                 <div class="card planned_task">
                     <div class="body">
-                        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-                           Add Item&nbsp;<i class="fa fa-plus"></i> 
-                        </button>
+                     
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
                                 <thead>
@@ -400,7 +159,7 @@ $query = "SELECT pi.*, p.name AS `name`
                                             <td>
                                               <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-<?php echo $slno; ?>" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,<?php echo $slno; ?>),clear_product_error(<?php echo $slno; ?>)">
                                                 <option value="<?php echo $row1['ItemName']; ?>"><?php echo $row1['pname']; ?></option>
-                                              </select>
+                                               </select>
                                               <script> getproducts(<?php echo $slno; ?>);</script>
                                             </td>
                                             <td><input type="text" style="width:100px" class="form-control" id="hsn-<?php echo $slno; ?>" value="<?php echo $row1['HSN']; ?>" name="hsn[]"></td>
@@ -434,6 +193,9 @@ $query = "SELECT pi.*, p.name AS `name`
                                 <input type="text" id="lastslno" hidden value="<?php echo $slno; ?>">
                             </tbody>
                             </table>
+                            <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
+                           Add Item&nbsp;<i class="fa fa-plus"></i> 
+                        </button>
                         </div>
                     </div>
                 </div> 
@@ -712,7 +474,7 @@ function create_purchase_invoice() {
     .then(response => response.text())
     .then(result => {
       console.log(result)
-      if (result === 'error') {
+      if (result == 'error' || result == '   error') {
         Toastify({
           text: "Party could not be added. Error Occurred",
           duration: 3000,
@@ -726,7 +488,7 @@ function create_purchase_invoice() {
           onClick: function() {},
         }).showToast();
         window.location.href = "purchase_invoice?status=error";
-      } else if (result === 'success') {
+      } else if (result === 'success' || result == '   success') {
         Toastify({
           text: "Party added successfully",
           duration: 3000,
@@ -857,6 +619,19 @@ function create_purchase_invoice() {
             },
             error: function() {
                 console.log("Error occurred while fetching parties.");
+            }
+        });
+    }
+
+    function getproducts(val) {
+        $.ajax({
+            url: "../get_ajax/get_products_purchase.php",
+            method: "GET",
+            success: function(response) {
+                $("#select_products-" + val).append(response);
+            },
+            error: function() {
+                console.log("Error occurred while fetching products.");
             }
         });
     }

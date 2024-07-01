@@ -4,47 +4,7 @@
 date_default_timezone_set('Asia/Kolkata');
 
 ?>
-<script>
-$(document).ready(function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const status = urlParams.get('status');
-  if (status === 'success') {
-    Toastify({
-      text: " purchase stored succesfully",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top",
-      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-      backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-      margintop:"202px",
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      onClick: function(){}, // Callback after click
-       style: {
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-      },
-    }).showToast();
-  }
 
- 
-   if (status === 'error') {
-    Toastify({
-      text: "Something Went Wrong",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top", // top, bottom, left, right
-      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      onClick: function(){}, // Callback after click
-       style: {
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-      },
-    }).showToast();
-  }
-});
-</script>
     <div id="main-content">
         <div class="container-fluid">
            <div class="block-header">
@@ -74,10 +34,10 @@ $(document).ready(function() {
                             <div class="form-group">
                                 <label>Time</label>
                                 <select class="form-control" name="time_period" id="time_period" onchange="get_list(this.value)">
-                                    <option selected value="Today">Today</option>
+                                    <option  value="Today">Today</option>
                                     <option value="Yesterday">Yesterday</option>
                                     <option value="This-Week">This-Week</option>
-                                    <option value="This-Month">This-Month</option>
+                                    <option  selected value="This-Month">This-Month</option>
                                     <option value="Current-Fiscal-Year">Current Fiscal Year </option>
                                     <option value="Last-7-days">Last 7 days</option>
                                 </select>
@@ -88,7 +48,7 @@ $(document).ready(function() {
                                 <label>Time</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
-                                        <input type="date" class="form-control" id="startDate" value="date-range" onchange="get_list(this.value)">
+                                        <input type="date" class="form-control" id="startDate" value="date-range" >
                                     </div>
                                     <span class="input-group-addon">TO</span>
                                     <div class="col-lg-4" style="width:250px">
@@ -110,7 +70,7 @@ $(document).ready(function() {
                         </div>
                         <div class="body">
 						<div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                                 <thead>
                                     <tr>
                                         <th>SLNO</th>
@@ -144,16 +104,15 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-            <form id="PurchaseInvoice" action="view_purchase" method="POST" style="display: none;">
+            <form id="PurchaseInvoice" action="../invoice/print" method="POST" style="display: none;">
                 <input type="text" hidden name="purchase_id" id="purchase_id">
             </form>
             <form id="edit_PurchaseInvoice" action="edit_purchase" method="POST" style="display: none;">
-                <input type="text" hidden name="edit_purchase_id" id="edit_purchase_id">
+                <input type="text"  name="edit_purchase_id" id="edit_purchase_id">
             </form>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-           <script>
+           <script> 
                 function submitPurchaseInvoiceForm(val) {
                     document.getElementById('purchase_id').value=val;
                     document.getElementById('PurchaseInvoice').submit();
@@ -184,12 +143,12 @@ function get_list(val) {
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-m-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Last-7-days') {
@@ -201,9 +160,9 @@ function get_list(val) {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-            fromDate: start,
-            toDate: end 
-        };
+        fromDate: start + " 00:00:00",
+        toDate: end + " 23:59:59"
+    };
     }
     
     $.ajax({
@@ -211,6 +170,7 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            loadTabledata();
             $("#Purchase-list").html(response);
         },
         error: function() {
@@ -219,30 +179,14 @@ function get_list(val) {
     });
 }
 
-  get_list("Today");
+  get_list("This-Month");
 </script>
 <script>
     document.title="NAYAN"
 </script>
 <!-- Javascript -->
-<script src="../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
-
-<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-
-<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
-
-<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
 <script src="../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 </body>
 
 </html>

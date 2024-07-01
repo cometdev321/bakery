@@ -4,7 +4,6 @@
 date_default_timezone_set('Asia/Kolkata');
 
 ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script>
@@ -92,7 +91,7 @@ $(document).ready(function() {
                                 <label>Time</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
-                                        <input type="date" class="form-control" id="startDate" value="date-range" onchange="get_list(this.value)">
+                                        <input type="date" class="form-control" id="startDate" value="date-range" >
                                     </div>
                                     <span class="input-group-addon">TO</span>
                                     <div class="col-lg-4" style="width:250px">
@@ -114,7 +113,7 @@ $(document).ready(function() {
                         </div>
                         <div class="body">
 						<div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                                 <thead>
                                     <tr>
                                         <th>SLNO</th>
@@ -155,7 +154,6 @@ $(document).ready(function() {
             </form>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
            <script>
               
                 function edit_paymentIN(val) {
@@ -209,12 +207,12 @@ function get_list(val) {
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-m-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Last-7-days') {
@@ -226,16 +224,17 @@ function get_list(val) {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-            fromDate: start,
-            toDate: end 
-        };
+        fromDate: start + " 00:00:00",
+        toDate: end + " 23:59:59"
+    };
     }
     $.ajax({
         url: "../get_ajax/paymentIn/get_paymentIn_list.php",
         data: formData,
         type: 'POST',
         success: function(response) {
-            console.log(formData) ;           $("#paymentin-list").html(response);
+            loadTabledata();
+            $("#paymentin-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");
@@ -249,24 +248,8 @@ function get_list(val) {
     document.title="NAYAN"
 </script>
 <!-- Javascript -->
-<script src="../../assets/bundles/libscripts.bundle.js"></script>    
-<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
-
-<script src="../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="../../assets/bundles/datatablescripts.bundle.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-
-<script src="../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
-
-<script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
 <script src="../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 </body>
 
 </html>

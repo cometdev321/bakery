@@ -1,7 +1,80 @@
 <?php include('base.php');?>
+<?php include('baseScript.php');?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<!-- DataTables CSS -->
+ <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include DataTables -->
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<script>
+       
+       function loadScript(url, callback) {
+            // Check if script already exists
+            let existingScript = document.querySelector(`script[src="${url}"]`);
+            if (existingScript) {
+                existingScript.remove();
+            }
+            let script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = url;
+            script.onload = callback;
+            document.head.appendChild(script);
+        }
+
+        function loadStylesheet(url) {
+            // Check if stylesheet already exists
+            let existingLink = document.querySelector(`link[href="${url}"]`);
+            if (existingLink) {
+                existingLink.remove();
+            }
+            let link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = url;
+            document.head.appendChild(link);
+        }
+
+        function destroyExistingTable() {
+            if ($.fn.DataTable.isDataTable('#exportTable')) {
+                $('#exportTable').DataTable().clear().destroy();
+            }
+        }
+
+        function loadTabledata() {
+            // Destroy any existing DataTable instance
+            destroyExistingTable();
+
+            // Load CSS files
+            loadStylesheet("https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css");
+            loadStylesheet("https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css");
+
+            // Load JS files in sequence
+            loadScript("https://code.jquery.com/jquery-3.6.0.min.js", function() {
+                loadScript("https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js", function() {
+                    loadScript("https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js", function() {
+                        loadScript("https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js", function() {
+                            loadScript("https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js", function() {
+                                // Initialize DataTable after all scripts are loaded
+                                $('#exportTable').DataTable({
+                                    destroy: true,
+                                    dom: 'Bfrtip',
+                                    paging: true,
+                                    searching: true,
+                                    ordering: true,
+                                    lengthChange: true,
+                                    pageLength: 10,
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }
+    
+    </script>
 <style>
 
     .demo-card label{ display: block; position: relative;}
@@ -291,7 +364,7 @@ if(isset($_POST['ProductSubmit'])) {
                             echo strtoupper($fetchadmin['Name']); 
                     }else if(isset($_SESSION['user'])){
                             echo strtoupper($fetchadmin['username']);
-                        }
+                        } 
                         
                         ?>&nbsp;
                     </strong></a>
@@ -319,6 +392,41 @@ if(isset($_POST['ProductSubmit'])) {
                     </li>
                 </ul>
             </div>
+
+
+            <?php
+            
+                if(!isset($_SESSION['user']) ){
+                    if(isset($_SESSION['subSession'])){
+                        $S_O_branch=$_SESSION['subSession'];
+                        $getSessionName=mysqli_query($conn,"SELECT name from branch where id in(select branch from tblusers where userID='$S_O_branch')");
+                        $getSessionValue=mysqli_fetch_array($getSessionName);
+                    }
+              ?>
+            <div class="form-group mx-3">
+                <label>Select Branch</label>
+                <select onchange="setSessionValue(this)" class="form-control show-tick ms select2" id="branch"  data-placeholder="Select"  > 
+                <?php  if(isset($_SESSION['subSession'])){ ?>
+                <option value="<?php echo $S_O_branch;?>"><?php echo isset($getSessionValue['name']) ? strtoupper($getSessionValue['name']) : 'All';?> </option>
+                <?php } ?>
+                <option >Select Branch</option>
+                <option value="All">All</option>
+                    <?php
+                        $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
+                            join tblusers tu on tu.branch=b.id
+                        where b.status='1' and b.userID='$session'";
+                        $getbrx=mysqli_query($conn,$branchQ);
+                        while($fetchbx=mysqli_fetch_array($getbrx)){
+                    ?>
+                        <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
+                    <?php   
+                        }
+                    ?>
+                </select>                                
+             </div>
+             <?php
+            }
+            ?>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#menu">Menu</a></li>
@@ -330,11 +438,11 @@ if(isset($_POST['ProductSubmit'])) {
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">                            
-                            <li>
-                                <a href="#Dashboard" class="has-arrow"><i class="icon-home"></i> <span>Dashboard</span></a>
                                <?php
                                    if(isset($_SESSION['admin'])){
                                 ?>
+                            <li>
+                                <a href="#Dashboard" class="has-arrow"><i class="icon-home"></i> <span>Dashboard</span></a>
                                 <ul>
                                     <li><a href="<?php echo $base ?>/branches/mybranches"><i class="fa fa-building-o"></i> My Branch</a></li>
                                     <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
@@ -346,8 +454,7 @@ if(isset($_POST['ProductSubmit'])) {
                                 <ul>
                                
                                     <li><a href="<?php echo $base ?>/category/add-category"><i class="fa icon-mouse"></i> Add New Category</a></li>
-                                    <li><a href="new-category"><i class="fa icon-mouse"></i>Category Requests</a></li>
-                                    <!--<li><a href="add-subcategory"><i class="fa icon-mouse"></i> Add Sub-Category</a></li>-->
+                                    <li><a href="<?php echo $base ?>/category/import-category"><i class="fa icon-mouse"></i>Import/Export Category</a></li>
 
                                 </ul>
                             </li>
@@ -357,18 +464,24 @@ if(isset($_POST['ProductSubmit'])) {
                               
                                     <li><a href="<?php echo $base ?>/party/add-party"><i class="fa icon-mouse"></i> Add New Party</a></li>
                                     <li><a href="<?php echo $base ?>/party/manage-party"><i class="fa icon-mouse"></i> Manage Party</a></li>
+                                    <li><a href="<?php echo $base ?>/party/import-party"><i class="fa icon-mouse"></i> Import/Export Party</a></li>
                                
                                 </ul>
                             </li>
+                          
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Products</span></a>
                                 <ul>
                               
                                     <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
                                     <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
+                                    <li><a href="<?php echo $base ?>/products/import-products"><i class="fa icon-mouse"></i> Import/Export Products</a></li>
                                
                                 </ul>
                             </li>
+                            <?php
+                                   if(!isset($_SESSION['admin'])){
+                                ?>
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-tag"></i> <span>Sales</span></a>
                                 <ul>                                    
@@ -384,6 +497,7 @@ if(isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
                                 </ul>
                             </li>
+                            <?php } ?>
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-plane"></i> <span>Transport</span></a>
                                 <ul>                                    
@@ -393,7 +507,53 @@ if(isset($_POST['ProductSubmit'])) {
                               
                                 </ul>
                             </li>
+                            <!-- reports for admin only -->
+                            <?php if(isset($_SESSION['admin'])){?>
+                            <li>
+                                <a href="#menu-level-1" class="has-arrow"><i class="icon-book-open"></i> <span>All Branches Reports</span></a>
+                                <ul>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
+                                        <ul>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/sale">Sale</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/purchase">Purchase</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/daybook">Day Book</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/alltransaction">All Transaction</a></li>
+                                        </ul>
+                                    </li>
 
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Party Report</a>
+                                        <ul>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/party/party_sales_report">PartyWise Sales Report</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/party/party_purchase_report">PartyWise Purchase Report</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/party/allParties">All Parties</a></li>
+                                            <!-- <li><a href="<?php echo $base ?>/allBranchReport/party/partySummary">Sale Purchase By Party</a></li> -->
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
+                                        <ul>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/stockDetails">Stock Details</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/itemreport">Item Report By Party</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/stocksummary">Stock Summary</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/lowStock">Low Stock Summary</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Expense Report</a>
+                                        <ul>
+                                            <li><a href="">Expense Details</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                </ul>
+                            </li>
+                            <?php } ?>
+                            <!-- reports for users -->
+                            <?php
+                                   if(!isset($_SESSION['admin'])){
+                                ?>
                             <li>
                                 <a href="#menu-level-1" class="has-arrow"><i class="icon-book-open"></i> <span>Reports</span></a>
                                 <ul>
@@ -410,7 +570,7 @@ if(isset($_POST['ProductSubmit'])) {
                                         <a href="#menu-level-2" class="has-arrow">Party Report</a>
                                         <ul>
                                             <li><a href="<?php echo $base ?>/reports/party/party_sales_report">PartyWise Sales Report</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/party_purchase_report">PartyWise Sales Report</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/party/party_purchase_report">PartyWise Purchase Report</a></li>
                                             <li><a href="<?php echo $base ?>/reports/party/allParties">All Parties</a></li>
                                             <li><a href="<?php echo $base ?>/reports/party/partySummary">Sale Purchase By Party</a></li>
                                         </ul>
@@ -433,6 +593,7 @@ if(isset($_POST['ProductSubmit'])) {
                                     
                                 </ul>
                             </li>
+                            <?php } ?>
                             <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
                         </ul>
                     </nav>
@@ -517,3 +678,26 @@ input[type=number] {
   -moz-appearance: textfield;
 }
   </style>
+ <script>
+function setSessionValue(branchValue) {
+    var selectedText = branchValue.options[branchValue.selectedIndex].text;
+    $.ajax({
+        type: "POST",
+        url: `${baseSet}/session_control.php`,
+        data: {
+            branch: branchValue.value,
+            itemname: selectedText
+        },
+        success: function(response) {
+            // Handle the response from the server if needed
+            console.log(response);
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            // Handle the error if needed
+            console.error("Error: " + error);
+        }
+    });
+}
+
+</script>

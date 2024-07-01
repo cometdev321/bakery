@@ -4,26 +4,6 @@ include('../common/session_control.php');
 
 
 
-// $query = "UPDATE tblpartyreport 
-//           SET 
-//             r_balance = CASE 
-//                           WHEN r_balance > p_balance THEN r_balance - p_balance 
-//                           ELSE 0 
-//                         END,
-//             p_balance = CASE 
-//                           WHEN p_balance > r_balance THEN p_balance - r_balance 
-//                           ELSE 0 
-//                         END";
-
-// $result = mysqli_query($conn, $query);
-
-// if ($result) {
-//     echo "Update successful";
-// } else {
-//     echo "Error updating record: " . mysqli_error($conn);
-// }
-
-
 $slno = 1;
 $credit;
 $query = "SELECT `id`,`name`,`mobno` from tblparty where userID='$session'";

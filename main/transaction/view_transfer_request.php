@@ -190,9 +190,7 @@ function saveasnew() {
        type:"post",
        data:formData,
        success:function(response){
-          if(response=='success'){
             window.location.href='transfer_history?status=success';
-          }
        
        },error: function() {
             console.log('error occured');

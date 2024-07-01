@@ -1,6 +1,13 @@
 <?php 
+
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
+if (!isset($_SESSION['admin'])) {
+    echo '<script type="text/javascript">
+    window.location.href = "../dashboard";
+  </script>';
+}
+
 ?>
 <?php
 // Check if the form has been submitted
@@ -62,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <form action="" method="post" enctype="multipart/form-data">
                                 <div class="body">
                                     <h6>Company Logo</h6>
-                                    <div class="media">
+                                    <div class="media"> 
                                         <div class="media-left m-r-15">
                                             <img src="../../Images/<?php  echo $fetchadmin['image']; ?>" class="user-photo media-object" alt="User">
                                         </div>

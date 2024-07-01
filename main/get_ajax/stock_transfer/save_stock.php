@@ -5,6 +5,9 @@ include('../../common/session_control.php');
 $tranferID=$_POST['id'];
 $add_to_product=$_POST['add_to_product'];
 
+// id transfer id 
+// product id is add_to_product
+
 $getTransfer="select * from tbltransfer where id='$tranferID'";
 $exeGetTrans=mysqli_query($conn,$getTransfer);
 $fetchGetTransfer=mysqli_fetch_array($exeGetTrans);

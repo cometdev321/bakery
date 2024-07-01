@@ -82,14 +82,19 @@ $(document).ready(function() {
 
 if(isset($_POST['submit'])){
            $name  =     $_POST["name"];
-            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' and status='1'  and userID='$session'";
+           if(isset($_POST['branch'])){
+                $userID=$_POST['branch'];
+              }else{
+                $userID=$session;
+           }
+            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' and status='1'  and userID='$userID'";
             $result = mysqli_query($conn, $query);
             
             if (mysqli_num_rows($result) > 0) {
             echo"<script>window.location.href='add-category?status=category_error'</script>";
             } else {
               // If the branch does not exist, insert it into the database
-              $insert_query = "INSERT INTO tblcategory (name,userId) VALUES ('$name','$session')";
+              $insert_query = "INSERT INTO tblcategory (name,userId) VALUES ('$name','$userID')";
               $insert_result = mysqli_query($conn, $insert_query);
             
               if ($insert_result) {
@@ -97,7 +102,7 @@ if(isset($_POST['submit'])){
               } else {
                 echo"<script>window.location.href='add-category?status=error'</script>";
               }
-            }
+            }   
 
 }
 ?>
@@ -115,29 +120,7 @@ if(isset($_POST['submit'])){
                     </div>            
                 </div>
             </div>
-            <?php
-            if (isset($alert_type)) {
-                  echo '<div class="alert text-dark l-' . $alert_type . '" role="alert">';
-                  echo $alert_message;
-                  echo '</div>';
-                  
-                }
-             if (isset($_GET['alert_type'])) {
-                $alert_type=$_GET['alert_type'];
-                $alert_message=$_GET['alert_message'];
-                
-                  echo '<div class="alert text-dark l-' . $alert_type . '" role="alert">';
-                  echo $alert_message;
-                  echo '</div>';
-                echo '<script>
-                          setTimeout(function() {
-                              window.location.href = "add-category";
-                          }, 1500);</script>';
-                }  
-                
-            ?>
             <div class="row clearfix">
-
                 <div class="col-lg-12 col-md-12">
                     <div class="card planned_task">
                         <div class="header">
@@ -145,8 +128,26 @@ if(isset($_POST['submit'])){
                         </div>
                         <div class="body">
                              <form  method="post" action="">
-                                <div class="form-group">
-                                    <label>Category Name</label>
+                             <?php if(isset($_SESSION['subSession'])){?>
+                                  <div class="col-lg-12 col-md-6 my-2">
+                                  <label>Branch</label>
+                                  <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
+                                          <?php
+                                                $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
+                                                    join tblusers tu on tu.branch=b.id
+                                                where b.status='1' and b.userID='$session'";
+                                                $getbrx=mysqli_query($conn,$branchQ);
+                                                while($fetchbx=mysqli_fetch_array($getbrx)){
+                                            ?>
+                                                <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
+                                            <?php   
+                                                }
+                                            ?>
+                                        </select> 
+                                        </div>
+                                        <?php } ?>
+                                        <div class="col-lg-12 col-md-6 my-2">
+                                        <label>Category Name</label>
                                     <input type="text"  placeholder="Type Here" class="form-control" name="name" required>
                                 </div>
                                 <div class="form-group">
@@ -157,6 +158,7 @@ if(isset($_POST['submit'])){
                         </div>
                     </div>
                 </div>
+            </div>
 
                 <div class="col-lg-12">
                     <div class="card">
@@ -185,7 +187,12 @@ if(isset($_POST['submit'])){
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$session' order by id desc";
+                                    if(isset($_SESSION['subSession'])){
+                                      $userID=$_SESSION['subSession'];
+                                    }else{
+                                      $userID=$session;
+                                 }
+                                    $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

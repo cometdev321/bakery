@@ -2,28 +2,28 @@
 include('../../common/cnn.php');
 include('../../common/session_control.php');
 
-$date=$_POST['date'];
-$fromBranch=$_POST['fromBranch'];
-$toBranch=$_POST['toBranch'];
-$product=$_POST['product'];
-$qty=$_POST['qty'];
+$date = $_POST['date'];
+$fromBranch = $_POST['fromBranch'];
+$toBranch = $_POST['toBranch'];
+$product = $_POST['product']; 
+$requestQty = $_POST['qty'];
 
-$checkQty="select openingstock from tblproducts where id='$product'";
-$exeCheckQty=mysqli_query($conn,$checkQty);
-$fetchCheckqty=mysqli_fetch_array($exeCheckQty);
+// $query = "UPDATE tblproducts p
+// JOIN tblusers u ON p.userID = u.userID
+// SET p.openingstock = p.openingstock - $requestQty
+// WHERE p.id = $product
+// AND u.branch = $fromBranch";
 
-$availableQty=$fetchCheckqty['openingstock'];
-if($qty>$availableQty){
-    echo "qtyError";
-}else{
-    //request transfer
-    $insertQuery = "INSERT INTO tbltransfer (`userID`,`date`,`fromBranch`, `ToBranch`, `product`,`qty`,`status`) 
-    VALUES ('$session','$date','$fromBranch', '$toBranch', '$product','$qty','requested')";
-    $result=mysqli_query($conn,$insertQuery);
+// $res = mysqli_query($conn, $query); // <-- Add semicolon here
 
-    if ($result) {
-        echo 'success';
-    } else {
-        echo 'error';
-    }
+// request transfer
+$insertQuery = "INSERT INTO tbltransfer (`userID`,`date`,`fromBranch`, `ToBranch`, `product`,`qty`,`status`) 
+                VALUES ('$session','$date','$fromBranch', '$toBranch', '$product','$requestQty','requested')";
+$result = mysqli_query($conn, $insertQuery);
+
+if ($result) {
+    echo 'success';
+} else {
+    echo 'error';
 }
+?>

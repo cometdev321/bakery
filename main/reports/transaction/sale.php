@@ -11,7 +11,7 @@ if(isset($_POST['submit'])) {
 ?>
 
  <div id="main-content">
-        <div class="container-fluid">
+        <div class="container-fluid"> 
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
@@ -117,7 +117,7 @@ if(isset($_POST['submit'])) {
                         <div class="card planned_task">
                             <div class="body">
                                 <div class="body table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -180,12 +180,12 @@ function get_list(val) {
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-1');?> ",
+            fromDate: "<?php echo date('Y-m-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> ",
+            fromDate: "<?php echo date('Y-4-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Last-7-days') {
@@ -206,12 +206,12 @@ function get_list(val) {
     if(formData.party=='null'){
         formData.party='all';
     }
-
     $.ajax({
         url: "../../get_ajax/transaction_report/getsales.php",
         data: formData,
         type: 'POST',
         success: function(response) {
+            loadTabledata(response);
             $("#table-body").html(response);
         },
         error: function() {
@@ -225,34 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script src="../../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
-
-
-<script src="../../../assets/bundles/datatablescripts.bundle.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
-<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
-
-<script src="../../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
-
-<script src="../../../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
-<script src="../../../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
-<script src="../../../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
-<script src="../../../assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
-<script src="../../../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
-<script src="../../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="../../../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
-<script src="../../../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
-
-<script src="../../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-<script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../../assets/js/pages/tables/jquery-datatable.js"></script>
-<script src="../../../assets/bundles/mainscripts.bundle.js"></script>
-<script src="../../../assets/js/pages/forms/advanced-form-elements.js"></script>
 </body>
 </html>

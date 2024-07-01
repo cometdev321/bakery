@@ -20,7 +20,7 @@ include('../../common/session_control.php');
                                             
 
                                                
-                                            
+                                             
         $fetchProducts=mysqli_query($conn,$query);
         while($row=mysqli_fetch_array($fetchProducts)){
             $prid=$row['id'];

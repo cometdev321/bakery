@@ -248,7 +248,7 @@ $query = "SELECT si.*, p.name AS `name`
           party_name.value=selectElement;
             party_mobno.value=val;
         }
-        
+         
     }
    function getproducts(val) {
         $.ajax({
@@ -321,9 +321,7 @@ $query = "SELECT si.*, p.name AS `name`
 
                 <div class="card planned_task">
                     <div class="body">
-                        <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-                           Add Item&nbsp;<i class="fa fa-plus"></i> 
-                        </button>
+                        
                         <!-- <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button> -->
                         <div class="body table-responsive">
                             <table class="table table-bordered  table-striped table-hover" cellspacing="0">
@@ -416,6 +414,9 @@ $query = "SELECT si.*, p.name AS `name`
                                 <input type="text" id="lastslno" hidden value="<?php echo $slno; ?>">
                             </tbody>
                             </table>
+                            <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
+                           Add Item&nbsp;<i class="fa fa-plus"></i> 
+                        </button>
                         </div>
                     </div>
                 </div> 
@@ -677,7 +678,6 @@ function create_sales_invoice() {
 
     data.push(rowData);
   }
-  // console.log(data);
   const url = 'functions/update_invoice.php';
   const options = {
     method: 'POST',
@@ -691,7 +691,7 @@ function create_sales_invoice() {
   fetch(url, options)
     .then(response => response.text())
     .then(result => {
-      if (result === 'error') {
+      if (result == 'error' || result=='   error') {
         Toastify({
           text: "Party could not be added. Error Occurred",
           duration: 3000,
@@ -705,9 +705,9 @@ function create_sales_invoice() {
           onClick: function() {},
         }).showToast();
         window.location.href = "sales_invoice?status=error";
-      } else if (result === 'success') {
+      } else if (result == 'success' || result =='   success') {
         Toastify({
-          text: "Party added successfully",
+          text: "updated successfully",
           duration: 3000,
           newWindow: true,
           close: true,
@@ -759,7 +759,6 @@ function create_sales_invoice() {
 
         if (checkbox.checked) {
             document.getElementById('amount_received').value = document.getElementById('total').value;
-            console.log(document.getElementById('amount_received').value)
             // document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
             document.getElementById('balance_total').value = 0;
             document.getElementById("received_pay").value="Yes";
@@ -807,7 +806,6 @@ function create_sales_invoice() {
         type: 'POST',
         data: { sales_invoice_item: id }, 
         success: function (response) {
-            console.log("removed");
         }
     });
 
@@ -822,7 +820,6 @@ function create_sales_invoice() {
         type: 'POST',
         data: { sales_invoice: id ,sales_invoice_number:sales_invoice_number}, 
         success: function (response) {
-            console.log("removed");
             window.location.href="sales_invoice";
         }
     });

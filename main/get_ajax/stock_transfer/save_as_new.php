@@ -10,7 +10,7 @@ $fetchGetTransfer=mysqli_fetch_array($exeGetTrans);
 
 
 $deductQtyFromProduct=$fetchGetTransfer['product'];
-$transferQty=$fetchGetTransfer['qty'];
+$transferQty=$fetchGetTransfer['qty']; 
 
 
 $getavailablestock1="select * from tblproducts where id='$deductQtyFromProduct'";
@@ -20,7 +20,7 @@ $fetchAvailableStock1=mysqli_fetch_array($exeAvaialble1);
 
 $category=$fetchAvailableStock1['category'];
 $productname=$fetchAvailableStock1['productname'];
-$saleprice=$fetchAvailableStock1['saleprice	'];
+$saleprice=$fetchAvailableStock1['saleprice'];
 $purchase=$fetchAvailableStock1['purchaseprice'];
 $size_number=$fetchAvailableStock1['size'];
 $size=$fetchAvailableStock1['sizetype'];    

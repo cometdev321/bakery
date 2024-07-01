@@ -3,7 +3,13 @@ include('../common/header2.php');
 include('../common/sidebar.php'); 
 include('../common/session_control.php'); 
 $id=$_POST['pid'];
-$query = "SELECT * FROM `tblparty` WHERE `id`='$id' AND userID='$session'";
+if(isset($_SESSION['subSession'])){
+   $userID= $_SESSION['subSession'];
+}else{
+    $userID= $session;
+
+}
+$query = "SELECT * FROM `tblparty` WHERE `id`='$id' AND userID='$userID'";
     $result = mysqli_query($conn, $query);
     $row = mysqli_fetch_array($result);
  ?>
@@ -14,7 +20,7 @@ if(isset($_POST['submit'])) {
     $name = $_POST['name'];
     $mobile = $_POST['mobno'];
     $gstno = $_POST['gstno'];
-  
+   
 
       // Update the record based on the provided $id
       $updateQuery = "UPDATE tblparty SET name = '$name', mobno = '$mobile', gstno = '$gstno' WHERE id = '$id'";

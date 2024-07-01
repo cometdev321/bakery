@@ -96,7 +96,7 @@ if(isset($_POST['submit'])) {
       $userID = $session;
   }
   
-  
+
   
   if (isset($allUserIDs)) {
       foreach ($allUserIDs as $userID) {

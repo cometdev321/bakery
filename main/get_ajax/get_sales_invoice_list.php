@@ -20,7 +20,7 @@ $query = "SELECT si.*, p.name AS party_name
 if (mysqli_num_rows($result) > 0) {
     ?>
         <?php while ($row = mysqli_fetch_array($result)) { 
-        
+         
             ?>
             <tr>
                 <td><?php echo $slno; ?></td>
@@ -32,6 +32,7 @@ if (mysqli_num_rows($result) > 0) {
                 <td>
                     <div class="row">
                         
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Pos Invoice"  onclick="submitSalePosForm('<?php echo $row['id']; ?>')"><i class="icon-doc"></i></button>
                     <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Sales Invoice"  onclick="submitSaleInvoiceForm('<?php echo $row['id']; ?>')"><i class="icon-drawer"></i></button>
                     <button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit Sales Invoice"  onclick="edit_invoice('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
                     </div>

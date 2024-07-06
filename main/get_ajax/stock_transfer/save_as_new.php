@@ -20,7 +20,7 @@ $fetchAvailableStock1=mysqli_fetch_array($exeAvaialble1);
 
 $category=$fetchAvailableStock1['category'];
 $productname=$fetchAvailableStock1['productname'];
-$saleprice=$fetchAvailableStock1['saleprice	'];
+$saleprice=$fetchAvailableStock1['saleprice'];
 $purchase=$fetchAvailableStock1['purchaseprice'];
 $size_number=$fetchAvailableStock1['size'];
 $size=$fetchAvailableStock1['sizetype'];    

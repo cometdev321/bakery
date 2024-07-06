@@ -72,30 +72,70 @@ if(isset($_POST['submit'])) {
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
     $sizeJoined=$size_number.$size;
-    if(isset($_POST['branch'])){
-      $userID=$_POST['branch'];
-    }else{
-      $userID=$session;
-    }
-    
-       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$userID'";
-    $result = mysqli_query($conn, $query);
-    
-    if(mysqli_num_rows($result) > 0) {
-        echo"<script>window.location.href='add-product?status=exists'</script>";
-    } else {
-      // If the record does not exist, insert the new record
-      $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`,`purchaseprice`, `HSN`, `openingstock`, `gst`, `size`,`sizetype`,`userID`) 
-        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$userID')";
-      
-      if(mysqli_query($conn, $query)) {
-        echo"<script>window.location.href='add-product?status=success'</script>";
-
+    if (isset($_POST['branch'])) {
+      if ($_POST['branch'] == "all") {
+          // Retrieve all user IDs for the branches
+          $allUserIDs = [];
+          $branchQuery = "SELECT tu.userID FROM branch b
+                          JOIN tblusers tu ON tu.branch = b.id
+                          WHERE b.status = '1' AND b.userID = '$session'";
+          $result = mysqli_query($conn, $branchQuery);
+  
+          if ($result) {
+              while ($row = mysqli_fetch_assoc($result)) {
+                  $allUserIDs[] = $row['userID'];
+              }
+          } else {
+              echo "Error: " . mysqli_error($conn);
+              exit;
+          }
       } else {
-        echo"<script>window.location.href='add-product?status=error'</script>";
-
+          $userID = $_POST['branch'];
       }
-    }
+  } else {
+      $userID = $session;
+  }
+  
+
+  
+  if (isset($allUserIDs)) {
+      foreach ($allUserIDs as $userID) {
+          $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size' AND userID='$userID'";
+          $result = mysqli_query($conn, $query);
+          
+          if (mysqli_num_rows($result) > 0) {
+              echo "<script>window.location.href='add-product?status=exists'</script>";
+              exit; 
+          }
+      }
+  
+      foreach ($allUserIDs as $userID) {
+          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `userID`) 
+                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype', '$userID')";
+          if (!mysqli_query($conn, $query)) {
+              echo "<script>window.location.href='add-product?status=error'</script>";
+              exit; 
+          }
+      }
+  
+      echo "<script>window.location.href='add-product?status=success'</script>";
+  } else {
+      $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size' AND userID='$userID'";
+      $result = mysqli_query($conn, $query);
+  
+      if (mysqli_num_rows($result) > 0) {
+          echo "<script>window.location.href='add-product?status=exists'</script>";
+      } else {
+          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `userID`) 
+                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype', '$userID')";
+          if (mysqli_query($conn, $query)) {
+              echo "<script>window.location.href='add-product?status=success'</script>";
+          } else {
+              echo "<script>window.location.href='add-product?status=error'</script>";
+          }
+      }
+  }
+  
 
 }
 ?>
@@ -132,11 +172,15 @@ if(isset($_POST['submit'])) {
                                                     join tblusers tu on tu.branch=b.id
                                                 where b.status='1' and b.userID='$session'";
                                                 $getbrx=mysqli_query($conn,$branchQ);
+                                                $row_count = mysqli_num_rows($getbrx);
+                                                if ($row_count > 0) {
                                                 while($fetchbx=mysqli_fetch_array($getbrx)){
                                             ?>
                                                 <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
                                             <?php   
                                                 }
+                                                echo "<option value='all'>All Branch</option>";
+                                              }
                                             ?>
                                         </select> 
                                         </div>

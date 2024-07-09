@@ -51,9 +51,9 @@
             $type = $val['type'];
             $itemName = $val['itemname'];
             $hsn = $val['hsn'];
-            $batchNo = $val['batchno'];
-            $expireDate = $val['expiredate'];
-            $manufactureDate = $val['mafdate'];
+            $batchNo = isset($val['batchno']) ? $val['batchno'] : '';
+            $expireDate = isset($val['expiredate']) ? $val['expiredate'] : '';
+            $manufactureDate = isset($val['mafdate']) ? $val['mafdate'] : '';
             $qty = $val['qty'];
             $size = $val['size'];
             $price = $val['price'];

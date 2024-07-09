@@ -110,7 +110,7 @@ $(document).ready(function() {
                                <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                        <h2>Transfer Reuqests Sent </h2>                            
+                        <h2>Transfer Requests Sent </h2>                            
                         </div>
                         <div class="body">
 						<div class="table-responsive">
@@ -187,7 +187,7 @@ $(document).ready(function() {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Transfer Reuqests Accepted </h2>                            
+                            <h2>Transfer Requests Accepted </h2>                            
                         </div>
                         <div class="body">
 						<div class="table-responsive">

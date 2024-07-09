@@ -167,7 +167,8 @@ if(isset($_POST['submit'])) {
                                   <div class="col-lg-6 col-md-6 my-2">
                                   <label>Branch</label>
                                   <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
-                                          <?php
+                                         <option>Select Branch</option>
+                                         <?php
                                                 $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
                                                     join tblusers tu on tu.branch=b.id
                                                 where b.status='1' and b.userID='$session'";

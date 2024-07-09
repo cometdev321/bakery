@@ -409,7 +409,7 @@ if(isset($_POST['ProductSubmit'])) {
                 <?php  if(isset($_SESSION['subSession'])){ ?>
                 <option value="<?php echo $S_O_branch;?>"><?php echo isset($getSessionValue['name']) ? strtoupper($getSessionValue['name']) : 'All';?> </option>
                 <?php } ?>
-                <option >Select Branch</option>
+                <option >Select Branch</option> 
                 <option value="All">All</option>
                     <?php
                         $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b

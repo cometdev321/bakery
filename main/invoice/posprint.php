@@ -35,7 +35,6 @@ if (isset($_POST['sale_id'])) {
                WHERE pi.status = '1' AND pi.id='$id'
                ORDER BY pi.id DESC"; 
 }
-
 $result1 = mysqli_query($conn, $query1);
 $row = mysqli_fetch_array($result1);
 

@@ -88,7 +88,7 @@ function generateRandomString($length = 15) {
   }
 
   return $randomString;
-}
+} 
 
 if (isset($_POST['submit'])) {
     $branchname = $_POST["branch"];
@@ -99,7 +99,7 @@ if (isset($_POST['submit'])) {
         echo"<script>window.location.href='myusers?status=branch_error'</script>";
     } else {
         // Check if the username already exists
-        $check_query = "SELECT * FROM tblusers WHERE username = '$username' and userID='$session'";
+        $check_query = "SELECT * FROM tblusers WHERE username = '$username' and superAdminID='$session'";
         $check_result = mysqli_query($conn, $check_query);
 
         if (mysqli_num_rows($check_result) > 0) {

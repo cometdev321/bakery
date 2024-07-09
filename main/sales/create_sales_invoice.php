@@ -279,7 +279,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                 include('../common/cnn.php');
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
-                                                $query1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where `userID`='$session' ORDER BY `id` DESC LIMIT 1";
+                                                $query1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where `userID`='$session' and status='1' ORDER BY `id` DESC LIMIT 1 ";
                                                 $result1 = mysqli_query($conn, $query1);
                                                 
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {
@@ -318,9 +318,9 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>Sl.No</th>
                                         <th>Item Name</th>
                                         <th>HSN</th>
-                                        <th>Batch No</th>
+                                        <!-- <th>Batch No</th>
                                         <th>Expire Date</th>
-                                        <th>Manuf. Date</th>
+                                        <th>Manuf. Date</th> -->
                                         <th>Size</th>
                                         <th>Qty</th>
                                         <th>Sales Price</th>
@@ -335,9 +335,9 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>Sl.No</th>
                                         <th>Item Name</th>
                                         <th>HSN</th>
-                                        <th>Batch No</th>
+                                        <!-- <th>Batch No</th>
                                         <th>Expire Date</th>
-                                        <th>Manuf. Date</th>
+                                        <th>Manuf. Date</th> -->
                                         <th>Size</th>
                                         <th>Qty</th>
                                         <th>Sales Price</th>
@@ -476,9 +476,9 @@ document.addEventListener('keydown', function(event) {
             '  <small id="product_errorMessage-' + rowCount + '" class="text-danger" style="display: none;">Select Product</small>' +
             '</td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="hsn-' + rowCount + '" name="hsn[]"></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="batchno-' + rowCount + '" name="batchno[]"></td>' +
-            '<td><input type="date" style="width:150px" class="form-control" id="expiredate-' + rowCount + '" name="expiredate[]"></td>' +
-            '<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
+           // '<td><input type="text" style="width:100px" class="form-control" id="batchno-' + rowCount + '" name="batchno[]"></td>' +
+            //'<td><input type="date" style="width:150px" class="form-control" id="expiredate-' + rowCount + '" name="expiredate[]"></td>' +
+            //'<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="sizetype-' + rowCount + '"  name="size[]" type="text" readonly></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount + '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
@@ -589,9 +589,9 @@ function create_sales_invoice() {
     
     const itemname = row.querySelector('[name="itemname[]"]').value;
     const hsn = row.querySelector('[name="hsn[]"]').value;
-    const batchno = row.querySelector('[name="batchno[]"]').value;
-    const expiredate = row.querySelector('[name="expiredate[]"]').value;
-    const mafdate = row.querySelector('[name="mafdate[]"]').value;
+    // const batchno = row.querySelector('[name="batchno[]"]').value;
+    // const expiredate = row.querySelector('[name="expiredate[]"]').value;
+    // const mafdate = row.querySelector('[name="mafdate[]"]').value;
     const qty = row.querySelector('[name="qty[]"]').value;
     const size = row.querySelector('[name="size[]"]').value;
     const price = row.querySelector('[name="price[]"]').value;
@@ -611,9 +611,9 @@ function create_sales_invoice() {
       const rowData = {
       itemname,
       hsn,
-      batchno,
-      expiredate,
-      mafdate,
+      // batchno,
+      // expiredate,
+      // mafdate,
       qty,
       size,
       price,

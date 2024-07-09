@@ -157,7 +157,7 @@ $(document).ready(function() {
             <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
                 <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
             </form>
-
+ 
 </div>
            <script>
                 function submitSalePosForm(val) {

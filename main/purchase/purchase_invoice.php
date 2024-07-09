@@ -45,7 +45,7 @@ date_default_timezone_set('Asia/Kolkata');
                             </div>
                          <div class="col-lg-9 col-md-12 row">
                             <div class="form-group">
-                                <label>Time</label>
+                                <label>Date</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
                                         <input type="date" class="form-control" id="startDate" value="date-range" >
@@ -107,12 +107,20 @@ date_default_timezone_set('Asia/Kolkata');
             <form id="PurchaseInvoice" action="../invoice/print" method="POST" style="display: none;">
                 <input type="text" hidden name="purchase_id" id="purchase_id">
             </form>
+            <form id="PosInvoice" action="../invoice/posprint" method="POST" style="display: none;">
+                <input type="text" hidden name="purchase_id" id="Pos_purchase_id">
+            </form>
             <form id="edit_PurchaseInvoice" action="edit_purchase" method="POST" style="display: none;">
                 <input type="text"  name="edit_purchase_id" id="edit_purchase_id">
             </form>
+            
 
 </div>
            <script> 
+                 function submitPurchasePosForm(val) {
+                    document.getElementById('Pos_purchase_id').value=val;
+                    document.getElementById('PosInvoice').submit();
+                }
                 function submitPurchaseInvoiceForm(val) {
                     document.getElementById('purchase_id').value=val;
                     document.getElementById('PurchaseInvoice').submit();

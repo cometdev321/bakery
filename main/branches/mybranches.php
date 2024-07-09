@@ -115,7 +115,7 @@ if(isset($_POST['submit'])){
         }else{
          $branchname  =     $_POST["branchname"];
          $location    =     $_POST["location"];
-            $query = "SELECT * FROM branch WHERE name = '$branchname' AND location = '$location' and status='1' and userID='$session'";
+            $query = "SELECT * FROM branch WHERE name = '$branchname' and status='1' and userID='$session'";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_num_rows($result) > 0) {
@@ -214,6 +214,7 @@ if(isset($_POST['submit'])){
                                         <td><?php echo $slno;?></td>
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['location'];?></td>
+                                        <td><?php echo $row['status'];?></td>
                                         <td>
                                             <form action="editbranch" method="post">
                                             <input name="branchid" value="<?php echo $row['id'];?>" hidden>

@@ -119,7 +119,7 @@ if(isset($_POST['submit'])) {
                         <div class="header">
                             <h2>User Details</h2>
                         </div>
-                        <div class="body">
+                        <div class="body"> 
                              <form id="basic-form" method="post" action="">
                                  <div class="row clearfix">
                                   <?php if(isset($_SESSION['subSession'])){?>

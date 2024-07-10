@@ -270,7 +270,7 @@ function updateTransfer() {
     var from = document.getElementById('from').value;
     var to = document.getElementById('to').value;
     var product = document.getElementById('product').value;
-    var qty = document.getElementById('qty').value;
+    var qty = parseFloat(document.getElementById('qty').value);
 
     // Validate form fields
     if (from == 'null') {
@@ -299,11 +299,11 @@ function updateTransfer() {
         type: "GET",
         data: { product_id: product },
         success: function(response) {
-            var availableStock = response.trim();
+            var availableStock = parseFloat(response.trim()); 
             // Compare quantity with available stock
            
 
-            if(qty > availableStock) {
+            if((qty) > (availableStock)) {
                 qty_errorMessage.innerHTML = 'Quantity is more than available stock';
                 qty_errorMessage.style.display = 'block';
                 return; // Prevent further execution

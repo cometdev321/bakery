@@ -2,6 +2,19 @@
 include('common/header.php'); 
 include('common/sidebar.php'); 
 ?>
+<style>
+        .alert-placeholder {
+            position: fixed;
+            top: 15%;
+            right: 10px;
+            z-index: 9999;
+            width: 80%; 
+            max-width: 600px; 
+            margin: auto;
+            left: 40%;
+            right: 0;
+        }
+    </style>
 <div id="main-content">
     <div class="container-fluid">
         <div class="block-header">
@@ -15,6 +28,7 @@ include('common/sidebar.php');
                 </div>            
             </div>
         </div>
+        <div class="alert-placeholder"></div>
 
          <!-- basic -->
         <div class="row clearfix">
@@ -401,5 +415,32 @@ donutGauge.set(2590);
 <script src="../assets/bundles/knob.bundle.js"></script> <!-- Jquery Knob-->
 <script src="../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../assets/js/index.js"></script>
+<script>
+     <?php if (isset($_SESSION['admin'])): ?>
+     $(document).ready(function() {
+            // Check if a branch is selected
+            var branchSelected = <?php echo isset($_SESSION['subSession']) ? 'true' : 'false'; ?>;
+
+            if (!branchSelected) {
+                displayAlert('Please select a branch.');
+            }
+            $('#branch').change(function() {
+                var selectedBranch = $(this).val();
+                if (selectedBranch) {
+                    $('.alert-placeholder').empty(); // Remove the alert
+                    // Add logic to store selected branch in session and reload or update content
+                }
+            });
+        });
+        function displayAlert(message) {
+            var alertHtml = `
+                <div class="alert alert-danger" role="alert">
+                    ${message}
+                </div>
+            `;
+            $('.alert-placeholder').html(alertHtml);
+        }
+        <?php endif; ?>
+</script>
 </body>
 </html>

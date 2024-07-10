@@ -188,11 +188,22 @@ if(isset($_POST['submit'])){
                                 <?php
                                     $slno=1;
                                     if(isset($_SESSION['subSession'])){
-                                      $userID=$_SESSION['subSession'];
+                                      if($_SESSION['subSession'] == 'ALL'){
+                                          $adminID = $_SESSION['admin'];
+                                          $query = "SELECT cat.* FROM tblcategory cat join tblusers u on u.userID = cat.userID 
+                                          where cat.status = '1' 
+                                          and u.superAdminID = '$adminID'
+                                          order by cat.id desc
+                                          ";
+                                      }else{
+                                        $userID=$_SESSION['subSession'];
+                                        $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
+                                      }
                                     }else{
                                       $userID=$session;
+                                      $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
                                  }
-                                    $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
+                                    
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

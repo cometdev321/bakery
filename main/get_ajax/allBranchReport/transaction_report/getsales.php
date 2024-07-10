@@ -5,17 +5,20 @@ include('../../../common/session_control.php');
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
-$selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
+$selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'ALL'; // Default to 'All' if not set
 
-if ($selectedBranch == 'All') {
-    $query = "SELECT si.*, p.name AS party_name 
-              FROM tblsalesinvoices si
-              JOIN tblusers tu ON tu.userID=si.userID 
-              INNER JOIN tblparty p ON si.party_name = p.id 
-              WHERE si.sales_invoice_date >= '$fromDate' 
-              AND si.sales_invoice_date <= '$toDate' 
-              AND si.status = '1' 
-              ORDER BY si.id DESC";
+if ($selectedBranch == 'ALL') {
+    $adminID = $_SESSION['admin'];
+    $query = "SELECT si.*, p.name AS party_name, u.username AS user_name
+        FROM tblsalesinvoices si
+        INNER JOIN tblparty p ON si.party_name = p.id
+        INNER JOIN tblusers u ON si.userID = u.userID
+        WHERE si.sales_invoice_date >= '$fromDate' 
+        AND si.sales_invoice_date <= '$toDate' 
+        AND u.superAdminID = '$adminID'
+        AND si.status = '1' 
+        ORDER BY si.id DESC;
+";
 } else {
     $query = "SELECT si.*, p.name AS party_name 
               FROM tblsalesinvoices si

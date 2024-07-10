@@ -1,6 +1,7 @@
 <?php  
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
+$adminID = $_SESSION['admin'];
 
  ?><!-- Add this to the "manage-products" page -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -123,15 +124,50 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    if(isset($_SESSION['subSession'])){
-                                        $userID=$_SESSION['subSession'];
-                                      }else{
-                                        $userID=$session;
-                                      }
-                                    $query = "SELECT tp.*,tc.name FROM tblproducts tp
-                                     join tblcategory tc on tc.id=tp.category 
-                                     WHERE tp.status = '1'  and tp.userID='$userID'
-                                      order by tp.id desc";
+                                    // if(isset($_SESSION['subSession'])){
+                                    //     if($_SESSION['subSession'] == 'ALL'){
+                                    //                 $query = "SELECT tp.* FROM tblproducts tp
+                                    //         join tblusers tu on tp.userID = tu.userID   
+                                    //         WHERE tp.status = '1'  and tu.userID='$adminID'
+                                    //         order by tp.id desc";
+                                      
+                                    //     }else{
+                                    //         $userID=$_SESSION['subSession'];
+                                    //     }
+                                    //   }else{
+                                    //     $userID=$session;
+                                    //   }
+
+                                    if(isset($_SESSION['admin'])){
+                                        $adminID = $_SESSION['admin'];
+                                        if(isset($_SESSION['subSession']) and $_SESSION['subSession'] == 'ALL' ){
+                                            $query = "SELECT tp.*, tc.name 
+                                            FROM tblproducts tp
+                                            JOIN tblusers tu ON tp.userID = tu.userID
+                                            JOIN tblcategory tc ON tc.id = tp.category 
+                                            WHERE tp.status = '1' AND tu.superAdminID = '$adminID'
+                                            ORDER BY tp.id DESC";
+                                            echo "<div>hello world</div>";
+                                        }else{
+                                            $userID=$_SESSION['subSession'];
+                                                $query = "SELECT tp.*,tc.name FROM tblproducts tp
+                                        join tblcategory tc on tc.id=tp.category 
+                                        WHERE tp.status = '1'  and tp.userID='$userID'
+                                        order by tp.id desc";
+                                        echo "<div>hello else   </div>";
+                                        }
+                                    }else{
+                                        $userID=$_SESSION['user'];
+                                        $query = "SELECT tp.*,tc.name FROM tblproducts tp
+                                        join tblcategory tc on tc.id=tp.category 
+                                        WHERE tp.status = '1'  and tp.userID='$userID'
+                                        order by tp.id desc";
+
+                                    }
+                                    // $query = "SELECT tp.*,tc.name FROM tblproducts tp
+                                    //  join tblcategory tc on tc.id=tp.category 
+                                    //  WHERE tp.status = '1'  and tp.userID='$userID'
+                                    //   order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

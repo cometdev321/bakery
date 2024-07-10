@@ -7,15 +7,17 @@ $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
 $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
 
-if ($selectedBranch == 'All') {
-    $query = "SELECT pi.*, p.name AS party_name 
-              FROM tblpurchaseinvoices pi
-              JOIN tblusers tu ON tu.userID=pi.userID 
-              INNER JOIN tblparty p ON pi.party_name = p.id
-              WHERE pi.purchase_invoice_date >= '$fromDate' 
+if ($selectedBranch == 'ALL') {
+    $adminID = $_SESSION['admin'];
+    $query = "SELECT pi.*, p.name AS party_name, u.username AS user_name
+        FROM tblpurchaseinvoices pi
+        INNER JOIN tblparty p ON pi.party_name = p.id
+        INNER JOIN tblusers u ON pi.userID = u.userID
+        WHERE pi.purchase_invoice_date >= '$fromDate' 
               AND pi.purchase_invoice_date <= '$toDate' 
-              AND pi.status = '1' 
-              ORDER BY pi.id DESC";
+        AND u.superAdminID = '$adminID'
+        AND pi.status = '1' 
+        ORDER BY pi.id DESC";
 } else {
     $query = "SELECT pi.*, p.name AS party_name 
               FROM tblpurchaseinvoices pi

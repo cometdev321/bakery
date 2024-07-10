@@ -1,8 +1,8 @@
 <?php
-$db_host ='127.0.0.1:3306';
+$db_host ='localhost';
 $db_user='root';
 $db_pass='';
-$db_databse='nayan';
+$db_databse='bakery';
 
 $conn= mysqli_connect($db_host,$db_user,$db_pass,$db_databse);
 

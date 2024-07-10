@@ -47,6 +47,7 @@ if (isset($_SESSION['user'])) {
 if (isset($_POST['branch'])) {
     unset($_SESSION['subSession']);
     $_SESSION['subSession'] = $_POST['branch'];  
+    
 }
 
 date_default_timezone_set('Asia/Kolkata');

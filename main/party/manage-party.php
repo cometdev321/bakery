@@ -92,10 +92,13 @@ $(document).ready(function() {
                                 <?php
                                     $slno=1;
                                     if(!isset($_SESSION['admin'])){
+                                       
                                         $query = "SELECT * FROM tblparty WHERE status = '1'  and userID='$session' order by id desc";
+
+                                        
                                     }else{
                                         $selectedBranch=$_SESSION['subSession'];
-                                        if($selectedBranch=='All'){
+                                        if($selectedBranch=='ALL'){
                                             $Csession=$_SESSION['admin'];
                                             $query = "SELECT * FROM tblparty WHERE status = '1'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
                                         }else{

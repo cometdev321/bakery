@@ -23,7 +23,7 @@ include('common/sidebar.php');
                         <div class="body">
                         <?php   
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
-                                if($userID=='All'){
+                                if($userID=='ALL'){
                                     $query = "SELECT count(id) as total FROM tblproducts where userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
                                     $query = "SELECT count(id) as total FROM tblproducts where userID='$userID' and status='1'"; 
@@ -45,7 +45,7 @@ include('common/sidebar.php');
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
-                                if($userID=='All'){
+                                if($userID=='ALL'){
                                     $query = "SELECT count(id) as total FROM tblparty where userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
                                     $query = "SELECT count(id) as total FROM tblparty where userID='$userID' and status='1'"; 
@@ -68,7 +68,7 @@ include('common/sidebar.php');
                         <div class="body">
                         <?php   
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
-                                if($userID=='All'){
+                                if($userID=='ALL'){
                                     $query = "SELECT count(id) as total FROM tblpurchaseinvoices where userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
                                     $query = "SELECT count(id) as total FROM tblpurchaseinvoices where userID='$userID' and status='1'"; 
@@ -91,7 +91,7 @@ include('common/sidebar.php');
                         <div class="body">
                         <?php   
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
-                                if($userID=='All'){
+                                if($userID=='ALL'){
                                     $query = "SELECT count(id) as total FROM tblsalesinvoices where userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
                                     $query = "SELECT count(id) as total FROM tblsalesinvoices where userID='$userID' and status='1'"; 
@@ -121,7 +121,7 @@ include('common/sidebar.php');
                                     $startDate = date('Y-m-d', strtotime('-7 days')); // Adjusted to start 7 days ago
                                     $endDate = date('Y-m-d');
 
-                                    if ($userID == 'All') {
+                                    if ($userID == 'ALL') {
                                         $query = "SELECT sum(after_discount_total) as total, DATE(purchase_invoice_date) as purchase_date 
                                                 FROM tblpurchaseinvoices 
                                                 WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session') 
@@ -166,7 +166,7 @@ include('common/sidebar.php');
                                     <h6>PURCHASES LAST 7 DAYS </h6>
                                     <span>&#8377;<?php echo array_sum($sparklineValues) ? array_sum($sparklineValues) : '0.00'; ?></span>
                                 </div>
-                                <!-- <small class="text-muted">19% compared to last week</small> -->
+                                <!-- <smALL class="text-muted">19% compared to last week</smALL> -->
                             </div>
                             <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
                             data-line-Width="1" data-line-Color="#604a7b" data-fill-Color="#a092b0">
@@ -191,7 +191,7 @@ include('common/sidebar.php');
                                         $startDate = date('Y-m-d', strtotime('-7 days')); // Start 7 days ago
                                         $endDate = date('Y-m-d');
 
-                                        if ($userID == 'All') {
+                                        if ($userID == 'ALL') {
                                             $query = "SELECT sum(after_discount_total) as total, DATE(sales_invoice_date) as sales_date 
                                                     FROM tblsalesinvoices 
                                                     WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session') 
@@ -236,7 +236,7 @@ include('common/sidebar.php');
                                         <h6>SALES LAST 7 DAYS </h6>
                                         <span>&#8377;<?php echo array_sum($sparklineValues) ? array_sum($sparklineValues) : '0.00'; ?></span>
                                     </div>
-                                    <!-- <small class="text-muted">19% compared to last week</small> -->
+                                    <!-- <smALL class="text-muted">19% compared to last week</smALL> -->
                                 </div>
                                 <div class="sparkline" data-type="line" data-spot-Radius="0" data-offset="90" data-width="100%" data-height="50px"
                                 data-line-Width="1" data-line-Color="#604a7b" data-fill-Color="#a092b0">

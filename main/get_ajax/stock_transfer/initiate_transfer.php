@@ -8,13 +8,16 @@ $toBranch = $_POST['toBranch'];
 $product = $_POST['product']; 
 $requestQty = $_POST['qty'];
 
-// $query = "UPDATE tblproducts p
-// JOIN tblusers u ON p.userID = u.userID
-// SET p.openingstock = p.openingstock - $requestQty
-// WHERE p.id = $product
-// AND u.branch = $fromBranch";
 
-// $res = mysqli_query($conn, $query); // <-- Add semicolon here
+
+
+$query = "UPDATE tblproducts p
+JOIN tblusers u ON p.userID = u.userID
+SET p.openingstock = p.openingstock - $requestQty
+WHERE p.id = $product
+AND u.branch = $fromBranch";
+
+$res = mysqli_query($conn, $query); // <-- Add semicolon here
 
 // request transfer
 $insertQuery = "INSERT INTO tbltransfer (`userID`,`date`,`fromBranch`, `ToBranch`, `product`,`qty`,`status`) 

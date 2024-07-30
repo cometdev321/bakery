@@ -1,6 +1,7 @@
 <?php 
     include('../common/header2.php');
     include('../common/sidebar.php');
+    // include('../common/session_control.php');
 date_default_timezone_set('Asia/Kolkata');
 
 ?>
@@ -139,13 +140,15 @@ $(document).ready(function() {
                                 </tfoot>
                                 <tbody id="sales-list">
                                  <?php
-                                 $slno = 1;                                 
-                                 $query = "SELECT tt.*,b.name as branchname,p.productname,b1.name as b1name from tbltransfer tt 
-                                 join tblproducts p on p.id=tt.product
-                                 join branch b on b.id=tt.fromBranch
-                                 join branch b1 on b1.id=tt.toBranch
-                                 where tt.status='requested' and tt.userID='$session' order by tt.id desc 
-                                    ";
+                                 $slno = 1;      
+                                
+                                    $query = "SELECT tt.*,b.name as branchname,p.productname,b1.name as b1name from tbltransfer tt 
+                                    join tblproducts p on p.id=tt.product
+                                    join branch b on b.id=tt.fromBranch
+                                    join branch b1 on b1.id=tt.toBranch
+                                    where tt.status='requested' and tt.userID='$session' order by tt.id desc";
+                               
+
                                  $result = mysqli_query($conn, $query);
                                  if (mysqli_num_rows($result) > 0) {
                                      ?>
@@ -219,7 +222,7 @@ $(document).ready(function() {
                                  join tblproducts p on p.id=tt.product
                                  join branch b on b.id=tt.fromBranch
                                  join branch b1 on b1.id=tt.toBranch
-                                 where tt.status='transfered' order by tt.id desc 
+                                 where tt.status='transfered'  order by tt.id desc 
                                     ";
                                  $result = mysqli_query($conn, $query);
                                  if (mysqli_num_rows($result) > 0) {

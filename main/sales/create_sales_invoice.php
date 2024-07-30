@@ -431,9 +431,123 @@ date_default_timezone_set('Asia/Kolkata');
                                         <div class="my-2">&nbsp;</div>
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>SALES INVOICE LIST </h2>                            
+                        </div>
+                        <div class="body">
+						<div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
+                                <thead>
+                                    <tr>
+                                        <th>SLNO</th>
+                                        <th>DATE</th>
+                                        <th>SALES INVOICE NUMBER</th>
+                                        <th>PARTY NAME</th>
+                                        <th>AMOUNT</th>
+                                        <th>TYPE</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>SLNO</th>
+                                        <th>DATE</th>
+                                        <th>SALES INVOICE NUMBER</th>
+                                        <th>PARTY NAME</th>
+                                        <th>AMOUNT</th>
+                                        <th>TYPE</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody id="sales-list">
+                                 <?php
+$slno = 1;
+
+$query = "SELECT si.*, p.name AS party_name 
+          FROM tblsalesinvoices si
+          INNER JOIN tblparty p ON si.party_name = p.id
+          WHERE si.userID = '$session' AND si.status = '1' 
+          ORDER BY si.id DESC limit 10";
+          $result = mysqli_query($conn, $query);
+
+
+
+
+
+if (mysqli_num_rows($result) > 0) {
+    ?>
+        <?php while ($row = mysqli_fetch_array($result)) { 
+         
+            ?>
+            <tr>
+                <td><?php echo $slno; ?></td>
+                <td><?php echo $row['sales_invoice_date']; ?></td>
+                <td><?php echo $row['sales_invoice_number']; ?></td>
+                <td><?php echo $row['party_name']; ?></td>
+                <td><?php echo $row['after_discount_total']; ?></td>
+                <td><?php echo $row['full_paid'] == 'Yes' ? 'Paid' : 'Pending'; ?></td>
+                <td>
+                    <div class="row">
+                        
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Pos Invoice"  onclick="submitSalePosForm('<?php echo $row['id']; ?>')"><i class="icon-doc"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Sales Invoice"  onclick="submitSaleInvoiceForm('<?php echo $row['id']; ?>')"><i class="icon-drawer"></i></button>
+                    <button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit Sales Invoice"  onclick="edit_invoice('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
+                    </div>
+                    
+                </td>
+            </tr> 
+            <?php $slno++;
+        } ?>
+<?php
+} else {
+    ?>
+        <tr>
+            <td>No Records Found</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+<?php
+}
+?>
+
+                                </tbody>
+                            </table>
+							</div>
+                        </div>
+                    </div>
+                </div>
 <div class="">
   <div class="my-2">&nbsp;</div>
-
+  <form id="salesInvoice" action="../invoice/print" method="POST" style="display: none;">
+                <input type="text" hidden name="sale_id" id="sale_id">
+            </form>
+            <form id="PosInvoice" action="../invoice/posprint" method="POST" style="display: none;">
+                <input type="text" hidden name="sale_id" id="Pos_sale_id">
+            </form>
+            <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
+                <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
+            </form>
+ 
+</div>
+           <script>
+                function submitSalePosForm(val) {
+                    document.getElementById('Pos_sale_id').value=val;
+                    document.getElementById('PosInvoice').submit();
+                }
+                function submitSaleInvoiceForm(val) {
+                    document.getElementById('sale_id').value=val;
+                    document.getElementById('salesInvoice').submit();
+                }
+                function edit_invoice(val) {
+                    document.getElementById('edit_sale_id').value=val;
+                    document.getElementById('edit_salesInvoice').submit();
+                }
+            </script>
   </div>
   <div class="my-2">&nbsp;</div>
 </div>

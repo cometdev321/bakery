@@ -256,19 +256,40 @@ date_default_timezone_set('Asia/Kolkata');
                             <li class="breadcrumb-item active">Create Sales Invoice</li>
                         </ul>
                     </div>
+                    <label class="control-inline fancy-checkbox">
+                                        <input type="checkbox" id="posActive" name="posActive" checked >
+                                        <span>Automatic Invoice</span>
+                                    </label>
                     </div>
                 </div>
             </div>
-
+            <style>
+        #suggestions .suggestion-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            outline: none;
+        }
+        #suggestions .suggestion-box:hover, 
+        #suggestions .suggestion-box.suggestion-selected {
+            background-color: #e9e9e9;
+        }
+    </style>
                     <div class="card planned_task">
                   <form action="" method="post">
                         <div class="body">
+                          
                                  <div class="row clearfix">
                                         <div class="col-lg-3 col-md-12 my-2">
                                             <label>Party</label>
-                                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
+                                            <input type="text" id="partySelect" class="form-control show-tick ms select2" name="party_name" placeholder="Enter party name">
+                                            <div id="suggestions"></div>
+                                            <!-- <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
                                                   <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
-                                                </select>
+                                                </select> -->
                                                 <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                                              </div>
                                             <div class="col-lg-3 col-md-12 my-2">
@@ -276,7 +297,6 @@ date_default_timezone_set('Asia/Kolkata');
                                                 <input type="number" name="party_mobno" placeholder="Type here" id="party_mobno"class="form-control" >
                                             </div>
                                             <?php
-                                                include('../common/cnn.php');
 
                                                 // Retrieve the last invoice number from tblsalesinvoices
                                                 $query1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where `userID`='$session' and status='1' ORDER BY `id` DESC LIMIT 1 ";
@@ -574,6 +594,7 @@ document.addEventListener('keydown', function(event) {
 
     // Function to add a new row to the table
     function addRow() {
+      
         rowCount++;
 
         const rowId = 'row-' + rowCount;
@@ -640,6 +661,7 @@ function create_sales_invoice() {
   let check_payment_received = received_pay.value;
   let amount_received_value = amount_received.value;
   let balance_total_value = balance_total.value;
+  let posActive_value=posActive.value;
   var  amount_received_type_value;
     if (!amount_received_type.disabled) {
       amount_received_type_value = amount_received_type.value;
@@ -690,7 +712,8 @@ function create_sales_invoice() {
     amount_received_value: amount_received_value,
     // amount_remaining_value: amount_remaining,
     amount_received_type_value: amount_received_type_value,
-    balance_total_value: balance_total_value
+    balance_total_value: balance_total_value,
+    PosActive: posActive_value
   };
 
   // event.preventDefault();
@@ -754,33 +777,12 @@ function create_sales_invoice() {
     .then(result => {
       console.log(result  )
       if (result == 'error') {
-        Toastify({
-          text: "Party could not be added. Error Occurred",
-          duration: 3000,
-          newWindow: true,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)",
-          margin: "70px 15px 10px 15px",
-          stopOnFocus: true,
-          onClick: function() {},
-        }).showToast();
-        window.location.href = "sales_invoice?status=error";
-      } else if (result == 'success' || result == '   success') {
-        Toastify({
-          text: "Party added successfully",
-          duration: 3000,
-          newWindow: true,
-          close: true,
-          gravity: "top",
-          position: "right",
-          backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)",
-          margin: "70px 15px 10px 15px",
-          stopOnFocus: true,
-          onClick: function() {},
-        }).showToast();
-        window.location.href = "sales_invoice?status=success";
+         window.location.href = "sales_invoice?status=error";
+      } else if (result == 'Posactive' || result == '   Posactive') {
+         window.location.href = "../invoice/posprint?status=success";
+      }else{
+         window.location.href = "sales_invoice?status=success";
+
       }
     })
     .catch(error => {
@@ -1040,6 +1042,7 @@ function create_sales_invoice() {
 </script>
 
 <!-- Javascript -->
+<script src="../js/chooseparty.js"></script>    
 <script src="../../assets/bundles/libscripts.bundle.js"></script>    
 <script src="../../assets/bundles/vendorscripts.bundle.js"></script>
 

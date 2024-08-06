@@ -17,6 +17,7 @@
     $fullyPaid = $postData['formData']['check_payment_received'];
     $amountReceived = $postData['formData']['amount_received_value'];
     $totalBalance = $postData['formData']['balance_total_value'];
+    $posActive = $postData['formData']['PosActive'];
     $amountReceivedtype='none';
     if (isset($postData['formData']['amount_received_type_value'])) {
         $amountReceivedtype = $postData['formData']['amount_received_type_value'];
@@ -71,7 +72,11 @@
         //     mysqli_query($conn, $query2);
         // }
         
-        echo "success";
+        if($posActive=="on"){
+            echo "Posactive";
+        }else{
+            echo "success";
+        }
     } else {
         // Insertion failed
         echo "error";

@@ -46,7 +46,7 @@ if (mysqli_num_rows($result) > 0) {
     ?>
         <tr>
             <td>No Records Found</td>
-            <td></td>
+            <td></td> 
             <td></td>
             <td></td>
             <td></td>

@@ -223,6 +223,7 @@ function get_list(val) {
         type: 'POST',
         success: function(response) {
             loadTabledata();
+            console.log(response)
             $("#sales-list").html(response);
         },
         error: function() {

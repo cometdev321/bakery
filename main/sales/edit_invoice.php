@@ -363,6 +363,7 @@ $query = "SELECT si.*, p.name AS `name`
                                 <?php
                                 $slno = 1;
                                 $salesInvoiceNum = $row['sales_invoice_number'];
+                                echo $salesInvoiceNum;
                                 $query1 = "SELECT ts.*,tp.productname as `pname` FROM `tblsalesinvoice_details` ts
                                           inner join tblproducts tp on tp.id=ts.ItemName
                                            WHERE ts.sales_invoice_number='$salesInvoiceNum' AND ts.userID='$session' AND ts.status='1' ORDER BY ts.id ASC";

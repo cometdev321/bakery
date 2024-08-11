@@ -20,9 +20,11 @@ if (isset($_POST['sale_id'])) {
     $id = $_POST['sale_id'];
 } else if (isset($_POST['purchase_id'])) {
     $id = $_POST['purchase_id'];
+}else if (isset($_POST['new_sale_id'])) {
+    $id = $_POST['new_sale_id'];
 }
 
-if (isset($_POST['sale_id'])) {
+if (isset($_POST['sale_id']) || isset($_POST['new_sale_id'])) {
     $query1 = "SELECT si.*, p.name as name, p.mobno as mobno
                FROM tblsalesinvoices si
                INNER JOIN tblparty p ON si.party_name = p.id
@@ -107,7 +109,8 @@ $row3 = mysqli_fetch_array($result3);
         <div class="header">
             <img src="../../Images/<?php echo $fetch['image'];?>" alt="logo" width="50">
             <h2><?php echo strtoupper($row3['name']); ?></h2>
-            <p><?php echo $row3['location']; ?></p>
+            <p><?php echo $row3['location'];    
+ ?></p>
         </div>
         <div class="details">
             <table>
@@ -142,7 +145,7 @@ $row3 = mysqli_fetch_array($result3);
                 <tbody>
                     <?php
                     $slno = 1;
-                    if (isset($_POST['sale_id'])) {
+                    if (isset($_POST['sale_id'])  || isset($_POST['new_sale_id'])) {
                         $invoiceNum = $row['sales_invoice_number'];
                         $query2 = "SELECT ts.*, tp.productname as `pname`
                                    FROM tblsalesinvoice_details ts

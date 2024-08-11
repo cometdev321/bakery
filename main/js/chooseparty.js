@@ -1,5 +1,6 @@
 $(document).ready(function () {
-  let suggestions;
+  let suggestions = $(); // Initialize as an empty jQuery object
+
   // Trigger AJAX search on input
   $("#partySelect").on("input", function () {
     var query = $(this).val();
@@ -10,7 +11,7 @@ $(document).ready(function () {
         data: { query: query },
         success: function (data) {
           $("#suggestions").html(data);
-          suggestions = $("#suggestions .suggestion-box");
+          suggestions = $("#suggestions .suggestion-box"); // Update suggestions
         },
       });
     } else {
@@ -19,10 +20,15 @@ $(document).ready(function () {
   });
 
   // Handle suggestion selection by click
-  $(document).on("click", ".suggestion-box", function () {
+  $(document).on("click", ".suggestion-box", function (e) {
+    e.preventDefault(); // Prevent default behavior (e.g., form submission)
     var name = $(this).text().trim();
+    var mobileNumber = $(this).data("mobno");
+    var partyid = $(this).data("id");
     $("#partySelect").val(name);
-    $("#suggestions").html("");
+    $("#party_mobno").val(mobileNumber); // Assuming you have an input for mobile number
+    $("#party_id").val(partyid); // Assuming you have an input for party ID
+    $("#suggestions").html(""); // Clear suggestions
   });
 
   // Handle keyboard navigation
@@ -52,11 +58,11 @@ $(document).ready(function () {
         var suggestion = suggestions.eq(focusedIndex);
         var name = suggestion.text().trim();
         var mobileNumber = suggestion.data("mobno");
-        // Set the selected name and mobile number in the appropriate inputs
+        var partyid = suggestion.data("id");
         $("#partySelect").val(name);
         $("#party_mobno").val(mobileNumber); // Assuming you have an input for mobile number
-
-        $("#suggestions").html("");
+        $("#party_id").val(partyid); // Assuming you have an input for party ID
+        $("#suggestions").html(""); // Clear suggestions
       } else {
         // No suggestion selected; assume new entry
         var newpartySelect = $("#partySelect").val().trim();
@@ -64,12 +70,11 @@ $(document).ready(function () {
           $.ajax({
             url: "../get_ajax/searchParty/getparty.php",
             method: "POST",
-            data: {
-              new_party: newpartySelect,
-            },
+            data: { new_party: newpartySelect },
             success: function (response) {
-              alert(response); // Display response from the server
-              $("#suggestions").html("");
+              alert("New party added");
+              $("#party_id").val(response); // Assuming the server returns the new party ID
+              $("#suggestions").html(""); // Clear suggestions
             },
           });
         }
@@ -82,4 +87,27 @@ $(document).ready(function () {
     suggestions.removeClass("suggestion-selected");
     $(this).addClass("suggestion-selected");
   });
+
+  // Close suggestions when clicking outside
+  $(document).on("click", function (e) {
+    if (!$(e.target).closest("#partySelect, #suggestions").length) {
+      $("#suggestions").html(""); // Clear suggestions if click outside
+    }
+  });
 });
+
+function addNewParty() {
+  var newpartySelect = $("#partySelect").val().trim();
+  if (newpartySelect.length > 0) {
+    $.ajax({
+      url: "../get_ajax/searchParty/getparty.php",
+      method: "POST",
+      data: { new_party: newpartySelect },
+      success: function (response) {
+        alert("New party added");
+        $("#party_id").val(response); // Assuming the server returns the new party ID
+        $("#suggestions").html(""); // Clear suggestions
+      },
+    });
+  }
+}

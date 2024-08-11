@@ -286,6 +286,7 @@ date_default_timezone_set('Asia/Kolkata');
                                         <div class="col-lg-3 col-md-12 my-2">
                                             <label>Party</label>
                                             <input type="text" id="partySelect" class="form-control show-tick ms select2" name="party_name" placeholder="Enter party name">
+                                            <input type="text" hidden  id="party_id"  name="party_id" >
                                             <div id="suggestions"></div>
                                             <!-- <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
                                                   <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
@@ -571,9 +572,28 @@ if (mysqli_num_rows($result) > 0) {
   </div>
   <div class="my-2">&nbsp;</div>
 </div>
+<form id="posInvoicePrint" action="../invoice/posprint" method="POST" style="display: none;">
+                <input type="text" hidden name="new_sale_id" id="new_sale_id">
+            </form>
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const checkbox = document.getElementById('posActive');
+    
+    // Function to update the checkbox value
+    function updateCheckboxValue() {
+      checkbox.value = checkbox.checked ? 'on' : 'off';
+    }
+
+    // Initial setting of the value when the page loads
+    updateCheckboxValue();
+
+    // Add an event listener to update the value when the checkbox is clicked
+    checkbox.addEventListener('change', updateCheckboxValue);
+  });
+</script>
 
 <script>
 document.addEventListener('keydown', function(event) {
@@ -651,7 +671,7 @@ document.addEventListener('keydown', function(event) {
     }
     
 function create_sales_invoice() {
-  let party = partySelect.value;
+  let party = party_id.value;
   let party_mob = party_mobno.value;
   let sale_invoice_no = sale_invoice_number.value;
   let sale_invoice_date = sales_invoice_date.value;
@@ -772,19 +792,18 @@ function create_sales_invoice() {
   
   // Send the AJAX request and handle the response
   fetch(url, options)
-    .then(response => response.text())
-    
+    .then(response => response.text())    
     .then(result => {
-      console.log(result  )
-      if (result == 'error') {
+    if (result === 'error') {
          window.location.href = "sales_invoice?status=error";
-      } else if (result == 'Posactive' || result == '   Posactive') {
-         window.location.href = "../invoice/posprint?status=success";
-      }else{
-         window.location.href = "sales_invoice?status=success";
+    } else if (!isNaN(result)) { // Check if result is a number
+      document.getElementById('new_sale_id').value=result;
+      document.getElementById('posInvoicePrint').submit();
+    } else {
+       window.location.href = "sales_invoice?status=success";
+    }
+})
 
-      }
-    })
     .catch(error => {
       console.error('Error:', error);
     });
@@ -1039,6 +1058,33 @@ function create_sales_invoice() {
         addRow();
 
     });
+
+    
+$(document).ready(function () {
+  $("#addNewPartyButton").on("click", function () {
+    // No suggestion selected; assume new entry
+    var newpartySelect = $("#partySelect").val().trim();
+    console.log("clicked")
+    if (newpartySelect.length > 0) {
+      $.ajax({
+        url: "../get_ajax/searchParty/getparty.php  ",
+        method: "POST",
+        data: { new_party: newpartySelect },
+        success: function (response) {
+          alert("New party added");
+          $("#party_id").val(response); // Assuming the server returns the new party ID
+          $("#suggestions").html(""); // Clear suggestions
+        },
+        error: function (xhr, status, error) {
+          alert("An error occurred: " + error);
+        },
+      });
+    } else {
+      alert("Please enter a party name.");
+    }
+  });
+});
+
 </script>
 
 <!-- Javascript -->
@@ -1066,7 +1112,6 @@ function create_sales_invoice() {
 <script src="../../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
 
 <script src="../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
-    <script src="../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../assets/js/pages/tables/jquery-datatable.js"></script>
 <script src="../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>

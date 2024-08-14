@@ -338,7 +338,7 @@ date_default_timezone_set('Asia/Kolkata');
                                     <tr>
                                         <th>Sl.No</th>
                                         <th>Item Name</th>
-                                        <th>HSN</th>
+                                        <!-- <th>HSN</th> -->
                                         <!-- <th>Batch No</th>
                                         <th>Expire Date</th>
                                         <th>Manuf. Date</th> -->
@@ -355,7 +355,7 @@ date_default_timezone_set('Asia/Kolkata');
                                     <tr>
                                         <th>Sl.No</th>
                                         <th>Item Name</th>
-                                        <th>HSN</th>
+                                        <!-- <th>HSN</th> -->
                                         <!-- <th>Batch No</th>
                                         <th>Expire Date</th>
                                         <th>Manuf. Date</th> -->
@@ -402,7 +402,8 @@ date_default_timezone_set('Asia/Kolkata');
                                                 <center>
                                                 <label>Mark As Fully Paid</label><br>
                                                 <label class="control-inline fancy-checkbox">
-                                            <input id="received_pay" type="checkbox" value="No" name="paid_checkbox" onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
+                                                <input id="received_pay" type="checkbox" value="No" name="paid_checkbox" checked onclick="update_paid()" data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
+
                                         <span></span>
                                             </label>
                                                 </center>
@@ -625,12 +626,12 @@ document.addEventListener('keydown', function(event) {
         const newRowContent =
             '<td><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount + '" name="slno[]" readonly></td>' +
             '<td>' +
-            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
+            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
             '    <option value="null">Select Product</option>' +
             '  </select>' +
             '  <small id="product_errorMessage-' + rowCount + '" class="text-danger" style="display: none;">Select Product</small>' +
             '</td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="hsn-' + rowCount + '" name="hsn[]"></td>' +
+            // '<td><input type="text" style="width:100px" class="form-control" id="hsn-' + rowCount + '" name="hsn[]"></td>' +
            // '<td><input type="text" style="width:100px" class="form-control" id="batchno-' + rowCount + '" name="batchno[]"></td>' +
             //'<td><input type="date" style="width:150px" class="form-control" id="expiredate-' + rowCount + '" name="expiredate[]"></td>' +
             //'<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
@@ -655,9 +656,9 @@ document.addEventListener('keydown', function(event) {
         calculate_total_discount();
     }
     
-    function update_price(hsn,val,sizetype,row) {
+    function update_price(val,sizetype,row) {
         if (!isNaN(val)) {
-            document.getElementById(`hsn-${row}`).value = hsn;
+            // document.getElementById(`hsn-${row}`).value = hsn;
             document.getElementById(`price-${row}`).value = val;
             document.getElementById(`sizetype-${row}`).value = sizetype;
             update_amount(rowCount);
@@ -745,7 +746,7 @@ function create_sales_invoice() {
     const row = rows[i];
     
     const itemname = row.querySelector('[name="itemname[]"]').value;
-    const hsn = row.querySelector('[name="hsn[]"]').value;
+    const hsn = 0;
     // const batchno = row.querySelector('[name="batchno[]"]').value;
     // const expiredate = row.querySelector('[name="expiredate[]"]').value;
     // const mafdate = row.querySelector('[name="mafdate[]"]').value;
@@ -767,7 +768,7 @@ function create_sales_invoice() {
       
       const rowData = {
       itemname,
-      hsn,
+      // hsn,
       // batchno,
       // expiredate,
       // mafdate,
@@ -842,8 +843,11 @@ function create_sales_invoice() {
         var checkbox = document.getElementById("received_pay");
 
         if (checkbox.checked) {
+            console.log("hello world");
+            // document.getElementById('amount_received').value = '0';
             document.getElementById('amount_received').value = document.getElementById('total').value;
-            document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
+            // document.getElementById('balance_total').value -= document.getElementById('amount_received').value;
+            document.getElementById('balance_total').value = 0
             document.getElementById("received_pay").value="Yes";
             var selectElement = document.getElementById('amount_received_type');
             // document.getElementById('amt_remaining').value = 0;

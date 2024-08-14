@@ -28,6 +28,9 @@ include('common/sidebar.php');
                 </div>            
             </div>
         </div>
+        <div class="text-right">
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='sales/create_sales_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Sales Invoice</span></button>
+                    </div>
         <div class="alert-placeholder"></div>
 
          <!-- basic -->

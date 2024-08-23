@@ -108,7 +108,7 @@ $row3 = mysqli_fetch_array($result3);
     <div class="receipt">
         <div class="header">
             <img src="../../Images/<?php echo $fetch['image'];?>" alt="logo" width="50">
-            <h2><?php echo strtoupper($row3['name']); ?></h2>
+            <!-- <h2><?php echo strtoupper($row3['name']); ?></h2> -->
             <p><?php echo $row3['location'];    
  ?></p>
         </div>
@@ -122,10 +122,10 @@ $row3 = mysqli_fetch_array($result3);
                     <td>Date</td>
                     <td><?php echo (isset($row['sales_invoice_date'])) ? $row['sales_invoice_date'] : $row['purchase_invoice_date']; ?></td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td>Customer</td>
                     <td><?php echo $row['name']; ?></td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td>Phone</td>
                     <td><?php echo $row['mobno']; ?></td>
@@ -184,6 +184,7 @@ $row3 = mysqli_fetch_array($result3);
             <p>Discount: <?php echo $row['discount']; ?></p>
             <p>Total: <?php echo $row['after_discount_total']; ?></p>
             <p>Thank you for your purchase!</p>
+            <p>999999999</p>
         </div>
     </div>
     

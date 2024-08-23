@@ -450,7 +450,7 @@ if(isset($_POST['ProductSubmit'])) {
                                 <?php } ?>
                             </li>
                             <li>
-                                <a href="#App" class="has-arrow"><i class="icon-basket"></i> <span>Category</span></a>
+                                <a href="#App" class="has-arrow"><i class="icon-link"></i> <span>Category</span></a>
                                 <ul>
                                
                                     <li><a href="<?php echo $base ?>/category/add-category"><i class="fa icon-mouse"></i> Add New Category</a></li>
@@ -480,6 +480,32 @@ if(isset($_POST['ProductSubmit'])) {
                                 </ul>
                             </li>
                             <?php
+                                   if(!isset($_SESSION['admin'])){
+                                ?>
+                            <li>
+                                <a href="#FileManager" class="has-arrow"><i class="icon-basket"></i> <span>Indent</span></a>
+                                <ul>                                    
+                                    <li><a href="<?php echo $base ?>/indent/create_indent">Create Indent</a></li>
+                                    <li><a href="<?php echo $base ?>/indent/selectdate">View indent</a></li>
+                                </ul>
+                            </li>
+                            <?php
+                                } ?>
+
+<?php
+                                   if(isset($_SESSION['admin'])){
+                                ?>
+                            <li>
+                                <a href="#FileManager" class="has-arrow"><i class="icon-basket"></i> <span>Indent</span></a>
+                                <ul>                                    
+                                    <li><a href="<?php echo $base ?>/indent/selectdateandbranch">Indent Requests</a></li>
+                                    <li><a href="<?php echo $base ?>/indent/indenthistory">Indent History </a></li>
+                                </ul>
+                            </li>
+                            <?php
+                                } ?>
+                                
+                                <?php
                                    if(!isset($_SESSION['admin'])){
                                 ?>
                             <li>

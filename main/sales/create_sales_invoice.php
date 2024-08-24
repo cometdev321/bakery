@@ -316,7 +316,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                 <!-- Update the "Sale Invoice Number" input field -->
                                                 <div class="col-lg-3 col-md-12 my-2">
                                                     <label>Sale Invoice Number</label>
-                                                    <input type="number" name="saleprice" id="sale_invoice_number"value="<?php echo $nextInvoiceNumber; ?>" class="form-control" required>
+                                                    <input type="number" readonly name="saleprice" id="sale_invoice_number"value="<?php echo $nextInvoiceNumber; ?>" class="form-control" required>
                                                 </div>
 
                                             <div class="col-lg-3 col-md-12  my-2">
@@ -797,11 +797,14 @@ function create_sales_invoice() {
     .then(result => {
     if (result === 'error') {
          window.location.href = "sales_invoice?status=error";
-    } else if (!isNaN(result)) { // Check if result is a number
-      document.getElementById('new_sale_id').value=result;
-      document.getElementById('posInvoicePrint').submit();
-    } else {
-       window.location.href = "sales_invoice?status=success";
+        //console.log(result);
+      } else if (!isNaN(result)) { // Check if result is a number
+        document.getElementById('new_sale_id').value=result;
+        document.getElementById('posInvoicePrint').submit();
+        //console.log(result);
+      } else {
+         window.location.href = "sales_invoice?status=success";
+       // console.log(result);
     }
 })
 
@@ -843,7 +846,6 @@ function create_sales_invoice() {
         var checkbox = document.getElementById("received_pay");
 
         if (checkbox.checked) {
-            console.log("hello world");
             // document.getElementById('amount_received').value = '0';
             document.getElementById('amount_received').value = document.getElementById('total').value;
             // document.getElementById('balance_total').value -= document.getElementById('amount_received').value;

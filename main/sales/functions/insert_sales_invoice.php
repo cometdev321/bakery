@@ -36,10 +36,6 @@ if ($result) {
     // Iterate through the posted data and insert the details records
     foreach ($postData['data'] as $key => $val) {
         $itemName = $val['itemname'];
-        $hsn = $val['hsn'];
-        $batchNo = isset($val['batchno']) ? $val['batchno'] : '';
-        $expireDate = isset($val['expiredate']) ? $val['expiredate'] : '';
-        $manufactureDate = isset($val['mafdate']) ? $val['mafdate'] : '';
         $qty = $val['qty'];
         $size = $val['size'];
         $price = $val['price'];
@@ -48,8 +44,8 @@ if ($result) {
         $amount = $val['amount'];
 
         // Perform the INSERT query for tblsalesinvoice_details
-        $details_query = "INSERT INTO tblsalesinvoice_details (`sales_invoice_number`,`ItemName`,`HSN`,`BatchNo`,`ExpireDate`,`ManufactureDate`,`Size`,`Qty`,`Price`,`Discount`,`Tax`,`Amount`,`userID`,`Date`) 
-                          VALUES ('$invoiceNumber', '$itemName', '$hsn', '$batchNo', '$expireDate', '$manufactureDate','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session','$invoiceDate')";
+        $details_query = "INSERT INTO tblsalesinvoice_details (`sales_invoice_number`,`ItemName`,`Size`,`Qty`,`Price`,`Discount`,`Tax`,`Amount`,`userID`,`Date`) 
+                          VALUES ('$invoiceNumber', '$itemName','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session','$invoiceDate')";
         mysqli_query($conn, $details_query);
     }
 

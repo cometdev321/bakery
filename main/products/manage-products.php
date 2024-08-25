@@ -95,9 +95,12 @@ $(document).ready(function() {
                                     <tr>
                                         <th>Slno</th>
                                         <th>Category</th>
+                                        <th>Poduct ID</th>
                                         <th>Poduct</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
+                                        <th>Discount/Unit</th>
+                                        <th>Profit Margin</th>
                                         <th>Size</th>
                                         <th>HSN</th>
                                         <th>Opening_Stock</th>
@@ -110,9 +113,12 @@ $(document).ready(function() {
                                     <tr>
                                         <th>Slno</th>
                                         <th>Category</th>
+                                        <th>Poduct ID</th>
                                         <th>Poduct</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
+                                        <th>Discount/Unit</th>
+                                        <th>Profit Margin</th>
                                         <th>Sizes</th>
                                         <th>HSN</th>
                                         <th>Opening_Stock</th>
@@ -124,20 +130,7 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    // if(isset($_SESSION['subSession'])){
-                                    //     if($_SESSION['subSession'] == 'ALL'){
-                                    //                 $query = "SELECT tp.* FROM tblproducts tp
-                                    //         join tblusers tu on tp.userID = tu.userID   
-                                    //         WHERE tp.status = '1'  and tu.userID='$adminID'
-                                    //         order by tp.id desc";
-                                      
-                                    //     }else{
-                                    //         $userID=$_SESSION['subSession'];
-                                    //     }
-                                    //   }else{
-                                    //     $userID=$session;
-                                    //   }
-
+                            
                                     if(isset($_SESSION['admin'])){
                                         $adminID = $_SESSION['admin'];
                                         if(isset($_SESSION['subSession']) and $_SESSION['subSession'] == 'ALL' ){
@@ -146,15 +139,14 @@ $(document).ready(function() {
                                             JOIN tblusers tu ON tp.userID = tu.userID
                                             JOIN tblcategory tc ON tc.id = tp.category 
                                             WHERE tp.status = '1' AND tu.superAdminID = '$adminID'
-                                            ORDER BY tp.id DESC";
-                                            echo "<div>hello world</div>";
+                                            group by tp.productname
+                                            ORDER BY tp.id DESC ";
                                         }else{
                                             $userID=$_SESSION['subSession'];
                                                 $query = "SELECT tp.*,tc.name FROM tblproducts tp
                                         join tblcategory tc on tc.id=tp.category 
                                         WHERE tp.status = '1'  and tp.userID='$userID'
                                         order by tp.id desc";
-                                        echo "<div>hello else   </div>";
                                         }
                                     }else{
                                         $userID=$_SESSION['user'];
@@ -174,9 +166,12 @@ $(document).ready(function() {
                                     <tr>
                                         <td><?php echo $slno;?></td>    
                                         <td><?php echo $row['name'];?></td>
+                                        <td><?php echo $row['id'];?></td>
                                         <td><?php echo $row['productname'];?></td>
                                         <td><?php echo $row['saleprice'];?></td>
                                         <td><?php echo $row['purchaseprice'];?></td>
+                                        <td><?php echo $row['default_discount'];?></td>
+                                        <td><?php echo $row['saleprice']-($row['purchaseprice']+intval($row['default_discount']));?></td>
                                         <td><?php echo $row['size'];?></td>
                                         <td><?php echo $row['HSN'];?></td>
                                         <td><?php echo $row['openingstock'];?></td>

@@ -71,6 +71,8 @@ if(isset($_POST['submit'])) {
     $HSN = $_POST['HSN'];
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
+    $discount=$_POST['default_discount_per_unit'];
+
     $sizeJoined=$size_number.$size;
     if (isset($_POST['branch'])) {
       if ($_POST['branch'] == "all") {
@@ -110,8 +112,8 @@ if(isset($_POST['submit'])) {
       }
   
       foreach ($allUserIDs as $userID) {
-          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `userID`) 
-                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype', '$userID')";
+          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`,`userID`) 
+                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype','$discount', '$userID')";
           if (!mysqli_query($conn, $query)) {
               echo "<script>window.location.href='add-product?status=error'</script>";
               exit; 
@@ -126,8 +128,8 @@ if(isset($_POST['submit'])) {
       if (mysqli_num_rows($result) > 0) {
           echo "<script>window.location.href='add-product?status=exists'</script>";
       } else {
-          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `userID`) 
-                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype', '$userID')";
+          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`,`default_discount`, `userID`) 
+                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype','$discount','$userID')";
           if (mysqli_query($conn, $query)) {
               echo "<script>window.location.href='add-product?status=success'</script>";
           } else {
@@ -194,10 +196,14 @@ if(isset($_POST['submit'])) {
                                           
                                           if(isset($_SESSION['subSession'])){
                                             $userID=$_SESSION['subSession'];
-                                          }else{
-                                            $userID=$session;
+                                            if($userID=='ALL'){
+                                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1'  GROUP BY name");
+                                            }else{
+                                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$userID'  GROUP BY name");
+                                            }
+                                        }else{
+                                            $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'  GROUP BY name");
                                           }
-                                        $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$userID'");
                                         while($fetchcat=mysqli_fetch_array($getct)){
                                         ?>
                                         <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
@@ -225,11 +231,16 @@ if(isset($_POST['submit'])) {
                                             <input type="text" name="openingstock" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Default Discount Per Unit</label>
+                                            <input type="number" name="default_discount_per_unit" value="0" placeholder="Type Here" class="form-control">
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-12  my-2">
                                             <label>Size</label>
                                             <input type="number" name="size_number" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Size-Type </label>
+                                            <label>UOM (Unit of Measure) </label>
                                             <select class="form-control show-tick ms select2" name="size">
                                               <option value="GM">Gram (g)</option>
                                               <option value="KG">Kilo Gram (kg)</option>
@@ -237,6 +248,7 @@ if(isset($_POST['submit'])) {
                                               <option value="L">Liter (L)</option>
                                             </select>
                                         </div>
+
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>GST Level</label>
                                             <div>

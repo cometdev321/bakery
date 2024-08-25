@@ -15,7 +15,7 @@ if (!$date) {
 $session = $_SESSION['user']; 
 
 // Fetch records for the selected date and the logged-in user using a normal SQL query
-$sql = "SELECT ti.*, p.productname 
+$sql = "SELECT ti.*, p.productname ,p.id,p.size
         FROM tblindent ti 
         JOIN tblproducts p ON ti.productid = p.id 
         WHERE DATE(ti.created_at) = '$date' AND ti.userid = '$session'";
@@ -58,9 +58,9 @@ $result = $conn->query($sql);
                             while ($row = $result->fetch_assoc()) { ?>
                                 <tr>
                                     <td><?php echo $slNo++; ?></td>
-                                    <td><?php echo $row['productname']; ?></td>
+                                    <td><?php echo $row['productname'].'('.$row['id'].')'.'('.$row['size'].')'; ?></td>
                                     <td><?php echo $row['new_order_qty']; ?></td>
-                                    <td><?php echo date('F j, Y', strtotime($row['created_at'])); ?></td>
+                                    <td><?php echo date('F j, Y ,g:i A', strtotime($row['created_at'])); ?></td>
                                     <td><?php echo strtoupper($row['status']); ?></td>
                                     <td>
                                     <?php if ($row['status'] === 'Created'): ?>

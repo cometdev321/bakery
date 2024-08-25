@@ -292,8 +292,13 @@ if(isset($_POST['ProductSubmit'])) {
 
             <div class="navbar-brand">
                 <a href="<?php echo $base ?>/dashboard" class="text-dark">
-                    &nbsp; &nbsp; &nbsp; &nbsp; ADMIN
-                    <!--<img src="Images/img1.png"  height="33" class="img-responsive logo">-->
+                     <?php 
+                            if(isset($_SESSION['admin'])){
+                                echo 'SuperAdmin';
+                            }else{
+                                echo 'Admin';
+                            }
+                     ?>
                     </a>                
             </div>
             
@@ -525,7 +530,7 @@ if(isset($_POST['ProductSubmit'])) {
                             </li>
                             <?php } ?>
                             <li>
-                                <a href="#FileManager" class="has-arrow"><i class="icon-plane"></i> <span>Transport</span></a>
+                                <a href="#FileManager" class="has-arrow"><i class="icon-plane"></i> <span>Stock Transfer</span></a>
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/transaction/transfer">Transfer Stock</a></li>
                                     <li><a href="<?php echo $base ?>/transaction/transfer_history">Transfer History</a></li>

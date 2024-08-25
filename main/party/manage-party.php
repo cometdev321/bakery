@@ -75,6 +75,8 @@ $(document).ready(function() {
                                         <th>Slno</th>
                                         <th>Name</th>
                                         <th>Contact</th>
+                                        <th>Address</th>
+                                        <th>Pay Info</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
                                     </tr>
@@ -84,6 +86,8 @@ $(document).ready(function() {
                                         <th>Slno</th>
                                         <th>Name</th>
                                         <th>Contact</th>
+                                        <th>Address</th>
+                                        <th>Pay Info</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
                                     </tr>
@@ -115,6 +119,8 @@ $(document).ready(function() {
                                         <td><?php echo $slno;?></td>
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['mobno'];?></td>
+                                        <td><?php echo $row['address'];?></td>
+                                        <td><?php echo $row['payment_info'];?></td>
                                         <td>
                                             <form action="editParty" method="post">
                                             <input name="pid" value="<?php echo $row['id'];?>" hidden>
@@ -148,7 +154,6 @@ $(document).ready(function() {
                                         <th>Name</th>
                                         <th>Contact</th>
                                         <th>GST No</th>
-                                        <th>Edit</th>
                                         <th>Remove</th>
                                     </tr>
                                 </thead>
@@ -158,7 +163,6 @@ $(document).ready(function() {
                                         <th>Name</th>
                                         <th>Contact</th>
                                         <th>GST No</th>
-                                        <th>Edit</th>
                                         <th>Remove</th>
                                     </tr>
                                 </tfoot>
@@ -166,14 +170,14 @@ $(document).ready(function() {
                                 <?php
                                     $slno=1;
                                     if(!isset($_SESSION['admin'])){
-                                        $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID='$session' order by id desc";
+                                        $query = "SELECT * FROM tblparty WHERE status = '0' and userID='$session' order by id desc";
                                     }else{
                                         $selectedBranch=$_SESSION['subSession'];
-                                        if($selectedBranch=='All'){
+                                        if($selectedBranch=='ALL'){
                                             $Csession=$_SESSION['admin'];
-                                            $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
+                                            $query = "SELECT * FROM tblparty WHERE status = '0'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
                                         }else{
-                                            $query = "SELECT * FROM tblparty WHERE status = 'bin'  and userID='$selectedBranch' order by id desc";
+                                            $query = "SELECT * FROM tblparty WHERE status = '0'  and userID='$selectedBranch' order by id desc";
 
                                         }
 
@@ -185,12 +189,6 @@ $(document).ready(function() {
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['mobno'];?></td>
                                         <td><?php echo $row['gstno'];?></td>
-                                        <td>
-                                            <form action="editParty" method="post">
-                                            <input name="pid" value="<?php echo $row['id'];?>" hidden>
-                                            <button type="submit" class="btn btn-success btn-sm "><i class="icon-pencil"></i><span></span></button>
-                                            </form>
-                                        </td>
                                         <td><button type="submit" name="submit" class="btn btn-success btn-sm " onclick="recover(<?php echo $row['id'];?>)"><i class="icon-refresh"></i></button></td>
                                     </tr>
                                 <?php $slno++; } ?>

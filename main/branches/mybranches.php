@@ -191,7 +191,6 @@ if(isset($_POST['submit'])){
                                         <th>Branch Name</th>
                                         <th>Location</th>
                                         <th>Edit</th>
-                                        <th>Remove</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -200,7 +199,6 @@ if(isset($_POST['submit'])){
                                         <th>Branch Name</th>
                                         <th>Location</th>
                                         <th>Edit</th>
-                                        <th>Remove</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -214,14 +212,13 @@ if(isset($_POST['submit'])){
                                         <td><?php echo $slno;?></td>
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['location'];?></td>
-                                        <td><?php echo $row['status'];?></td>
                                         <td>
                                             <form action="editbranch" method="post">
                                             <input name="branchid" value="<?php echo $row['id'];?>" hidden>
                                             <button type="submit" class="btn btn-success btn-sm "><i class="icon-pencil"></i><span></span></button>
                                             </form>
                                         </td>
-                                        <td><button type="submit" name="submit" class="btn btn-danger btn-sm js-sweetalert" data-type="ajax-loader" onclick="ready(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td>
+                                        <!-- <td><button type="submit" name="submit" class="btn btn-danger btn-sm js-sweetalert" data-type="ajax-loader" onclick="ready(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td> -->
                                     </tr>
                                 <?php $slno++; } ?>
                                 </tbody>

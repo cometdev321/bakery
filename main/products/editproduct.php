@@ -158,6 +158,10 @@ if(isset($_POST['submit'])){
                                             <input name="gst" value="0" type="radio" <?php if($gst=='0'){echo 'checked';}?>>
                                             <span><i></i>Exempted</span>
                                         </label>
+                                           <label class="fancy-radio">
+                                            <input name="gst" value="-1" type="radio" <?php if($gst=='-1'){echo 'checked';}?>>
+                                            <span><i></i>Non-Gst</span>
+                                        </label>
                                     </div>
                                 </div>
                             </div>

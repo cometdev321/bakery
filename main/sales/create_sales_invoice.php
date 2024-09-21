@@ -345,7 +345,7 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>Size</th>
                                         <th>Qty</th>
                                         <th>Sales Price</th>
-                                        <th>Discount</th>
+                                        <!-- <th>Discount</th> -->
                                         <th>Tax</th>
                                         <th>Amount</th>
                                         <th>Action</th>
@@ -362,7 +362,7 @@ date_default_timezone_set('Asia/Kolkata');
                                         <th>Size</th>
                                         <th>Qty</th>
                                         <th>Sales Price</th>
-                                        <th>Discount</th>
+                                        <!-- <th>Discount</th> -->
                                         <th>Tax</th>
                                         <th>Amount</th>
                                         <th>Action</th>
@@ -453,95 +453,6 @@ date_default_timezone_set('Asia/Kolkata');
                                         <div class="my-2">&nbsp;</div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>SALES INVOICE LIST </h2>                            
-                        </div>
-                        <div class="body">
-						<div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
-                                <thead>
-                                    <tr>
-                                        <th>SLNO</th>
-                                        <th>DATE</th>
-                                        <th>SALES INVOICE NUMBER</th>
-                                        <th>PARTY NAME</th>
-                                        <th>AMOUNT</th>
-                                        <th>TYPE</th>
-                                        <th>ACTION</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>SLNO</th>
-                                        <th>DATE</th>
-                                        <th>SALES INVOICE NUMBER</th>
-                                        <th>PARTY NAME</th>
-                                        <th>AMOUNT</th>
-                                        <th>TYPE</th>
-                                        <th>ACTION</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody id="sales-list">
-                                 <?php
-$slno = 1;
-
-$query = "SELECT si.*, p.name AS party_name 
-          FROM tblsalesinvoices si
-          INNER JOIN tblparty p ON si.party_name = p.id
-          WHERE si.userID = '$session' AND si.status = '1' 
-          ORDER BY si.id DESC limit 10";
-          $result = mysqli_query($conn, $query);
-
-
-
-
-
-if (mysqli_num_rows($result) > 0) {
-    ?>
-        <?php while ($row = mysqli_fetch_array($result)) { 
-         
-            ?>
-            <tr>
-                <td><?php echo $slno; ?></td>
-                <td><?php echo $row['sales_invoice_date']; ?></td>
-                <td><?php echo $row['sales_invoice_number']; ?></td>
-                <td><?php echo $row['party_name']; ?></td>
-                <td><?php echo $row['after_discount_total']; ?></td>
-                <td><?php echo $row['full_paid'] == 'Yes' ? 'Paid' : 'Pending'; ?></td>
-                <td>
-                    <div class="row">
-                        
-                    <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Pos Invoice"  onclick="submitSalePosForm('<?php echo $row['id']; ?>')"><i class="icon-doc"></i></button>
-                    <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Sales Invoice"  onclick="submitSaleInvoiceForm('<?php echo $row['id']; ?>')"><i class="icon-drawer"></i></button>
-                    <button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit Sales Invoice"  onclick="edit_invoice('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
-                    </div>
-                    
-                </td>
-            </tr> 
-            <?php $slno++;
-        } ?>
-<?php
-} else {
-    ?>
-        <tr>
-            <td>No Records Found</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-<?php
-}
-?>
-
-                                </tbody>
-                            </table>
-							</div>
-                        </div>
-                    </div>
                 </div>
 <div class="">
   <div class="my-2">&nbsp;</div>
@@ -626,7 +537,7 @@ document.addEventListener('keydown', function(event) {
         const newRowContent =
             '<td><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount + '" name="slno[]" readonly></td>' +
             '<td>' +
-            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
+            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + ',this.options[this.selectedIndex].dataset.gst),clear_product_error(' + rowCount + ')">' +
             '    <option value="null">Select Product</option>' +
             '  </select>' +
             '  <small id="product_errorMessage-' + rowCount + '" class="text-danger" style="display: none;">Select Product</small>' +
@@ -638,8 +549,8 @@ document.addEventListener('keydown', function(event) {
             '<td><input type="text" style="width:100px" class="form-control" id="sizetype-' + rowCount + '"  name="size[]" type="text" readonly></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount + '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            // '<td><input type="text" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="text" style="width:100px" class="form-control" readonly id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount + '" name="amount[]" value="0" readonly></td>' +
             '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
 
@@ -656,11 +567,15 @@ document.addEventListener('keydown', function(event) {
         calculate_total_discount();
     }
     
-    function update_price(val,sizetype,row) {
+    function update_price(val,sizetype,row,gst) {
         if (!isNaN(val)) {
+          if(gst<0){
+            gst=0;
+          }
             // document.getElementById(`hsn-${row}`).value = hsn;
             document.getElementById(`price-${row}`).value = val;
             document.getElementById(`sizetype-${row}`).value = sizetype;
+            document.getElementById(`tax-${row}`).value = gst;
             update_amount(rowCount);
             document.getElementById('add-row-btn').disabled = false;
         } else {
@@ -677,6 +592,7 @@ function create_sales_invoice() {
   let sale_invoice_no = sale_invoice_number.value;
   let sale_invoice_date = sales_invoice_date.value;
   let subtotal_value = subtotal.value;
+  // let discount_value = 0;
   let discount_value = discount.value;
   let after_discount_total_value = total.value;
   let check_payment_received = received_pay.value;
@@ -707,19 +623,18 @@ function create_sales_invoice() {
         event.preventDefault();
     return;
     }
- 
-  if (party === 'null') {
-    party_errorMessage.style.display = 'block';
-    party_errorMessage.textContent = 'Party name is required.';
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth' // Optional: Add smooth scrolling behavior
-    });
-    partySelect.focus();
-    event.preventDefault();
-    return;
-  }
 
+    if (!party || party.trim() === '') {
+      party_errorMessage.style.display = 'block';
+      party_errorMessage.textContent = 'Party name is required.';
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Optional: Add smooth scrolling behavior
+      });
+      partySelect.focus();
+      event.preventDefault();
+      return;
+}
 
   var formData = {
     party: party,
@@ -753,10 +668,10 @@ function create_sales_invoice() {
     const qty = row.querySelector('[name="qty[]"]').value;
     const size = row.querySelector('[name="size[]"]').value;
     const price = row.querySelector('[name="price[]"]').value;
-    const discount = row.querySelector('[name="discount[]"]').value;
+    // const discount = row.querySelector('[name="discount[]"]').value;
+    const discount = 0;
     const tax = row.querySelector('[name="tax[]"]').value;
     const amount = row.querySelector('[name="amount[]"]').value;
-    
     if (itemname === 'null') {
         showError=i+1;//because i start from 0 and rowCount starts from 1
         const errorMessage = document.querySelector(`#product_errorMessage-${showError}`);
@@ -903,7 +818,8 @@ function create_sales_invoice() {
 
         const qty = parseFloat(qtyInput.value);
         const price = parseFloat(priceInput.value);
-        const discount = parseFloat(discountInput.value);
+        const discount = 0
+        // const discount = parseFloat(discountInput.value);
         const tax = parseFloat(taxInput.value);
 
         const subtotal = (qty * price) - discount;

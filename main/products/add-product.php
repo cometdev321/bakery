@@ -68,7 +68,7 @@ if(isset($_POST['submit'])) {
     $purchase = $_POST['purchaseprice'];
     $size_number = $_POST['size_number'];
     $size = $_POST['size'];
-    $HSN = $_POST['HSN'];
+    $HSN = isset($_POST['HSN']) ? $_POST['HSN'] : '';
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
     $discount=$_POST['default_discount_per_unit'];
@@ -224,7 +224,7 @@ if(isset($_POST['submit'])) {
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>HSN Code</label>
-                                            <input type="text" name="HSN" placeholder="Type Here" class="form-control" required>
+                                            <input type="text" name="HSN" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>Opening Stock</label>
@@ -271,6 +271,10 @@ if(isset($_POST['submit'])) {
                                                 <label class="fancy-radio">
                                                     <input name="gst" value="0" type="radio">
                                                     <span><i></i>Exempted</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input name="gst" value="-1" type="radio">
+                                                    <span><i></i>Non-Gst</span>
                                                 </label>
                                             </div>
                                         </div>

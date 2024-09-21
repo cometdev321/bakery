@@ -5,7 +5,7 @@ include('../../common/session_control.php'); // Ensure you include your session 
 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
 $startOfYear = date('Y-01-01'); // Set to the first day of the current year
 
-if ($userID == 'All') {
+if ($userID == 'All' || $userID == 'ALL') {
     $query = "SELECT DATE_FORMAT(sales_invoice_date, '%Y-%m') AS month, SUM(after_discount_total) AS total 
               FROM tblsalesinvoices 
               WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session')

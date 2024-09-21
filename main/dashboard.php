@@ -29,7 +29,7 @@ include('common/sidebar.php');
             </div>
         </div>
         <div class="text-right">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='sales/create_sales_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Sales Invoice</span></button>
+                        <!--<button type="button" class="btn btn-primary" onclick="window.location.href='sales/create_sales_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Sales Invoice</span></button>-->
                     </div>
         <div class="alert-placeholder"></div>
 
@@ -138,7 +138,7 @@ include('common/sidebar.php');
                                     $startDate = date('Y-m-d', strtotime('-7 days')); // Adjusted to start 7 days ago
                                     $endDate = date('Y-m-d');
 
-                                    if ($userID == 'ALL') {
+                                    if ($userID == 'ALL' || $userID == 'all') {
                                         $query = "SELECT sum(after_discount_total) as total, DATE(purchase_invoice_date) as purchase_date 
                                                 FROM tblpurchaseinvoices 
                                                 WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session') 
@@ -401,15 +401,8 @@ include('common/sidebar.php');
             
         </div>
 </div>
-<script src="../assets/js/pages/chart/gauge.js"></script>
-<script src="../assets/vendor/gauge/gauge.min.js"></script>
-<script>
-donutGauge = new Donut(document.getElementById("gauge-donut"));
-donutGauge.setTextField(document.getElementById("donut-textfield"));
-donutGauge.maxValue = 3000;
-donutGauge.set(2590);
-</script>
 <script src="js/dashboard.js"></script>
+
 <script src="../assets/bundles/chartist.bundle.js"></script>
 <script src="../assets/vendor/chartist/polar_area_chart.js"></script>
 <!-- Javascript -->

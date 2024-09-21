@@ -39,7 +39,7 @@ if ($result) {
         $qty = $val['qty'];
         $size = $val['size'];
         $price = $val['price'];
-        $itemDiscount = $val['discount']; // Use a different variable name for the discount
+        $itemDiscount = 0; // Use a different variable name for the discount
         $tax = $val['tax'];
         $amount = $val['amount'];
 

@@ -133,7 +133,7 @@ $(document).ready(function() {
                             
                                     if(isset($_SESSION['admin'])){
                                         $adminID = $_SESSION['admin'];
-                                        if(isset($_SESSION['subSession']) and $_SESSION['subSession'] == 'ALL' ){
+                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){
                                             $query = "SELECT tp.*, tc.name 
                                             FROM tblproducts tp
                                             JOIN tblusers tu ON tp.userID = tu.userID
@@ -171,11 +171,11 @@ $(document).ready(function() {
                                         <td><?php echo $row['saleprice'];?></td>
                                         <td><?php echo $row['purchaseprice'];?></td>
                                         <td><?php echo $row['default_discount'];?></td>
-                                        <td><?php echo $row['saleprice']-($row['purchaseprice']+intval($row['default_discount']));?></td>
+                                        <td><?php echo intval($row['saleprice'])-(intval($row['purchaseprice'])+intval($row['default_discount']));?></td>
                                         <td><?php echo $row['size'];?></td>
                                         <td><?php echo $row['HSN'];?></td>
                                         <td><?php echo $row['openingstock'];?></td>
-                                        <td><?php echo $row['gst']=='0'?'Exempted':$row['gst'];?></td>
+                                        <td><?php     echo $row['gst'] == '0' ? 'Exempted' : ($row['gst'] == '-1' ? 'Non-GST' : $row['gst']); ?></td>
                                         <td>
                                             <form action="editproduct" method="post">
                                             <input name="pid" value="<?php echo $row['id'];?>" hidden>

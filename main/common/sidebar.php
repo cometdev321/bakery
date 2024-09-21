@@ -118,7 +118,7 @@
 <!-- Overlay For Sidebars -->
 
 <?php
-if(isset($_POST['ProductSubmit'])) {
+if (isset($_POST['ProductSubmit'])) {
     $category = $_POST['category'];
     // $sub_category = $_POST['sub_category'];
     $productname = $_POST['productname'];
@@ -126,23 +126,72 @@ if(isset($_POST['ProductSubmit'])) {
     $purchase = $_POST['purchaseprice'];
     $size_number = $_POST['size_number'];
     $size = $_POST['size'];
-    $HSN = $_POST['HSN'];
+    $HSN = isset($_POST['HSN']) ? $_POST['HSN'] : '';
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
-    $sizeJoined=$size_number.$size;
-    
-       $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size'  and userID='$session'";
-    $result = mysqli_query($conn, $query);
-    
-    if(mysqli_num_rows($result) > 0) {
-        echo"<script>window.location.href='add-product?status=exists'</script>";
+    $discount = $_POST['default_discount_per_unit'];
+
+    $sizeJoined = $size_number . $size;
+
+    // Determine userID based on branch selection
+    if (isset($_POST['branch'])) {
+        if ($_POST['branch'] == "all") {
+            // Retrieve all user IDs for the branches
+            $allUserIDs = [];
+            $branchQuery = "SELECT tu.userID FROM branch b
+                            JOIN tblusers tu ON tu.branch = b.id
+                            WHERE b.status = '1' AND b.userID = '$session'";
+            $result = mysqli_query($conn, $branchQuery);
+
+            if ($result) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $allUserIDs[] = $row['userID'];
+                }
+            } else {
+                echo "Error: " . mysqli_error($conn);
+                exit;
+            }
+        } else {
+            $userID = $_POST['branch'];
+        }
     } else {
-      // If the record does not exist, insert the new record
-      $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`,`purchaseprice`, `HSN`, `openingstock`, `gst`, `size`,`sizetype`,`userID`) 
-        VALUES ('$category', '$sub_category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$session')";
-      
-      if(mysqli_query($conn, $query)) {
-        echo "<script> Toastify({
+        $userID = $session;
+    }
+
+    // Check for product existence for each user or just the selected branch
+    if (isset($allUserIDs)) {
+        foreach ($allUserIDs as $userID) {
+            $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'";
+            $result = mysqli_query($conn, $query);
+
+            if (mysqli_num_rows($result) > 0) {
+                echo "<script>window.location.href='product/add-product?status=exists'</script>";
+                exit;
+            }
+        }
+
+        // Insert product for all branches
+        foreach ($allUserIDs as $userID) {
+            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`) 
+                      VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID')";
+            if (!mysqli_query($conn, $query)) {
+                echo "<script>window.location.href='product/add-product?status=error'</script>";
+                exit;
+            }
+        }
+
+    } else {
+        // Single branch
+        $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'";
+        $result = mysqli_query($conn, $query);
+
+        if (mysqli_num_rows($result) > 0) {
+            echo "<script>window.location.href='product/add-product?status=exists'</script>";
+        } else {
+            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`) 
+                      VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID')";
+            if (mysqli_query($conn, $query)) {
+                echo "<script> Toastify({
             text: 'Product added successfully',
             duration: 3000,
             newWindow: true,
@@ -158,27 +207,28 @@ if(isset($_POST['ProductSubmit'])) {
             },
         }).showToast();</script>";
         
-      } else {
-        echo "<script> Toastify({
-            text: 'Error occured try later',
-            duration: 3000,
-            newWindow: true,
-            close: true,
-            gravity: 'top', // top, bottom, left, right
-            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-            backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)', // Use gradient color with red mix
-            marginTop: '202px', // corrected to marginTop
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            onClick: function(){}, // Callback after click
-            style: {
-                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
-            },
-        }).showToast();</script>";
-      }
+            } else {
+                echo "<script> Toastify({
+                    text: 'Error occurred, try later',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)',
+                    marginTop: '202px',
+                    stopOnFocus: true,
+                    onClick: function(){},
+                    style: {
+                        margin: '70px 15px 10px 15px',
+                    },
+                }).showToast();</script>";
+            }
+        }
     }
-
 }
 ?>
+
     <?php
     if(isset($_SESSION['admin'])){
         $getadmin=mysqli_query($conn,"select * from admin where unicode='$session'");
@@ -193,7 +243,7 @@ if(isset($_POST['ProductSubmit'])) {
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="userDetailsModalLabel">Product Details</h5>
+                <h5 class="modal-title" id="userDetailsModalLabel">Add Product</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -201,80 +251,141 @@ if(isset($_POST['ProductSubmit'])) {
             <div class="modal-body">
                 <form id="basic-form" method="post" action="">
                     <div class="row clearfix">
+                        <!-- Branch Dropdown (only if admin) -->
+                        <?php if(isset($_SESSION['admin'])){?>
+                        <div class="col-lg-6 col-md-6 my-2">
+                            <label>Branch</label>
+                            <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required>
+                                <option>Select Branch</option>
+                                <?php
+                                    $branchQ="SELECT tu.userID as unicodeBranch,b.name as name FROM branch b
+                                              JOIN tblusers tu ON tu.branch=b.id
+                                              WHERE b.status='1' AND b.userID='$session'";
+                                    $getbrx = mysqli_query($conn, $branchQ);
+                                    $row_count = mysqli_num_rows($getbrx);
+                                    if ($row_count > 0) {
+                                        while($fetchbx = mysqli_fetch_array($getbrx)){
+                                ?>
+                                <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
+                                <?php   
+                                        }
+                                        echo "<option value='all'>All Branch</option>";
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <?php } ?>
+
+                        <!-- Category Dropdown -->
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Category</label>
-                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="category">
+                            <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" required>
                                 <option>Select Category</option>
-                                <?php   
-                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'");
-                                while($fetchcat=mysqli_fetch_array($getct)){
+                                <?php
+                                    if(isset($_SESSION['subSession'])){
+                                        $userID = $_SESSION['subSession'];
+                                        if($userID == 'ALL' || $userID == 'all'){
+                                            $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' GROUP BY name");
+                                        } else {
+                                            $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' AND userID='$userID' GROUP BY name");
+                                        }
+                                    } else {
+                                        $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' AND userID='$session' GROUP BY name");
+                                    }
+                                    while($fetchcat = mysqli_fetch_array($getct)){
                                 ?>
                                 <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
+
+                        <!-- Product Name -->
                         <div class="col-lg-6 col-md-12 my-2">
-                                            <label>Product Name</label>
-                                            <input type="text" name="productname" placeholder="Type Here" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Sale Price</label>
-                                            <input type="number" name="saleprice" placeholder="Type Here"  class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Purchase Price</label>
-                                            <input type="number" name="purchaseprice" placeholder="Type Here"  class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>HSN Code</label>
-                                            <input type="text" name="HSN" placeholder="Type Here" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Opening Stock</label>
-                                            <input type="text" name="openingstock" placeholder="Type Here" class="form-control" >
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Size</label>
-                                            <input type="number" name="size_number" placeholder="Type Here" class="form-control" >
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Size-Type </label>
-                                            <select class="form-control show-tick ms select2" name="size">
-                                              <option value="GM">Gram (g)</option>
-                                              <option value="KG">Kilo Gram (kg)</option>
-                                              <option value="ML">Milli Liter (ml)</option>
-                                              <option value="L">Liter (L)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>GST Level</label>
-                                            <div>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="5" type="radio" checked>
-                                                    <span><i></i>5%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="12" type="radio">
-                                                    <span><i></i>12%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="18" type="radio">
-                                                    <span><i></i>18%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="28" type="radio">
-                                                    <span><i></i>28%</span>
-                                                </label>
-                                                <label class="fancy-radio">
-                                                    <input name="gst" value="0" type="radio">
-                                                    <span><i></i>Exempted</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <div class="form-group my-2">
-                                    <button type="submit" name="ProductSubmit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
-                                </div>
+                            <label>Product Name</label>
+                            <input type="text" name="productname" placeholder="Type Here" class="form-control" required>
+                        </div>
+
+                        <!-- Sale Price -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>Sale Price</label>
+                            <input type="number" name="saleprice" placeholder="Type Here" class="form-control" required>
+                        </div>
+
+                        <!-- Purchase Price -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>Purchase Price</label>
+                            <input type="number" name="purchaseprice" placeholder="Type Here" class="form-control" required>
+                        </div>
+
+                        <!-- HSN Code -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>HSN Code</label>
+                            <input type="text" name="HSN" placeholder="Type Here" class="form-control">
+                        </div>
+
+                        <!-- Opening Stock -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>Opening Stock</label>
+                            <input type="text" name="openingstock" placeholder="Type Here" class="form-control">
+                        </div>
+
+                        <!-- Default Discount Per Unit -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>Default Discount Per Unit</label>
+                            <input type="number" name="default_discount_per_unit" value="0" placeholder="Type Here" class="form-control">
+                        </div>
+
+                        <!-- Size -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>Size</label>
+                            <input type="number" name="size_number" placeholder="Type Here" class="form-control">
+                        </div>
+
+                        <!-- UOM (Unit of Measure) -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>UOM (Unit of Measure)</label>
+                            <select class="form-control show-tick ms select2" name="size">
+                                <option value="GM">Gram (g)</option>
+                                <option value="KG">Kilo Gram (kg)</option>
+                                <option value="ML">Milli Liter (ml)</option>
+                                <option value="L">Liter (L)</option>
+                            </select>
+                        </div>
+
+                        <!-- GST Level -->
+                        <div class="col-lg-6 col-md-12 my-2">
+                            <label>GST Level</label>
+                            <div>
+                                <label class="fancy-radio">
+                                    <input name="gst" value="5" type="radio" checked>
+                                    <span><i></i>5%</span>
+                                </label>
+                                <label class="fancy-radio">
+                                    <input name="gst" value="12" type="radio">
+                                    <span><i></i>12%</span>
+                                </label>
+                                <label class="fancy-radio">
+                                    <input name="gst" value="18" type="radio">
+                                    <span><i></i>18%</span>
+                                </label>
+                                <label class="fancy-radio">
+                                    <input name="gst" value="28" type="radio">
+                                    <span><i></i>28%</span>
+                                </label>
+                                <label class="fancy-radio">
+                                    <input name="gst" value="0" type="radio">
+                                    <span><i></i>Exempted</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="form-group my-2">
+                        <button type="submit" name="ProductSubmit" class="btn btn-success btn-sm">
+                            <i class="fa fa-check-circle"></i> <span>Save</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -414,7 +525,7 @@ if(isset($_POST['ProductSubmit'])) {
                 <?php  if(isset($_SESSION['subSession'])){ ?>
                 <option value="<?php echo $S_O_branch;?>"><?php echo isset($getSessionValue['name']) ? strtoupper($getSessionValue['name']) : 'All';?> </option>
                 <?php } ?>
-                <option >Select Branch</option> 
+                <option value="ALL">Select Branch</option> 
                 <option value="ALL">All</option>
                     <?php
                         $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b

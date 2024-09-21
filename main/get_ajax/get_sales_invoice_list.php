@@ -45,12 +45,7 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     ?>
         <tr>
-            <td>No Records Found</td>
-            <td></td> 
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td colspan="7">No Records Found</td>
         </tr>
 <?php
 }

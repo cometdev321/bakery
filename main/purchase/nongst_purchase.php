@@ -11,11 +11,11 @@ date_default_timezone_set('Asia/Kolkata');
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create GST Purchase Invoice</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Create Non-GST Purchase Invoice</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Create GST Purchase Invoice</li>
+                            <li class="breadcrumb-item active">Create Non-GST Purchase Invoice</li>
                         </ul>
                     </div>
                     </div>
@@ -40,7 +40,7 @@ date_default_timezone_set('Asia/Kolkata');
                                             <?php
 
                                                 // Retrieve the last invoice number from tblPurchaseinvoices
-                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where userID='$session' and gst_registered='yes' ORDER BY id DESC LIMIT 1";
+                                                $query1 = "SELECT purchase_invoice_number FROM tblPurchaseinvoices where userID='$session' and gst_registered='no' ORDER BY id DESC LIMIT 1";
                                                 $result1 = mysqli_query($conn, $query1);
                                                 $nextInvoiceNumber;
                                                 if ($result1 && mysqli_num_rows($result1) > 0) {
@@ -60,7 +60,7 @@ date_default_timezone_set('Asia/Kolkata');
                                                     <input type="number" name="Purchaseprice" readonly id="Purchase_invoice_number" value="<?php echo $nextInvoiceNumber; ?>" class="form-control" required>
                                                 </div>
                                                 <div hidden class="col-lg-3 col-md-12 my-2">
-                                                    <input type="text" name="purchasetype" id="purchasetype" value="yes" class="form-control" required>
+                                                    <input type="text" name="purchasetype" id="purchasetype" value="no" class="form-control" required>
                                                 </div>
                                             <div class="col-lg-3 col-md-12  my-2">
                                                 <label>Purchase Invoice Date</label>
@@ -230,7 +230,7 @@ date_default_timezone_set('Asia/Kolkata');
             '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount + '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             // '<td><input type="text" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="text" style="width:100px" class="form-control" id="tax-' + rowCount + '"  readonly name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount + '" readonly name="amount[]" value="0" readonly></td>' +
             '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
 
@@ -249,6 +249,9 @@ date_default_timezone_set('Asia/Kolkata');
     
     function update_price(val,sizetype,row,gst) {
         if (!isNaN(val)) {
+            if(gst<0){
+                gst=0;
+            }
             document.getElementById(`price-${row}`).value = val;
             document.getElementById(`sizetype-${row}`).value = sizetype;
             document.getElementById(`tax-${row}`).value = gst;
@@ -297,8 +300,7 @@ function create_Purchase_invoice() {
         event.preventDefault();
     return;
     }
-
-  if (party === 'null') {
+if (!party || party.trim() === '') { // Check for null or empty string
     party_errorMessage.style.display = 'block';
     party_errorMessage.textContent = 'Party name is required.';
     window.scrollTo({
@@ -308,7 +310,8 @@ function create_Purchase_invoice() {
     partySelect.focus();
     event.preventDefault();
     return;
-  }
+}
+
 
 
   var formData = {
@@ -511,7 +514,7 @@ inputField.addEventListener("change", function() {
 
     function getproducts(val) {
         $.ajax({
-            url: "../get_ajax/get_products_purchase.php",
+            url: "../get_ajax/get_non_gst_product.php",
             method: "GET",
             success: function(response) {
                 $("#select_products-" + val).html(response);

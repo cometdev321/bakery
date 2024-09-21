@@ -237,7 +237,6 @@ date_default_timezone_set('Asia/Kolkata');
         }else{
             party_mobno.value=val;
         }
-        
     }
 
 

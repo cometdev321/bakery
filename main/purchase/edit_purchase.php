@@ -3,13 +3,14 @@
     include('../common/cnn.php');
     include('../common/sidebar.php');
 
-    $id=$_POST['edit_purchase_id'];
+    $id=$_POST['edit_purchase_id']; 
+    $gst_registered=$_POST['gst']; 
 
     
 $query = "SELECT pi.*, p.name AS `name` 
           FROM tblpurchaseinvoices pi
           INNER JOIN tblparty p ON pi.party_name = p.id
-          WHERE  pi.userID = '$session' AND pi.status = '1' AND  pi.id='$id'
+          WHERE  pi.userID = '$session' AND pi.status = '1' AND  pi.id='$id' 
           ORDER BY pi.id DESC "; 
           
           $result = mysqli_query($conn, $query);
@@ -28,7 +29,8 @@ $query = "SELECT pi.*, p.name AS `name`
 </style>
 
 
-
+<!-- to get valid productct -->
+ <input type="text" value="<?php echo $gst_registered;?>" id="gst_registered" >
 
  <div id="main-content">
         <div class="container-fluid">
@@ -133,14 +135,26 @@ $query = "SELECT pi.*, p.name AS `name`
                                 <?php
                                 $slno = 1;
                                 $purchaseInvoiceNum = $row['purchase_invoice_number'];
-                                $query1 = "SELECT ts.*, tp.productname AS pname 
-                                FROM tblpurchaseinvoice_details ts
-                                INNER JOIN tblproducts tp ON tp.id = ts.ItemName
-                                WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
-                                  AND ts.userID = '$session' 
-                                  AND ts.status = '1' 
-                                ORDER BY ts.id ASC;
-                                ";
+                                if($gst_registered=='no'){
+                                    $query1 = "SELECT ts.*, tp.productname AS pname 
+                                    FROM tblpurchaseinvoice_details ts
+                                    INNER JOIN tblproducts tp ON tp.id = ts.ItemName
+                                    WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
+                                      AND ts.userID = '$session' 
+                                      AND tp.gst in ('-1')
+                                      AND ts.status = '1' 
+                                    ORDER BY ts.id ASC;";
+                                }else{
+                                    $query1 = "SELECT ts.*, tp.productname AS pname 
+                                    FROM tblpurchaseinvoice_details ts
+                                    INNER JOIN tblproducts tp ON tp.id = ts.ItemName
+                                    WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
+                                      AND ts.userID = '$session' 
+                                      AND tp.gst not in ('-1')
+                                      AND ts.status = '1' 
+                                    ORDER BY ts.id ASC;";
+                                }
+                                
 
                                 // $query1 = "SELECT * from tblpurchaseinvoice_details where purchase_invoice_number = '$purchaseInvoiceNum' 
                                 //           AND userID = '$session' 
@@ -160,7 +174,6 @@ $query = "SELECT pi.*, p.name AS `name`
                                               <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-<?php echo $slno; ?>" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,<?php echo $slno; ?>),clear_product_error(<?php echo $slno; ?>)">
                                                 <option value="<?php echo $row1['ItemName']; ?>"><?php echo $row1['pname']; ?></option>
                                                </select>
-                                              <script> getproducts(<?php echo $slno; ?>);</script>
                                             </td>
                                             <td><input type="text" style="width:100px" class="form-control" id="hsn-<?php echo $slno; ?>" value="<?php echo $row1['HSN']; ?>" name="hsn[]"></td>
                                             <!-- <td><input type="text" style="width:100px" class="form-control" id="batchno-<?php echo $slno; ?>" value="<?php echo $row1['BatchNo']; ?>" name="batchno[]"></td>
@@ -222,7 +235,7 @@ $query = "SELECT pi.*, p.name AS `name`
                                                 <center>
                                                 <label>Mark As Fully Paid</label><br>
                                                 <label class="control-inline fancy-checkbox">
-                                            <input id="received_pay" type="checkbox" value="No" <?php $paid=$row['full_paid']; if($paid=='Yes'){echo 'checked';}else{ }?> name="paid_checkbox"  onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
+                                            <input id="received_pay" type="checkbox" value="<?php echo $row['full_paid'];?>" <?php $paid=$row['full_paid']; if($paid=='Yes'){echo 'checked';}else{ }?> name="paid_checkbox"  onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
                                         <span></span>
                                             </label>
                                                 </center>
@@ -287,6 +300,9 @@ $query = "SELECT pi.*, p.name AS `name`
         });
     </script>
 <script>
+    
+
+ 
     let rowCount = document.getElementById('lastslno').value-1;
 
     // Function to add a new row to the table
@@ -350,7 +366,7 @@ $query = "SELECT pi.*, p.name AS `name`
 function create_purchase_invoice() {
   
   let purchaseId = purchase_invoice_id.value;
-  let party = party_name.value;
+  let party = partySelect.value;
   let party_mob = party_mobno.value;
   let purchase_invoice_no = purchase_invoice_number.value;
   let purchases_invoice_date = purchase_invoice_date.value;
@@ -384,6 +400,9 @@ function create_purchase_invoice() {
         event.preventDefault();
     return;
     }
+    if (!party || party.trim() === '' || party=='null') { // Check for null or empty string
+        party=party_name.value;
+}
 
 
 
@@ -619,8 +638,15 @@ function create_purchase_invoice() {
     }
 
     function getproducts(val) {
+        gst_registered_value=gst_registered.value;
+        let url="";
+        if(gst_registered_value=='no'){
+            url="../get_ajax/get_non_gst_product.php";
+        }else{
+            url="../get_ajax/get_products_purchase.php";
+        }
         $.ajax({
-            url: "../get_ajax/get_products_purchase.php",
+            url:url,
             method: "GET",
             success: function(response) {
                 $("#select_products-" + val).append(response);

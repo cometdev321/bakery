@@ -6,7 +6,7 @@
 ?>
 <option value="null">Select Item</option>
 <?php
-$get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst` FROM tblproducts  where userID='$session'");
+$get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst` FROM tblproducts  where userID='$session' and status='1'");
 while($product = mysqli_fetch_array($get_p)){
 ?>
 <option value="<?php echo $product['id']; ?>"

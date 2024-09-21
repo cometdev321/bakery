@@ -9,12 +9,13 @@
     $partyMobNo = $postData['formData']['party_mob'];
     $invoiceNumber = $postData['formData']['purchase_invoice_no'];
     $invoiceDate = $postData['formData']['purchase_invoice_date'];
-    $subtotal = $postData['formData']['subtotal_value'];
+    $subtotal = $postData['formData']['subtotal_value']; 
     $totalDiscount = $postData['formData']['discount_value'];
     $afterDiscountTotal = $postData['formData']['after_discount_total_value'];
     $fullyPaid = $postData['formData']['check_payment_received'];
     $amountReceived = $postData['formData']['amount_received_value'];
     $totalBalance = $postData['formData']['balance_total_value'];
+    $purchase_type = $postData['formData']['purchase_type'];
     $amountReceivedtype='none';
     if (isset($postData['formData']['amount_received_type_value'])) {
         $amountReceivedtype = $postData['formData']['amount_received_type_value'];
@@ -23,8 +24,8 @@
     // $current_time = date("H:i:s", time()); 
     
     // Prepare and execute the query for tblpurchasesinvoices
-    $query = "INSERT INTO tblpurchaseinvoices (party_name, party_mobno, purchase_invoice_number, purchase_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_paid,amount_paid_type, total_balance,userID) 
-              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session')";
+    $query = "INSERT INTO tblpurchaseinvoices (party_name, party_mobno, purchase_invoice_number, purchase_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_paid,amount_paid_type, total_balance,userID,gst_registered) 
+              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype','$totalBalance','$session','$purchase_type')";
 
     // Perform the database query
     $result = mysqli_query($conn, $query);

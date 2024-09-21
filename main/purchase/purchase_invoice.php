@@ -19,7 +19,8 @@ date_default_timezone_set('Asia/Kolkata');
                 </div>            
                 <div class="col-lg-7 col-md-4 col-sm-12">
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_purchase_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Purchase Invoice</span></button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="window.location.href='create_purchase_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create GST Purchase Invoice</span></button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="window.location.href='nongst_purchase'"><i class="fa fa-plus"></i> <span>&nbsp;Create Non-GST Purchase Invoice</span></button>
                     </div>
                 </div>
             </div>
@@ -74,6 +75,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <thead>
                                     <tr>
                                         <th>SLNO</th>
+                                        <th>GST-Enabled</th>
                                         <th>DATE</th>
                                         <th>PURCHASE INVOICE NUMBER</th>
                                         <th>PARTY NAME</th>
@@ -85,6 +87,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <tfoot>
                                     <tr>
                                         <th>SLNO</th>
+                                        <th>GST-Enabled</th>
                                         <th>DATE</th>
                                         <th>PURCHASE INVOICE NUMBER</th>
                                         <th>PARTY NAME</th>
@@ -112,6 +115,7 @@ date_default_timezone_set('Asia/Kolkata');
             </form>
             <form id="edit_PurchaseInvoice" action="edit_purchase" method="POST" style="display: none;">
                 <input type="text"  name="edit_purchase_id" id="edit_purchase_id">
+                <input type="text"  name="gst" id="gst">
             </form>
             
 
@@ -125,8 +129,9 @@ date_default_timezone_set('Asia/Kolkata');
                     document.getElementById('purchase_id').value=val;
                     document.getElementById('PurchaseInvoice').submit();
                 }
-                function edit_invoice(val) {
+                function edit_invoice(val,gst) {
                     document.getElementById('edit_purchase_id').value=val;
+                    document.getElementById('gst').value=gst;
                     document.getElementById('edit_PurchaseInvoice').submit();
                 }
             </script>

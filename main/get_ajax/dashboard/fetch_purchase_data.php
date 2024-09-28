@@ -10,6 +10,7 @@ if ($userID == 'All' || $userID == 'ALL') {
               FROM tblpurchaseinvoices 
               WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session')
               AND purchase_invoice_date >= '$startOfYear' 
+              AND status=1
               GROUP BY DATE_FORMAT(purchase_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
 } else if (isset($_SESSION['subSession'])) {
@@ -17,6 +18,7 @@ if ($userID == 'All' || $userID == 'ALL') {
               FROM tblpurchaseinvoices 
               WHERE userID='$userID' 
               AND purchase_invoice_date >= '$startOfYear' 
+              AND status=1
               GROUP BY DATE_FORMAT(purchase_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
 } else {
@@ -24,6 +26,7 @@ if ($userID == 'All' || $userID == 'ALL') {
               FROM tblpurchaseinvoices 
               WHERE userID='$session' 
               AND purchase_invoice_date >= '$startOfYear' 
+              AND status=1
               GROUP BY DATE_FORMAT(purchase_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
 }

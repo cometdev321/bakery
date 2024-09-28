@@ -94,6 +94,11 @@ $(document).ready(function() {
                                 <thead>
                                     <tr>
                                         <th>Slno</th>
+                                        <?php
+                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){ 
+                                        ?>
+                                        <th>Branch</th>
+                                        <?php } ?>
                                         <th>Category</th>
                                         <th>Poduct ID</th>
                                         <th>Poduct</th>
@@ -112,6 +117,11 @@ $(document).ready(function() {
                                 <tfoot>
                                     <tr>
                                         <th>Slno</th>
+                                        <?php
+                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){ 
+                                        ?>
+                                        <th>Branch</th>
+                                        <?php } ?>
                                         <th>Category</th>
                                         <th>Poduct ID</th>
                                         <th>Poduct</th>
@@ -134,12 +144,12 @@ $(document).ready(function() {
                                     if(isset($_SESSION['admin'])){
                                         $adminID = $_SESSION['admin'];
                                         if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){
-                                            $query = "SELECT tp.*, tc.name 
+                                            $query = "SELECT tp.*, tc.name,b.name as branch
                                             FROM tblproducts tp
                                             JOIN tblusers tu ON tp.userID = tu.userID
+                                            JOIN branch b ON b.id=tu.branch
                                             JOIN tblcategory tc ON tc.id = tp.category 
                                             WHERE tp.status = '1' AND tu.superAdminID = '$adminID'
-                                            group by tp.productname
                                             ORDER BY tp.id DESC ";
                                         }else{
                                             $userID=$_SESSION['subSession'];
@@ -165,6 +175,11 @@ $(document).ready(function() {
                                 ?>
                                     <tr>
                                         <td><?php echo $slno;?></td>    
+                                        <?php
+                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){ 
+                                        ?>
+                                        <td><?php echo strtoupper($row['branch']);?></td>
+                                        <?php } ?>
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['id'];?></td>
                                         <td><?php echo $row['productname'];?></td>

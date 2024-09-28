@@ -71,6 +71,7 @@ if(isset($_POST['submit'])) {
     $HSN = isset($_POST['HSN']) ? $_POST['HSN'] : '';
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
+    $sizetype=$size_number.$size;
     $discount=$_POST['default_discount_per_unit'];
 
     $sizeJoined=$size_number.$size;
@@ -102,7 +103,7 @@ if(isset($_POST['submit'])) {
   
   if (isset($allUserIDs)) {
       foreach ($allUserIDs as $userID) {
-          $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size' AND userID='$userID'";
+          $query = "SELECT count(*) FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID' AND status='1'";
           $result = mysqli_query($conn, $query);
           
           if (mysqli_num_rows($result) > 0) {
@@ -122,7 +123,7 @@ if(isset($_POST['submit'])) {
   
       echo "<script>window.location.href='add-product?status=success'</script>";
   } else {
-      $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$size' AND userID='$userID'";
+      $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'  AND status='1'";
       $result = mysqli_query($conn, $query);
   
       if (mysqli_num_rows($result) > 0) {
@@ -131,7 +132,7 @@ if(isset($_POST['submit'])) {
           $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`,`default_discount`, `userID`) 
                     VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype','$discount','$userID')";
           if (mysqli_query($conn, $query)) {
-              echo "<script>window.location.href='add-product?status=success'</script>";
+              echo "<script>window.location.href='//add-product?status=success'</script>";
           } else {
               echo "<script>window.location.href='add-product?status=error'</script>";
           }

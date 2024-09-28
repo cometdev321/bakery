@@ -504,7 +504,7 @@ function create_purchase_invoice() {
           onClick: function() {},
         }).showToast();
         window.location.href = "purchase_invoice?status=error";
-      } else if (result === 'success' || result == '   success') {
+      } else if (result === 'success' || result == '   success' || result.trim()=='success') {
         Toastify({
           text: "Party added successfully",
           duration: 3000,

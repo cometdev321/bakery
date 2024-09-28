@@ -41,7 +41,7 @@ include('common/sidebar.php');
                         <?php   
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
                                 if($userID=='ALL'){
-                                    $query = "SELECT count(id) as total FROM tblproducts where userID in(select userID from tblusers where superAdminID='$session')"; 
+                                    $query = "SELECT count(distinct(productname)) as total FROM tblproducts where status=1 and userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
                                     $query = "SELECT count(id) as total FROM tblproducts where userID='$userID' and status='1'"; 
                                 }else{
@@ -63,11 +63,11 @@ include('common/sidebar.php');
                         <div class="body">
                         <?php   
                                 if($userID=='ALL'){
-                                    $query = "SELECT count(id) as total FROM tblparty where userID in(select userID from tblusers where superAdminID='$session')"; 
+                                    $query = "SELECT count(id) as total FROM tblparty where status=1 and  userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
-                                    $query = "SELECT count(id) as total FROM tblparty where userID='$userID' and status='1'"; 
+                                    $query = "SELECT count(id) as total FROM tblparty where status=1 and  userID='$userID' and status='1'"; 
                                 }else{
-                                    $query = "SELECT count(id) as total FROM tblparty where userID='$session' and status='1'"; 
+                                    $query = "SELECT count(id) as total FROM tblparty where status=1 and  userID='$session' and status='1'"; 
                                 }
                                 $result = mysqli_query($conn,$query);
                                 $fetch = mysqli_fetch_array($result);
@@ -86,11 +86,11 @@ include('common/sidebar.php');
                         <?php   
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
                                 if($userID=='ALL'){
-                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where userID in(select userID from tblusers where superAdminID='$session')"; 
+                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where status=1 and userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
-                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where userID='$userID' and status='1'"; 
+                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where status=1 and  userID='$userID' and status='1'"; 
                                 }else{
-                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where userID='$session' and status='1'"; 
+                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where status=1 and  userID='$session' and status='1'"; 
                                 }
                                 $result = mysqli_query($conn,$query);
                                 $fetch = mysqli_fetch_array($result);
@@ -109,11 +109,11 @@ include('common/sidebar.php');
                         <?php   
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
                                 if($userID=='ALL'){
-                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where userID in(select userID from tblusers where superAdminID='$session')"; 
+                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where status=1 and  userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
-                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where userID='$userID' and status='1'"; 
+                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where status=1 and  userID='$userID' and status='1'"; 
                                 }else{
-                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where userID='$session' and status='1'"; 
+                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where status=1 and  userID='$session' and status='1'"; 
                                 }
                                 $result = mysqli_query($conn,$query);
                                 $fetch = mysqli_fetch_array($result);
@@ -143,6 +143,7 @@ include('common/sidebar.php');
                                                 FROM tblpurchaseinvoices 
                                                 WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session') 
                                                 AND purchase_invoice_date BETWEEN '$startDate' AND '$endDate'
+                                                AND status=1
                                                 GROUP BY purchase_date 
                                                 ORDER BY purchase_date ASC"; // Ordering by date ascending
                                     } else if (isset($_SESSION['subSession'])) {
@@ -213,6 +214,7 @@ include('common/sidebar.php');
                                                     FROM tblsalesinvoices 
                                                     WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session') 
                                                     AND sales_invoice_date BETWEEN '$startDate' AND '$endDate'
+                                                    AND status=1
                                                     GROUP BY sales_date 
                                                     ORDER BY sales_date ASC"; // Ordering by date ascending
                                         } else if (isset($_SESSION['subSession'])) {

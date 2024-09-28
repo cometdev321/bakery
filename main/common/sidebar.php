@@ -126,6 +126,7 @@ if (isset($_POST['ProductSubmit'])) {
     $purchase = $_POST['purchaseprice'];
     $size_number = $_POST['size_number'];
     $size = $_POST['size'];
+    $sizetype=$size_number.$size;
     $HSN = isset($_POST['HSN']) ? $_POST['HSN'] : '';
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
@@ -161,7 +162,7 @@ if (isset($_POST['ProductSubmit'])) {
     // Check for product existence for each user or just the selected branch
     if (isset($allUserIDs)) {
         foreach ($allUserIDs as $userID) {
-            $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'";
+            $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'  AND status='1'";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_num_rows($result) > 0) {
@@ -182,11 +183,11 @@ if (isset($_POST['ProductSubmit'])) {
 
     } else {
         // Single branch
-        $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'";
+        $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'  AND status='1'";
         $result = mysqli_query($conn, $query);
 
         if (mysqli_num_rows($result) > 0) {
-            echo "<script>window.location.href='product/add-product?status=exists'</script>";
+            echo "<script>window.location.href='products/add-product?status=exists'</script>";
         } else {
             $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`) 
                       VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID')";
@@ -280,7 +281,7 @@ if (isset($_POST['ProductSubmit'])) {
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Category</label>
                             <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" required>
-                                <option>Select Category</option>
+                                <option value="6360">Select Category</option>
                                 <?php
                                     if(isset($_SESSION['subSession'])){
                                         $userID = $_SESSION['subSession'];

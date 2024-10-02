@@ -94,21 +94,13 @@ $(document).ready(function() {
                                 <thead>
                                     <tr>
                                         <th>Slno</th>
-                                        <?php
-                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){ 
-                                        ?>
-                                        <th>Branch</th>
-                                        <?php } ?>
                                         <th>Category</th>
-                                        <th>Poduct ID</th>
                                         <th>Poduct</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
                                         <th>Discount/Unit</th>
                                         <th>Profit Margin</th>
                                         <th>Size</th>
-                                        <th>HSN</th>
-                                        <th>Opening_Stock</th>
                                         <th>GST</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
@@ -117,21 +109,13 @@ $(document).ready(function() {
                                 <tfoot>
                                     <tr>
                                         <th>Slno</th>
-                                        <?php
-                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){ 
-                                        ?>
-                                        <th>Branch</th>
-                                        <?php } ?>
                                         <th>Category</th>
-                                        <th>Poduct ID</th>
                                         <th>Poduct</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
                                         <th>Discount/Unit</th>
                                         <th>Profit Margin</th>
                                         <th>Sizes</th>
-                                        <th>HSN</th>
-                                        <th>Opening_Stock</th>
                                         <th>GST</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
@@ -144,13 +128,31 @@ $(document).ready(function() {
                                     if(isset($_SESSION['admin'])){
                                         $adminID = $_SESSION['admin'];
                                         if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){
-                                            $query = "SELECT tp.*, tc.name,b.name as branch
-                                            FROM tblproducts tp
-                                            JOIN tblusers tu ON tp.userID = tu.userID
-                                            JOIN branch b ON b.id=tu.branch
-                                            JOIN tblcategory tc ON tc.id = tp.category 
-                                            WHERE tp.status = '1' AND tu.superAdminID = '$adminID'
-                                            ORDER BY tp.id DESC ";
+                                            $query = "SELECT 
+                                            tp.productname,
+                                            MIN(tp.id) as id, 
+                                            MIN(tp.saleprice) as saleprice, 
+                                            MIN(tp.purchaseprice) as purchaseprice,
+                                            MIN(tp.default_discount) as default_discount,
+                                            MIN(tp.gst) as gst,
+                                            MIN(tp.size) as size,
+                                            tc.name as name,
+                                            MIN(b.name) as branch
+                                        FROM 
+                                            tblproducts tp
+                                        JOIN 
+                                            tblusers tu ON tp.userID = tu.userID
+                                        JOIN 
+                                            branch b ON b.id = tu.branch
+                                        JOIN 
+                                            tblcategory tc ON tc.id = tp.category 
+                                        WHERE 
+                                            tp.status = '1' AND tu.superAdminID = '$adminID'
+                                        GROUP BY 
+                                            tp.productname
+                                        ORDER BY 
+                                            id DESC;
+                                        ";
                                         }else{
                                             $userID=$_SESSION['subSession'];
                                                 $query = "SELECT tp.*,tc.name FROM tblproducts tp
@@ -175,22 +177,14 @@ $(document).ready(function() {
                                 ?>
                                     <tr>
                                         <td><?php echo $slno;?></td>    
-                                        <?php
-                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){ 
-                                        ?>
-                                        <td><?php echo strtoupper($row['branch']);?></td>
-                                        <?php } ?>
                                         <td><?php echo $row['name'];?></td>
-                                        <td><?php echo $row['id'];?></td>
                                         <td><?php echo $row['productname'];?></td>
                                         <td><?php echo $row['saleprice'];?></td>
                                         <td><?php echo $row['purchaseprice'];?></td>
                                         <td><?php echo $row['default_discount'];?></td>
                                         <td><?php echo intval($row['saleprice'])-(intval($row['purchaseprice'])+intval($row['default_discount']));?></td>
                                         <td><?php echo $row['size'];?></td>
-                                        <td><?php echo $row['HSN'];?></td>
-                                        <td><?php echo $row['openingstock'];?></td>
-                                        <td><?php     echo $row['gst'] == '0' ? 'Exempted' : ($row['gst'] == '-1' ? 'Non-GST' : $row['gst']); ?></td>
+                                        <td><?php echo $row['gst'] == '0' ? 'Exempted' : ($row['gst'] == '-1' ? 'Non-GST' : $row['gst']); ?></td>
                                         <td>
                                             <form action="editproduct" method="post">
                                             <input name="pid" value="<?php echo $row['id'];?>" hidden>

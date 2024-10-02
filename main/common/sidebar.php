@@ -132,7 +132,7 @@ if (isset($_POST['ProductSubmit'])) {
     $gst = $_POST['gst'];
     $discount = $_POST['default_discount_per_unit'];
 
-    $sizeJoined = $size_number . $size;
+    $sizeJoined = $size_number.$size;
 
     // Determine userID based on branch selection
     if (isset($_POST['branch'])) {
@@ -339,7 +339,7 @@ if (isset($_POST['ProductSubmit'])) {
                         <!-- Size -->
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Size</label>
-                            <input type="number" name="size_number" placeholder="Type Here" class="form-control">
+                            <input type="number" name="size_number" value="0" placeholder="Type Here" class="form-control">
                         </div>
 
                         <!-- UOM (Unit of Measure) -->

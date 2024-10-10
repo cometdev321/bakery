@@ -554,7 +554,11 @@ if (isset($_POST['ProductSubmit'])) {
             <div class="tab-content p-l-0 p-r-0">
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
-                        <ul id="main-menu" class="metismenu">                            
+                        <ul id="main-menu" class="metismenu">    
+                            <li>
+                                <a href="<?php echo $base ?>/deliwheels/dashboard" class=""><i class="fa fa-truck"></i><span>DeliWheels</span></a>
+                               
+                            </li>                        
                                <?php
                                    if(isset($_SESSION['admin'])){
                                 ?>
@@ -566,6 +570,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 </ul>
                                 <?php } ?>
                             </li>
+                           
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-link"></i> <span>Category</span></a>
                                 <ul>

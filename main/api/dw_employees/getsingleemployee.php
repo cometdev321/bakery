@@ -6,7 +6,7 @@ include_once '../db.php';
 
 $id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$query = "SELECT * FROM dw_employees WHERE id = ?";
+$query = "SELECT * FROM dw_employees  where status='1' and  id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $id);
 $stmt->execute();

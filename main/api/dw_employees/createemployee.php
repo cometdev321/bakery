@@ -18,7 +18,7 @@ if(!empty($data->name) && !empty($data->mobile) && !empty($data->role)) {
     if($checkStmt->rowCount() > 0) {
         // Employee already exists
         echo json_encode(["message" => "Employee already exists."]);
-    } else {
+    } else { 
         // Insert new employee
         $query = "INSERT INTO dw_employees SET name=:name, mobile=:mobile, role=:role, status=1";
         $stmt = $conn->prepare($query);

@@ -117,7 +117,6 @@ include('../../common/deliwheelsSidebar.php');
                 let slno = 1;
                 const tbody = $('#VehicleTable tbody');
                 tbody.empty(); // Clear existing rows
-console.log(data)
                 data.forEach(function(Vehicle) {
                     tbody.append(`
                         <tr>
@@ -159,14 +158,19 @@ console.log(data)
                 data: JSON.stringify(VehicleData),
                 success: function(response) {
                     const message = response.message;
-                    if (message === "Vehicle created successfully.") {
+                    if (message) {
                         Toastify({
                             text: message,
                             duration: 3000,
                             backgroundColor: "green",
                         }).showToast();
 
-                        $('#VehicleForm')[0].reset(); // Reset form fields
+                         // Reload the page after a successful creation
+                         setTimeout(function() {
+                            location.reload(); // Reload the current page
+                        }, 500);
+                        $('#VehicleForm')[0].reset(); 
+                        // Reset form fields
                         // Optionally, you could refresh the Vehicle table here
                     } else {
                         Toastify({

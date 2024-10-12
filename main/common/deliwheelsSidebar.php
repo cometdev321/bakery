@@ -212,7 +212,6 @@ if(!$deliwheelsConn)
                             <li>
                                 <a href="<?php echo $base ?>/deliwheels/route/create" class=""><i class="fa fa-sitemap"></i> <span>Routes</span></a>
                             </li>
-                          
                             <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
                         </ul>
                     </nav>

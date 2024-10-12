@@ -24,20 +24,25 @@ include('../../common/deliwheelsSidebar.php');
                         <h2>Route Details</h2>
                     </div>
                     <div class="body">
-                         <form id="employeeForm">
+                         <form id="RouteForm">
                             <div class="form-group">
                                 <label>Start Point</label>
-                                <input type="text" placeholder="Type Here" class="form-control" name="name" required>
+                                <input type="text" placeholder="Type Here" class="form-control" name="startpoint" required>
                             </div>
                             <div class="form-group">
                                 <label>End Point</label>
-                                <input type="text" placeholder="Type Here" class="form-control" name="mobile" required>
+                                <input type="text" placeholder="Type Here" class="form-control" name="endpoint" required>
                             </div>
                             <div class="form-group">
                                 <label>Vehicle</label>
-                                <select class="form-control show-tick ms select2" name="role" data-placeholder="Select" required>
-                                <option value='1'>Driver</option>
-                                <option value='2'>Partner</option>
+                                <select class="form-control show-tick ms select2" name="vehicle_id" data-placeholder="Select" required>
+                                <?php
+                                    $query = "SELECT id,name,number_plate FROM dw_vehicles WHERE status = '1' order by id desc";
+                                    $result = mysqli_query($deliwheelsConn, $query);
+                                    while($row=mysqli_fetch_array($result)){
+                                ?>
+                                    <option value="<?php echo $row['id'];?>"><?php echo $row['name'];?>(<?php echo $row['number_plate'];?>)</option>
+                                <?php  } ?>
                                 </select>
                             </div>
                            
@@ -57,22 +62,22 @@ include('../../common/deliwheelsSidebar.php');
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="employeeTable">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="RouteTable">
                                 <thead>
                                     <tr>
                                         <th>Slno</th>
-                                        <th>Branch Name</th>
-                                        <th>Location</th>
-                                        <th>Role</th>
+                                        <th>StartPoint</th>
+                                        <th>EndPoint</th>
+                                        <th>Vehicle</th>
                                         <th>Edit</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>Slno</th>
-                                        <th>Branch Name</th>
-                                        <th>Location</th>
-                                        <th>Role</th>
+                                        <th>StartPoint</th>
+                                        <th>EndPoint</th>
+                                        <th>Vehicle</th>
                                         <th>Edit</th>
                                     </tr>
                                 </tfoot>
@@ -92,24 +97,23 @@ include('../../common/deliwheelsSidebar.php');
     $(document).ready(function() {
         // Fetch employees from the API
         $.ajax({
-            url: '../../api/dw_employees/getallemployees.php', // Update with your API endpoint
+            url: '../../api/dw_route/read_routes.php', // Update with your API endpoint
             type: 'GET',
             dataType: 'json',
             success: function(data) {
                 let slno = 1;
-                const tbody = $('#employeeTable tbody');
-                tbody.empty(); // Clear existing rows
+                const tbody = $('#RouteTable tbody');
+                tbody.empty(); 
 
-                data.forEach(function(employee) {
-                    const role = employee.role == '1' ? 'Driver' : 'Partner';
+                data.forEach(function(route) {
                     tbody.append(`
                         <tr>
                             <td>${slno}</td>
-                            <td>${employee.name}</td>
-                            <td>${employee.mobile}</td>
-                            <td>${role}</td>
+                            <td>${route.startpoint}</td>
+                            <td>${route.endpoint}</td>
+                            <td>${route.vehiclename}(${route.number_plate})</td>
                             <td>
-                                <a href="edit_employee?id=${employee.id}" class="btn btn-success btn-sm"><i class="icon-pencil"></i></a>
+                                <a href="edit_route?id=${route.routeid}" class="btn btn-success btn-sm"><i class="icon-pencil"></i></a>
                             </td>
                         </tr>
                     `);
@@ -125,23 +129,22 @@ include('../../common/deliwheelsSidebar.php');
             }
         });
 
-        $('#employeeForm').on('submit', function(event) {
+        $('#RouteForm').on('submit', function(event) {
             event.preventDefault();
 
-            const employeeData = {
-                name: $('input[name="name"]').val(),
-                mobile: $('input[name="mobile"]').val(),
-                role: $('select[name="role"]').val()
-            };
-            console.log(employeeData);
+            const route = {
+                startpoint: $('input[name="startpoint"]').val(),
+                endpoint: $('input[name="endpoint"]').val(),
+                vehicle_id: $('select[name="vehicle_id"]').val()
+            }
             $.ajax({
-                url: '../../api/dw_employees/createemployee.php',
+                url: '../../api/dw_route/create_route.php',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(employeeData),
+                data: JSON.stringify(route),
                 success: function(response) {
                     const message = response.message;
-                    if (message === "Employee created successfully.") {
+                    if (message) {
                         Toastify({
                             text: message,
                             duration: 3000,
@@ -149,7 +152,7 @@ include('../../common/deliwheelsSidebar.php');
                         }).showToast();
                         window.location.href = 'create'; // Redirect after deletion
 
-                        $('#employeeForm')[0].reset(); // Reset form fields
+                        $('#RouteForm')[0].reset(); // Reset form fields
                         // Optionally, you could refresh the employee table here
                     } else {
                         Toastify({

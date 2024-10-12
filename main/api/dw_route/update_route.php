@@ -21,7 +21,19 @@ if(!empty($data->id) && !empty($data->startpoint) && !empty($data->endpoint) && 
     } else {
         echo json_encode(["message" => "Route update failed."]);
     }
+}  else if (isset($data->id) && isset($data->status)) {
+    $query = "UPDATE dw_routes SET status = :status WHERE id = :id";
+    
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(":id", $data->id);
+    $stmt->bindParam(":status", $data->status);
+
+    if ($stmt->execute()) {
+        echo json_encode(["message" => "Status updated successfully."]);
+    } else {
+        echo json_encode(["message" => "Status update failed."]);
+    }
 } else {
-    echo json_encode(["message" => "Incomplete data."]);
+    echo json_encode(["message" => "No status provided."]);
 }
 ?>

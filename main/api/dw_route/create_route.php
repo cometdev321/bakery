@@ -15,7 +15,7 @@ if(!empty($data->startpoint) && !empty($data->endpoint) && !empty($data->vehicle
     $checkStmt->bindParam(":endpoint", $data->endpoint);
     $checkStmt->bindParam(":vehicle_id", $data->vehicle_id);
     $checkStmt->execute();
-    
+     
     if($checkStmt->rowCount() > 0) {
         // Route already exists
         echo json_encode(["message" => "Route already exists."]);

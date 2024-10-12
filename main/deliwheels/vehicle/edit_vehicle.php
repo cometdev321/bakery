@@ -83,7 +83,7 @@ $vehicle = mysqli_fetch_assoc($vehicle_result);
                     </div>
                 </div>
             </div>
-        </div>
+        </div> 
     </div>
 </div>
 

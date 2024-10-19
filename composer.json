@@ -1,0 +1,11 @@
+{
+  "name": "nayanbakery/nayanbakery",
+  "description": "A simple PHP web application for Nayan Bakery.",
+  "type": "project",
+  "require": {
+    "php": "^7.4 || ^8.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  }
+}

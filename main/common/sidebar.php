@@ -600,7 +600,7 @@ if (isset($_POST['ProductSubmit'])) {
                                     <?php
                                    if(isset($_SESSION['admin'])){
                                 ?>
-                                    <li><a href="<?php echo $base ?>/products/mass-products"><i class="fa icon-mouse"></i> mass-products</a></li>
+                                    <li><a href="<?php echo $base ?>/products/mass-products"><i class="fa icon-mouse"></i> Mass-products</a></li>
                                     <?php } ?>
 
                                     <li><a href="<?php echo $base ?>/products/import-products"><i class="fa icon-mouse"></i> Import/Export Products</a></li>

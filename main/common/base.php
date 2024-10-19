@@ -1,7 +1,7 @@
 <?php
 // Determine the base URL based on the current domain
 if ($_SERVER['HTTP_HOST'] === 'nayaanfood.in') {
-    $base = 'http://nayaanfood.in/bakery/main';
+    $base = 'http://nayanfood.in/bakery/main';
 } else {
     $base = 'http://localhost/bakery/main';
 }

@@ -571,8 +571,10 @@ function create_sales_invoice() {
         const discount = 0;
         const tax = parseFloat(taxInput.value);
 
-        const subtotal = (qty * price) - discount;
-        const amount = subtotal + (subtotal * tax / 100);
+        let subtotal = (qty * price) - discount;
+        let amount = subtotal + (subtotal * tax / 100);
+        amount=subtotal;//skipping gst adding again
+
         amountInput.value = amount;
 
         calculate_subtotal();

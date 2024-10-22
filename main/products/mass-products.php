@@ -75,6 +75,7 @@ $(document).ready(function() {
                                     <tr>
                                         <th>Slno</th>
                                         <th>Product</th>
+                                        <th>Size</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
                                     </tr>
@@ -116,7 +117,7 @@ $(document).ready(function() {
             success: function(response) {
                 response = response.trim(); 
                 if (response == 'success') {
-                    Toastify({
+                    Toastify({ 
                         text: "Sale price updated successfully",
                         duration: 3000,
                         gravity: "top",

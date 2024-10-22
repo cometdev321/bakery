@@ -62,7 +62,7 @@ $(document).ready(function() {
 <?php
 if(isset($_POST['submit'])) {
     $category = $_POST['category'];
-    // $sub_category = $_POST['sub_category'];
+    $sub_category =0;
     $productname = $_POST['productname'];
     $saleprice = $_POST['saleprice'];
     $purchase = $_POST['purchaseprice'];
@@ -114,7 +114,7 @@ if(isset($_POST['submit'])) {
   
       foreach ($allUserIDs as $userID) {
           $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`,`userID`) 
-                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype','$discount', '$userID')";
+                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size','$discount', '$userID')";
           if (!mysqli_query($conn, $query)) {
               echo "<script>window.location.href='add-product?status=error'</script>";
               exit; 
@@ -170,7 +170,6 @@ if(isset($_POST['submit'])) {
                                   <div class="col-lg-6 col-md-6 my-2">
                                   <label>Branch</label>
                                   <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
-                                         <option>Select Branch</option>
                                          <?php
                                                 $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
                                                     join tblusers tu on tu.branch=b.id
@@ -192,12 +191,11 @@ if(isset($_POST['submit'])) {
                                         <div class="col-lg-6 col-md-12 my-2">
                                             <label>Category</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
-                                        <option >Select Category</option>
                                         <?php
                                           
                                           if(isset($_SESSION['subSession'])){
                                             $userID=$_SESSION['subSession'];
-                                            if($userID=='ALL'){
+                                            if($userID=='ALL' || $userID=='all'){
                                                 $getct=mysqli_query($conn,"select id,name from tblcategory where status='1'  GROUP BY name");
                                             }else{
                                                 $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$userID'  GROUP BY name");
@@ -238,7 +236,7 @@ if(isset($_POST['submit'])) {
 
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>Size</label>
-                                            <input type="number" value="0" name="size_number" placeholder="Type Here" class="form-control" >
+                                            <input type="number" required name="size_number" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>UOM (Unit of Measure) </label>

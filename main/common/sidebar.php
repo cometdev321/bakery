@@ -120,7 +120,7 @@
 <?php
 if (isset($_POST['ProductSubmit'])) {
     $category = $_POST['category'];
-    // $sub_category = $_POST['sub_category'];
+    $sub_category =0;
     $productname = $_POST['productname'];
     $saleprice = $_POST['saleprice'];
     $purchase = $_POST['purchaseprice'];
@@ -257,7 +257,6 @@ if (isset($_POST['ProductSubmit'])) {
                         <div class="col-lg-6 col-md-6 my-2">
                             <label>Branch</label>
                             <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required>
-                                <option>Select Branch</option>
                                 <?php
                                     $branchQ="SELECT tu.userID as unicodeBranch,b.name as name FROM branch b
                                               JOIN tblusers tu ON tu.branch=b.id
@@ -339,7 +338,7 @@ if (isset($_POST['ProductSubmit'])) {
                         <!-- Size -->
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Size</label>
-                            <input type="number" name="size_number" value="0" placeholder="Type Here" class="form-control">
+                            <input type="number" name="size_number"  placeholder="Type Here" class="form-control" required>
                         </div>
 
                         <!-- UOM (Unit of Measure) -->

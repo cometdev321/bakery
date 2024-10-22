@@ -4,7 +4,7 @@ include('../../common/session_control.php');
 
 // Check if productname and price data is being updated
 if (isset($_POST['productname'])) {
-    $productname = $_POST['productname'];
+    $productname = $_POST['productname']; 
 
     if (isset($_POST['saleprice'])) {
         $newSalePrice = $_POST['saleprice'];

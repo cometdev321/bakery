@@ -642,6 +642,11 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/sales/paymentIn_list">Payment In</a></li>
                                 </ul>
                             </li>
+                            <?php } ?>
+  
+                            <?php
+                                   if(isset($_SESSION['admin'])){
+                                ?>
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
                                 <ul>                                    

@@ -280,7 +280,7 @@ if(isset($_POST['submit'])) {
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-12 my-2">
-                                            <label>Is Purchase Enabled</label>
+                                            <label>Is Branch Purchase Enabled</label>
                                             <div class="fancy-checkbox">
                                                 <label>
                                                     <input type="checkbox" name="ispurchaseenabled" value="1">

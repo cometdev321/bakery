@@ -167,7 +167,7 @@ if(isset($_POST['submit'])){
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12 my-2">
-                                    <label>Is Purchased</label>
+                                    <label>Is Branch Purchase Enabled</label>
                                     <div>
                                         <label class="fancy-checkbox">
                                             <input type="checkbox" name="ispurchaseEnabled" <?php if($pro_details['ispurchaseEnabled'] == 1) echo 'checked'; ?>>

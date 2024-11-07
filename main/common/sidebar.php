@@ -131,7 +131,7 @@ if (isset($_POST['ProductSubmit'])) {
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
     $discount = $_POST['default_discount_per_unit'];
-
+    $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0; 
     $sizeJoined = $size_number.$size;
 
     // Determine userID based on branch selection
@@ -173,9 +173,9 @@ if (isset($_POST['ProductSubmit'])) {
 
         // Insert product for all branches
         foreach ($allUserIDs as $userID) {
-            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`) 
-                      VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID')";
-            if (!mysqli_query($conn, $query)) {
+            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
+            VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
+               if (!mysqli_query($conn, $query)) {
                 echo "<script>window.location.href='product/add-product?status=error'</script>";
                 exit;
             }
@@ -189,9 +189,9 @@ if (isset($_POST['ProductSubmit'])) {
         if (mysqli_num_rows($result) > 0) {
             echo "<script>window.location.href='products/add-product?status=exists'</script>";
         } else {
-            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`) 
-                      VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID')";
-            if (mysqli_query($conn, $query)) {
+            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
+            VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
+               if (mysqli_query($conn, $query)) {
                 echo "<script> Toastify({
             text: 'Product added successfully',
             duration: 3000,
@@ -378,6 +378,16 @@ if (isset($_POST['ProductSubmit'])) {
                                 </label>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-md-12 my-2">
+                                <label>Is Purchase Enabled</label>
+                                <div class="fancy-checkbox">
+                                    <label>
+                                        <input type="checkbox" name="ispurchaseenabled" value="1">
+                                        <span>Enable Purchase</span>
+                                    </label>
+                                </div>
+                            </div>
+
                     </div>
 
                     <!-- Save Button -->
@@ -589,23 +599,19 @@ if (isset($_POST['ProductSubmit'])) {
                                
                                 </ul>
                             </li>
-                          
+                            
+                            <?php if(isset($_SESSION['admin'])){ ?>
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-grid"></i> <span>Products</span></a>
                                 <ul>
-                              
                                     <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
                                     <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
-                                    <?php
-                                   if(isset($_SESSION['admin'])){
-                                ?>
                                     <li><a href="<?php echo $base ?>/products/mass-products"><i class="fa icon-mouse"></i> Mass-products</a></li>
-                                    <?php } ?>
-
                                     <li><a href="<?php echo $base ?>/products/import-products"><i class="fa icon-mouse"></i> Import/Export Products</a></li>
-                               
+                                    
                                 </ul>
                             </li>
+                            <?php } ?>
                             <?php
                                    if(!isset($_SESSION['admin'])){
                                 ?>
@@ -650,11 +656,31 @@ if (isset($_POST['ProductSubmit'])) {
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
                                 <ul>                                    
-                                    <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li>
-                                    <!-- <li><a href="<?php echo $base ?>/vendors/vendor.php">Vendor</a></li> -->
-                                    <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
+                                    <!-- <li><a href="<?php echo $base ?>/purchase/purchase_invoice">Purchase Invoices</a></li> -->
+                                    <!-- <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li> -->
+                                    <li><a href="<?php echo $base ?>/purchase/purchases/purchases">Purchases</a></li>
+                                    <li><a href="<?php echo $base ?>/purchase/settings">Settings</a></li>
                                 </ul>
                             </li>
+                            <?php } ?>
+                            
+                            <?php
+                                if (isset($_SESSION['user'])) {
+                                    $session = $_SESSION['user'];
+                                    $fetchQuery = "SELECT * from tblispurchaseenabled WHERE status = 1 and branch='$session'";
+                                    $results = mysqli_query($conn, $fetchQuery);
+                                    if(mysqli_num_rows($results)>0){
+                                        ?>
+                                            <li>
+                                                <a href="#FileManager" class="has-arrow"><i class="icon-bag"></i> <span>Purchase</span></a>
+                                                <ul>                                    
+                                                    <li><a href="<?php echo $base ?>/purchase/enabledpurchase/purchase_invoice">Purchase Invoices</a></li>
+                                                    <li><a href="<?php echo $base ?>/purchase/paymentout_list">Payment Out</a></li>
+                                                </ul>
+                                            </li>
+                                            <?php
+                                    }
+                                ?>
                             <?php } ?>
                             <li>
                                 <a href="#FileManager" class="has-arrow"><i class="icon-plane"></i> <span>Stock Transfer</span></a>

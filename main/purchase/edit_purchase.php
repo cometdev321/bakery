@@ -141,7 +141,6 @@ $query = "SELECT pi.*, p.name AS `name`
                                     INNER JOIN tblproducts tp ON tp.id = ts.ItemName
                                     WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
                                       AND ts.userID = '$session' 
-                                      AND tp.gst in ('-1')
                                       AND ts.status = '1' 
                                     ORDER BY ts.id ASC;";
                                 }else{
@@ -150,7 +149,6 @@ $query = "SELECT pi.*, p.name AS `name`
                                     INNER JOIN tblproducts tp ON tp.id = ts.ItemName
                                     WHERE ts.purchase_invoice_number = '$purchaseInvoiceNum' 
                                       AND ts.userID = '$session' 
-                                      AND tp.gst not in ('-1')
                                       AND ts.status = '1' 
                                     ORDER BY ts.id ASC;";
                                 }

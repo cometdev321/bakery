@@ -5,7 +5,7 @@ include('../common/sidebar.php');
 ?>
 
 <?php
-
+ 
 if(isset($_POST['submit'])){
   
     $id = $_POST['id'];
@@ -21,6 +21,7 @@ if(isset($_POST['submit'])){
     $gst = $_POST['gst'];
     $default_discount = $_POST['default_discount']; // Added for default discount
     $sizeJoined = $size_number . $size;
+    $is_purchased = isset($_POST['ispurchaseEnabled']) ? 1 : 0;
 
     $query = "UPDATE tblproducts SET 
                 category = '$category', 
@@ -33,7 +34,8 @@ if(isset($_POST['submit'])){
                 gst = '$gst', 
                 size = '$sizeJoined', 
                 sizetype = '$size', 
-                default_discount = '$default_discount'  -- Updated SQL query
+                default_discount = '$default_discount',
+                ispurchaseEnabled = '$is_purchased'  
               WHERE id = '$id'";
 
     if(mysqli_query($conn, $query)){
@@ -164,6 +166,16 @@ if(isset($_POST['submit'])){
                                         </label>
                                     </div>
                                 </div>
+                                <div class="col-lg-6 col-md-12 my-2">
+                                    <label>Is Purchased</label>
+                                    <div>
+                                        <label class="fancy-checkbox">
+                                            <input type="checkbox" name="ispurchaseEnabled" <?php if($pro_details['ispurchaseEnabled'] == 1) echo 'checked'; ?>>
+                                            <span><i></i> Mark as Purchased</span>
+                                        </label>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="form-group">
                                 <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Update</span></button>

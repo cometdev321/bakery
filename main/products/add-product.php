@@ -73,7 +73,7 @@ if(isset($_POST['submit'])) {
     $gst = $_POST['gst'];
     $sizetype=$size_number.$size;
     $discount=$_POST['default_discount_per_unit'];
-
+    $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0; 
     $sizeJoined=$size_number.$size;
     if (isset($_POST['branch'])) {
       if ($_POST['branch'] == "all") {
@@ -97,13 +97,13 @@ if(isset($_POST['submit'])) {
       }
   } else {
       $userID = $session;
-  }
+  } 
   
 
-  
+   
   if (isset($allUserIDs)) {
       foreach ($allUserIDs as $userID) {
-          $query = "SELECT count(*) FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID' AND status='1'";
+          $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID' AND status='1'";
           $result = mysqli_query($conn, $query);
           
           if (mysqli_num_rows($result) > 0) {
@@ -113,8 +113,9 @@ if(isset($_POST['submit'])) {
       }
   
       foreach ($allUserIDs as $userID) {
-          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`,`userID`) 
-                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size','$discount', '$userID')";
+        $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
+        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
+
           if (!mysqli_query($conn, $query)) {
               echo "<script>window.location.href='add-product?status=error'</script>";
               exit; 
@@ -129,10 +130,11 @@ if(isset($_POST['submit'])) {
       if (mysqli_num_rows($result) > 0) {
           echo "<script>window.location.href='add-product?status=exists'</script>";
       } else {
-          $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`,`default_discount`, `userID`) 
-                    VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$sizetype','$discount','$userID')";
+        $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
+          VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
+
           if (mysqli_query($conn, $query)) {
-              echo "<script>window.location.href='//add-product?status=success'</script>";
+              echo "<script>window.location.href='add-product?status=success'</script>";
           } else {
               echo "<script>window.location.href='add-product?status=error'</script>";
           }
@@ -247,7 +249,7 @@ if(isset($_POST['submit'])) {
                                               <option value="L">Liter (L)</option>
                                             </select>
                                         </div>
-
+                                            
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>GST Level</label>
                                             <div>
@@ -274,6 +276,15 @@ if(isset($_POST['submit'])) {
                                                 <label class="fancy-radio">
                                                     <input name="gst" value="-1" type="radio">
                                                     <span><i></i>Non-Gst</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 my-2">
+                                            <label>Is Purchase Enabled</label>
+                                            <div class="fancy-checkbox">
+                                                <label>
+                                                    <input type="checkbox" name="ispurchaseenabled" value="1">
+                                                    <span>Enable Purchase</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -334,12 +345,6 @@ document.addEventListener("DOMContentLoaded", function() {
     
 <script src="../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../assets/js/pages/forms/advanced-form-elements.js"></script>
-</body>
-
-<!-- Mirrored from www.wrraptheme.com/templates/lucid/html/light/forms-advanced.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Mar 2023 05:12:17 GMT -->
-</html>
-
-
 </body>
 
 <!-- Mirrored from www.wrraptheme.com/templates/lucid/html/light/forms-advanced.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Mar 2023 05:12:17 GMT -->

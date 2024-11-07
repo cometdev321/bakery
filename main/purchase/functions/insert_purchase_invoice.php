@@ -14,7 +14,7 @@
     $afterDiscountTotal = $postData['formData']['after_discount_total_value'];
     $fullyPaid = $postData['formData']['check_payment_received'];
     $amountReceived = $postData['formData']['amount_received_value'];
-    $totalBalance = $postData['formData']['balance_total_value'];
+    $totalBalance = $postData['formData']['balance_total_value']; 
     $purchase_type = $postData['formData']['purchase_type'];
     $amountReceivedtype='none';
     if (isset($postData['formData']['amount_received_type_value'])) {

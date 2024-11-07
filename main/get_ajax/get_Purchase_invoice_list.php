@@ -7,7 +7,7 @@ $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
 $query = "SELECT pi.* , p.name AS party_name
-        FROM tblpurchaseinvoices pi
+        FROM tblpurchaseinvoices pi 
         INNER JOIN tblparty p ON pi.party_name=p.id
         WHERE pi.timestamp >= '$fromDate' AND pi.timestamp <= '$toDate' AND pi.userID = '$session' AND pi.status = '1' 
         ORDER BY pi.id DESC";

@@ -13,7 +13,7 @@ GROUP BY productname, saleprice, purchaseprice;
 
 // Initialize serial number
 $slno = 1;
-
+ 
 // Loop through the results and generate table rows with editable price fields
 while ($row = mysqli_fetch_array($get_p)) {
     echo ' 

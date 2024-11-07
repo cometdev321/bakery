@@ -120,7 +120,12 @@ $row3 = mysqli_fetch_array($result3);
                 </tr>
                 <tr>
                     <td>Date</td>
-                    <td><?php echo (isset($row['sales_invoice_date'])) ? $row['sales_invoice_date'] : $row['purchase_invoice_date']; ?></td>
+                    <td>
+                        <?php
+                            $date = isset($row['sales_invoice_date']) ? $row['sales_invoice_date'] : $row['purchase_invoice_date'];
+                            echo date("d-m-Y", strtotime($date));
+                        ?>
+                    </td>
                 </tr>
                 <!-- <tr>
                     <td>Customer</td>

@@ -9,7 +9,7 @@ $toDate = $_POST['toDate'];
 $query = "SELECT si.*, p.name AS party_name 
           FROM tblsalesinvoices si
           INNER JOIN tblparty p ON si.party_name = p.id
-          WHERE si.timestamp >= '$fromDate' AND si.timestamp <= '$toDate' AND si.userID = '$session' AND si.status = '1' 
+          WHERE si.sales_invoice_date >= '$fromDate' AND si.sales_invoice_date <= '$toDate' AND si.userID = '$session' AND si.status = '1' 
           ORDER BY si.id DESC";
           $result = mysqli_query($conn, $query);
 

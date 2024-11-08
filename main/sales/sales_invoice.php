@@ -79,7 +79,6 @@ $(document).ready(function() {
                                     <option value="Yesterday">Yesterday</option>
                                     <option value="This-Week">This-Week</option>
                                     <option selected value="This-Month">This-Month</option>
-                                    <option value="Current-Fiscal-Year">Current Fiscal Year </option>
                                     <option value="Last-7-days">Last 7 days</option>
                                 </select>
                                 </div>
@@ -180,33 +179,33 @@ function get_list(val) {
 
     if (val === 'Today') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d'); ?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d'); ?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Yesterday') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>",
+            toDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>"
         };
     }else if (val === 'This-Week') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('this week'));?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('this week'));?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-01');?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-01');?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-4-01');?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Last-7-days') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else {
         let start = document.getElementById('startDate').value;
@@ -223,8 +222,10 @@ function get_list(val) {
         type: 'POST',
         success: function(response) {
             loadTabledata();
-            console.log(response)
-            $("#sales-list").html(response);
+            setTimeout(() => {
+                $("#sales-list").empty();
+                $("#sales-list").html(response);
+            }, 100);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");

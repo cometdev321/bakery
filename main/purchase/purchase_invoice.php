@@ -3,7 +3,7 @@
     include('../common/sidebar.php');
 date_default_timezone_set('Asia/Kolkata');
 if(isset($_SESSION['user'])){
-    echo "<script>window.location.href='http://localhost/bakery/main/purchase/enabledpurchase/purchase_invoice'</script>";
+    echo "<script>window.location.href='$base/purchase/enabledpurchase/purchase_invoice'</script>";
 }
 ?>
 

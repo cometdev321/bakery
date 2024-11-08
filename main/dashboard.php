@@ -56,6 +56,7 @@ include('common/sidebar.php');
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
+                            $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
                                 if($userID=='ALL'){
                                     $query = "SELECT count(id) as total FROM tblparty where status=1 and  userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){

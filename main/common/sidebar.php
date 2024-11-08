@@ -529,18 +529,18 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/branches/mybranches"><i class="fa fa-building-o"></i> My Branch</a></li>
                                     <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
                                 </ul>
-                                <?php } ?>
                             </li>
-                           
+                            
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-link"></i> <span>Category</span></a>
                                 <ul>
-                               
+                                    
                                     <li><a href="<?php echo $base ?>/category/add-category"><i class="fa icon-mouse"></i> Add New Category</a></li>
                                     <li><a href="<?php echo $base ?>/category/import-category"><i class="fa icon-mouse"></i>Import/Export Category</a></li>
-
+                                    
                                 </ul>
                             </li>
+                            <?php } ?>
                             <li>
                                 <a href="#App" class="has-arrow"><i class=" icon-users"></i> <span>Party</span></a>
                                 <ul>

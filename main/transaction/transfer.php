@@ -123,7 +123,7 @@ $(document).ready(function() {
                                               where b.status='1' and tu.status=1";
                                             }else{
                                               $queryBatch="select name as Bname,id as branchID from branch where status='1' and id in
-                                              (select branch from tblusers where userID='$session' )";
+                                              (select branch from tblusers  )";
                                             }
                                             $getct=mysqli_query($conn,$queryBatch);
                                             while($fetchcat=mysqli_fetch_array($getct)){
@@ -153,7 +153,7 @@ $(document).ready(function() {
                                               where b.status='1' and tu.status=1";
                                             }else{
                                               $queryBatch="select name as Bname,id as branchID from branch where status='1' and id in
-                                              (select branch from tblusers where userID='$session' )";
+                                              (select branch from tblusers )";
                                             }
                                             $getct=mysqli_query($conn,$queryBatch);
                                             while($fetchcat=mysqli_fetch_array($getct)){
@@ -198,11 +198,11 @@ $(document).ready(function() {
                                         <option value="null">Select Product</option>
                                             <?php
                                             $slno=1;
-                                            $queryBatch="select id,productname,openingstock from tblproducts where status='1' and userID='$session' ";
+                                            $queryBatch="select id,productname,size from tblproducts where status='1'";
                                             $getct=mysqli_query($conn,$queryBatch);
                                             while($fetchcat=mysqli_fetch_array($getct)){
                                               ?>
-                                            <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['productname'] . " (Qty: " . $fetchcat['openingstock'] . ")"; ?></option>
+                                            <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['productname'] . " (size: " . $fetchcat['size'] . ")"; ?></option>
                                             <?php } ?>
                                           </select>  
                                           <small id="product_errorMessage" class="text-danger" style="display: none;">Select Product</small> 

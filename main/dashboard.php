@@ -39,14 +39,8 @@ include('common/sidebar.php');
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
-                                $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
-                                if($userID=='ALL'){
-                                    $query = "SELECT count(distinct(productname)) as total FROM tblproducts where status=1 and userID in(select userID from tblusers where superAdminID='$session')"; 
-                                }else if(isset($_SESSION['subSession'])){
-                                    $query = "SELECT count(id) as total FROM tblproducts where userID='$userID' and status='1'"; 
-                                }else{
-                                    $query = "SELECT count(id) as total FROM tblproducts where userID='$session' and status='1'"; 
-                                }
+                                
+                                $query = "SELECT count(id) as total FROM tblproducts where status='1'";  
                                 $result = mysqli_query($conn,$query);
                                 $fetch = mysqli_fetch_array($result);
                           ?>

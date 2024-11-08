@@ -124,54 +124,10 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                            
-                                    if(isset($_SESSION['admin'])){
-                                        $adminID = $_SESSION['admin'];
-                                        if($_SESSION['subSession'] == 'ALL' ||  $_SESSION['subSession'] == 'all' ){
-                                            $query = "SELECT 
-                                            tp.productname,
-                                            MIN(tp.id) as id, 
-                                            MIN(tp.saleprice) as saleprice, 
-                                            MIN(tp.purchaseprice) as purchaseprice,
-                                            MIN(tp.default_discount) as default_discount,
-                                            MIN(tp.gst) as gst,
-                                            MIN(tp.size) as size,
-                                            tc.name as name,
-                                            MIN(b.name) as branch
-                                        FROM 
-                                            tblproducts tp
-                                        JOIN 
-                                            tblusers tu ON tp.userID = tu.userID
-                                        JOIN 
-                                            branch b ON b.id = tu.branch
-                                        JOIN 
-                                            tblcategory tc ON tc.id = tp.category 
-                                        WHERE 
-                                            tp.status = '1' AND tu.superAdminID = '$adminID'
-                                        GROUP BY 
-                                            tp.productname
-                                        ORDER BY 
-                                            id DESC;
-                                        ";
-                                        }else{
-                                            $userID=$_SESSION['subSession'];
-                                                $query = "SELECT tp.*,tc.name FROM tblproducts tp
-                                        join tblcategory tc on tc.id=tp.category 
-                                        WHERE tp.status = '1'  and tp.userID='$userID'
-                                        order by tp.id desc";
-                                        }
-                                    }else{
-                                        $userID=$_SESSION['user'];
                                         $query = "SELECT tp.*,tc.name FROM tblproducts tp
                                         join tblcategory tc on tc.id=tp.category 
-                                        WHERE tp.status = '1'  and tp.userID='$userID'
+                                        WHERE tp.status = '1'  
                                         order by tp.id desc";
-
-                                    }
-                                    // $query = "SELECT tp.*,tc.name FROM tblproducts tp
-                                    //  join tblcategory tc on tc.id=tp.category 
-                                    //  WHERE tp.status = '1'  and tp.userID='$userID'
-                                    //   order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

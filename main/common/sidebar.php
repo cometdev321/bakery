@@ -120,96 +120,50 @@
 <?php
 if (isset($_POST['ProductSubmit'])) {
     $category = $_POST['category'];
-    $sub_category =0;
+    $sub_category = 0;
     $productname = $_POST['productname'];
     $saleprice = $_POST['saleprice'];
     $purchase = $_POST['purchaseprice'];
     $size_number = $_POST['size_number'];
     $size = $_POST['size'];
-    $sizetype=$size_number.$size;
+    $sizetype = $size_number . $size;
     $HSN = isset($_POST['HSN']) ? $_POST['HSN'] : '';
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
     $discount = $_POST['default_discount_per_unit'];
-    $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0; 
-    $sizeJoined = $size_number.$size;
+    $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0;
+    $sizeJoined = $size_number . $size;
 
-    // Determine userID based on branch selection
-    if (isset($_POST['branch'])) {
-        if ($_POST['branch'] == "all") {
-            // Retrieve all user IDs for the branches
-            $allUserIDs = [];
-            $branchQuery = "SELECT tu.userID FROM branch b
-                            JOIN tblusers tu ON tu.branch = b.id
-                            WHERE b.status = '1' AND b.userID = '$session'";
-            $result = mysqli_query($conn, $branchQuery);
+    // Check if a product with the same name and size exists
+    $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
+    $result = mysqli_query($conn, $checkQuery);
 
-            if ($result) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $allUserIDs[] = $row['userID'];
-                }
-            } else {
-                echo "Error: " . mysqli_error($conn);
-                exit;
-            }
-        } else {
-            $userID = $_POST['branch'];
-        }
+    if (mysqli_num_rows($result) > 0) {
+        // Redirect if a duplicate product exists
+        echo "<script>window.location.href='products/add-product?status=exists'</script>";
     } else {
-        $userID = $session;
-    }
+        // Insert the product if no duplicate is found
+        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`) 
+                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled')";
 
-    // Check for product existence for each user or just the selected branch
-    if (isset($allUserIDs)) {
-        foreach ($allUserIDs as $userID) {
-            $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'  AND status='1'";
-            $result = mysqli_query($conn, $query);
-
-            if (mysqli_num_rows($result) > 0) {
-                echo "<script>window.location.href='product/add-product?status=exists'</script>";
-                exit;
-            }
-        }
-
-        // Insert product for all branches
-        foreach ($allUserIDs as $userID) {
-            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
-            VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
-               if (!mysqli_query($conn, $query)) {
-                echo "<script>window.location.href='product/add-product?status=error'</script>";
-                exit;
-            }
-        }
-
-    } else {
-        // Single branch
-        $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'  AND status='1'";
-        $result = mysqli_query($conn, $query);
-
-        if (mysqli_num_rows($result) > 0) {
-            echo "<script>window.location.href='products/add-product?status=exists'</script>";
+        if (mysqli_query($conn, $insertQuery)) {
+            echo "<script>
+                Toastify({
+                    text: 'Product added successfully',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #84fab0, #8fd3f4)',
+                    marginTop: '202px',
+                    stopOnFocus: true,
+                    style: { margin: '70px 15px 10px 15px' },
+                }).showToast();
+                </script>";
         } else {
-            $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
-            VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
-               if (mysqli_query($conn, $query)) {
-                echo "<script> Toastify({
-            text: 'Product added successfully',
-            duration: 3000,
-            newWindow: true,
-            close: true,
-            gravity: 'top', // top, bottom, left, right
-            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-            backgroundColor: 'linear-gradient(to right, #84fab0, #8fd3f4)', // Use gradient color
-            marginTop: '202px', // corrected to marginTop
-            stopOnFocus: true, // Prevents dismissing of toast on hover
-            onClick: function(){}, // Callback after click
-            style: {
-                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
-            },
-        }).showToast();</script>";
-        
-            } else {
-                echo "<script> Toastify({
+            echo "<script>
+                Toastify({
                     text: 'Error occurred, try later',
                     duration: 3000,
                     newWindow: true,
@@ -219,16 +173,14 @@ if (isset($_POST['ProductSubmit'])) {
                     backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)',
                     marginTop: '202px',
                     stopOnFocus: true,
-                    onClick: function(){},
-                    style: {
-                        margin: '70px 15px 10px 15px',
-                    },
-                }).showToast();</script>";
-            }
+                    style: { margin: '70px 15px 10px 15px' },
+                }).showToast();
+                </script>";
         }
     }
 }
 ?>
+
 
     <?php
     if(isset($_SESSION['admin'])){
@@ -253,7 +205,7 @@ if (isset($_POST['ProductSubmit'])) {
                 <form id="basic-form" method="post" action="">
                     <div class="row clearfix">
                         <!-- Branch Dropdown (only if admin) -->
-                        <?php if(isset($_SESSION['admin'])){?>
+                        <!-- <?php if(isset($_SESSION['admin'])){?>
                         <div class="col-lg-6 col-md-6 my-2">
                             <label>Branch</label>
                             <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required>
@@ -274,7 +226,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 ?>
                             </select>
                         </div>
-                        <?php } ?>
+                        <?php } ?> -->
 
                         <!-- Category Dropdown -->
                         <div class="col-lg-6 col-md-12 my-2">

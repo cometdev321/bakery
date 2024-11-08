@@ -60,9 +60,9 @@ $(document).ready(function() {
 </script>
 
 <?php
-if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
     $category = $_POST['category'];
-    $sub_category =0;
+    $sub_category = 0;
     $productname = $_POST['productname'];
     $saleprice = $_POST['saleprice'];
     $purchase = $_POST['purchaseprice'];
@@ -71,79 +71,32 @@ if(isset($_POST['submit'])) {
     $HSN = isset($_POST['HSN']) ? $_POST['HSN'] : '';
     $openingstock = $_POST['openingstock'];
     $gst = $_POST['gst'];
-    $sizetype=$size_number.$size;
-    $discount=$_POST['default_discount_per_unit'];
-    $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0; 
-    $sizeJoined=$size_number.$size;
-    if (isset($_POST['branch'])) {
-      if ($_POST['branch'] == "all") {
-          // Retrieve all user IDs for the branches
-          $allUserIDs = [];
-          $branchQuery = "SELECT tu.userID FROM branch b
-                          JOIN tblusers tu ON tu.branch = b.id
-                          WHERE b.status = '1' AND b.userID = '$session'";
-          $result = mysqli_query($conn, $branchQuery);
-  
-          if ($result) {
-              while ($row = mysqli_fetch_assoc($result)) {
-                  $allUserIDs[] = $row['userID'];
-              }
-          } else {
-              echo "Error: " . mysqli_error($conn);
-              exit;
-          }
-      } else {
-          $userID = $_POST['branch'];
-      }
-  } else {
-      $userID = $session;
-  } 
-  
+    $sizetype = $size_number . $size;
+    $discount = $_POST['default_discount_per_unit'];
+    $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0;
+    $sizeJoined = $size_number . $size;
 
-   
-  if (isset($allUserIDs)) {
-      foreach ($allUserIDs as $userID) {
-          $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID' AND status='1'";
-          $result = mysqli_query($conn, $query);
-          
-          if (mysqli_num_rows($result) > 0) {
-              echo "<script>window.location.href='add-product?status=exists'</script>";
-              exit; 
-          }
-      }
-  
-      foreach ($allUserIDs as $userID) {
-        $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
-        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
+    // Check if the product with the same name and size exists
+    $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
+    $result = mysqli_query($conn, $checkQuery);
 
-          if (!mysqli_query($conn, $query)) {
-              echo "<script>window.location.href='add-product?status=error'</script>";
-              exit; 
-          }
-      }
-  
-      echo "<script>window.location.href='add-product?status=success'</script>";
-  } else {
-      $query = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND userID='$userID'  AND status='1'";
-      $result = mysqli_query($conn, $query);
-  
-      if (mysqli_num_rows($result) > 0) {
-          echo "<script>window.location.href='add-product?status=exists'</script>";
-      } else {
-        $query = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `userID`, `ispurchaseEnabled`) 
-          VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$userID', '$ispurchaseenabled')";
+    if (mysqli_num_rows($result) > 0) {
+        // Redirect if a duplicate product exists
+        echo "<script>window.location.href='add-product?status=exists'</script>";
+    } else {
+        // Insert the new product if no duplicate is found
+        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`) 
+                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled')";
 
-          if (mysqli_query($conn, $query)) {
-              echo "<script>window.location.href='add-product?status=success'</script>";
-          } else {
-              echo "<script>window.location.href='add-product?status=error'</script>";
-          }
-      }
-  }
-  
-
+        if (mysqli_query($conn, $insertQuery)) {
+            echo "<script>window.location.href='add-product?status=success'</script>";
+        } else {
+            echo "<script>window.location.href='add-product?status=error'</script>";
+        }
+    }
 }
 ?>
+
 
  <div id="main-content">
         <div class="container-fluid">
@@ -168,7 +121,7 @@ if(isset($_POST['submit'])) {
                         <div class="body">
                              <form id="basic-form" method="post" action="">
                                  <div class="row clearfix">
-                                 <?php if(isset($_SESSION['admin'])){?>
+                                 <!-- <?php if(isset($_SESSION['admin'])){?>
                                   <div class="col-lg-6 col-md-6 my-2">
                                   <label>Branch</label>
                                   <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
@@ -189,7 +142,7 @@ if(isset($_POST['submit'])) {
                                             ?>
                                         </select> 
                                         </div>
-                                        <?php } ?>
+                                        <?php } ?> -->
                                         <div class="col-lg-6 col-md-12 my-2">
                                             <label>Category</label>
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >

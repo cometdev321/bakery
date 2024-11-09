@@ -5,248 +5,33 @@ date_default_timezone_set('Asia/Kolkata');
 
 ?>
 <style>
-.required {
-    color: red;
+#suggestions {
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #fff;
 }
 
-.modal-body {
-    margin-top: -10px;
+#suggestions .suggestion-box {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+#suggestions .suggestion-box:hover,
+#suggestions .suggestion-box.suggestion-selected {
+    background-color: #e9e9e9;
+}
+
+/* Optional: Hide last border for a cleaner look */
+#suggestions .suggestion-box:last-child {
+    border-bottom: none;
 }
 </style>
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script>
-$(document).ready(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    if (status === 'success') {
-        Toastify({
-            text: "Party added successfully",
-            duration: 3000,
-            newWindow: true,
-            close: true,
-            gravity: "top", // top, bottom, left, right
-            position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-            backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-            margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-            stopOnFocus: true, // Prevent dismissing of toast on hover
-            onClick: function() {}, // Callback after click
-        }).showToast();
-    }
-    if (status === 'error') {
-        Toastify({
-            text: "Party could not be added",
-            duration: 3000,
-            newWindow: true,
-            close: true,
-            gravity: "top", // top, bottom, left, right
-            position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-            backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-            margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-            stopOnFocus: true, // Prevent dismissing of toast on hover
-            onClick: function() {}, // Callback after click
-        }).showToast();
-    }
-    if (status === 'alreadyexists') {
-        Toastify({
-            text: "Party details already exist!",
-            duration: 3000,
-            newWindow: true,
-            close: true,
-            gravity: "top", // top, bottom, left, right
-            position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-            backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-            margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-            stopOnFocus: true, // Prevent dismissing of toast on hover
-            onClick: function() {}, // Callback after click
-        }).showToast();
-    }
-});
-</script>
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Create New Party</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <label for="nameInput"><span class="required">*</span> Name:</label>
-                <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter name" required>
-            </div>
-            <div class="modal-body">
-                <label for="mobileInput"><span class="required">*</span> Mobile Number:</label>
-                <input type="number" class="form-control" id="mob1" name="mobile" placeholder="Enter mobile number"
-                    required onkeyup="update();">
-                <small id="mobile_errorMessage" class="text-danger" style="display: none;">Invalid Mobile Number</small>
-            </div>
-            <div class="modal-body">
-                <label for="gstInput">GST Number (Optional):</label>
-                <input type="text" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number"
-                    aria-describedby="gstHelpText">
-                <small id="gstHelpText" class="form-text text-muted">Example: GSTIN-12**34**56*78ZA</small>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-sm" id="saveButton" onclick="check_data();"
-                    name="add_party">Save</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="product_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Create New Product</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <label for="categorySelect"><span class="required">*</span> Category:</label>
-                <select class="form-control show-tick ms select2" data-placeholder="Select" name="category"
-                    id="category" required onchange="clear_product_error();">
-                    <option value="null">Select Category</option>
-                    <?php
-                    $getct=mysqli_query($conn,"select name from tblcategory where status='1'  and userID='$session'");
-                    while($fetchcat=mysqli_fetch_array($getct)){
-                    ?>
-                    <option value="<?php echo $fetchcat['name']; ?>"><?php echo $fetchcat['name']; ?></option>
-                    <?php } ?>
-                </select>
-                <small id="category_errorMessage" class="text-danger" style="display: none;">Select Category</small>
-            </div>
-            <div class="modal-body">
-                <label for="productNameInput"><span class="required">*</span> Product Name:</label>
-                <input type="text" class="form-control" id="productNameInput" name="product_name"
-                    placeholder="Enter product name" required onkeyup="clear_product_error();">
-                <small id="product_errorMessage" class="text-danger" style="display: none;">Type Product Name</small>
-            </div>
-            <div class="modal-body">
-                <label for="salePriceInput"><span class="required">*</span> Sale Price:</label>
-                <input type="number" class="form-control" id="salePriceInput" name="sale_price"
-                    placeholder="Enter sale price" required onkeyup="clear_product_error();">
-                <small id="sale_errorMessage" class="text-danger" style="display: none;">Type Sale Price</small>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" id="saveButton" onclick="check_product_data();"
-                    name="add_product">Save</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function update() {
-    mobile_errorMessage.style.display = 'none';
-    mob1.style.borderColor = "initial";
-}
-
-function check_data() {
-    let mobno = mob1.value;
-    let firstChar = mobno.charAt(0);
-
-    if (mobno.length !== 10) {
-        mobile_errorMessage.style.display = 'block';
-        mob1.style.borderColor = "red";
-        mob1.focus();
-        event.preventDefault();
-        return;
-    } else if (firstChar !== '6' && firstChar !== '7' && firstChar !== '8' && firstChar !== '9') {
-        mobile_errorMessage.style.display = 'block';
-        mob1.style.borderColor = "red";
-        mob1.focus();
-        event.preventDefault();
-        return;
-    } else {
-        let name = nameInput.value;
-        let gst = gstInput.value;
-
-        var formdata = {
-            name: name,
-            mobno: mobno,
-            gstno: gst
-        }
-
-        $.ajax({
-            url: '../get_ajax/create_party_ajax.php',
-            type: 'POST',
-            data: formdata,
-            success: function(response) {
-                if (response == 'alreadyexists') {
-                    Toastify({
-                        text: "Party already exists",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                    }).showToast();
-                }
-
-                if (response == 'error') {
-                    Toastify({
-                        text: "Party could not be added.Error Occured",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                    }).showToast();
-                }
-                if (response == 'success') {
-                    Toastify({
-                        text: "Party added successfully",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                    }).showToast();
-                }
-
-
-
-                $('#myModal').modal('hide');
-                getparties();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error: ' + error);
-            }
-        });
-    }
-
-}
-
-
-
-
-function handleSelectChange(selectElement, val) {
-    if (selectElement === 'add_new') {
-        $('#myModal').modal('show');
-    } else {
-        party_mobno.value = val;
-    }
-}
-</script>
 
 <div id="main-content">
     <div class="container-fluid">
@@ -268,35 +53,52 @@ function handleSelectChange(selectElement, val) {
             </div>
         </div>
     </div>
-    <style>
-    #suggestions .suggestion-box {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin: 5px 0;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: #f9f9f9;
-        outline: none;
-    }
-
-    #suggestions .suggestion-box:hover,
-    #suggestions .suggestion-box.suggestion-selected {
-        background-color: #e9e9e9;
-    }
-    </style>
-    <div class="card planned_task">
+    <form action="" method="post">
+        
+        <div class="card planned_task">
         <form action="" method="post">
             <div class="body">
-
                 <div class="row clearfix">
-                    <div class="col-lg-3 col-md-12 my-2">
-                        <label>Party</label>
-                        <input type="text" id="partySelect" class="form-control show-tick ms select2" name="party_name"
-                            placeholder="Enter party name">
-                        <input type="text" hidden id="party_id" name="party_id">
-                        <div id="suggestions"></div>
-                        <!-- <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
-                                                  <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
+                    <div class="col-lg-12 col-md-12 my-2">
+                        <label>Add Product</label>
+                        <select  name="barcodeproduct" class="form-control show-tick ms select2"
+                        onchange="addRow(this.options[this.selectedIndex].dataset.id,this.options[this.selectedIndex].dataset.name,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,
+                            this.options[this.selectedIndex].dataset.gst)"
+                            id="barcodeproduct">
+                            <option value="null">Select Item</option>
+                            <?php
+                                $get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst`,`barcode` FROM tblproducts  where status='1'");
+                                while($product = mysqli_fetch_array($get_p)){
+                                    ?>
+                                <option value="<?php echo $product['id']; ?>" 
+                                data-Existingqty="<?php echo $product['openingstock']; ?>"
+                                data-hsn="<?php echo $product['HSN']; ?>"
+                                data-id="<?php echo $product['id']; ?>"
+                                data-name="<?php echo $product['productname']; ?>"
+                                data-price="<?php echo $product['saleprice']; ?>"
+                                data-sizetype="<?php echo $product['size']; ?>"
+                                data-gst="<?php echo $product['gst']; ?>"
+                                >
+                                <?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)</option>
+                                <?php
+                                }
+                                ?> 
+                            </select>
+                        </div>
+                </div>
+            </div>
+    </div>
+    <div class="card planned_task">
+    <div class="body">
+        <div class="row clearfix">
+            <div class="col-lg-3 col-md-12 my-2">
+                <label>Party</label>
+                <input type="text" id="partySelect" class="form-control show-tick ms select2" name="party_name"
+                placeholder="Enter party name">
+                <input type="text" hidden id="party_id" name="party_id">
+                <div id="suggestions"></div>
+                <!-- <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
+                    <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
                                                 </select> -->
                         <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                     </div>
@@ -306,20 +108,18 @@ function handleSelectChange(selectElement, val) {
                             class="form-control">
                     </div>
                     <?php
-
-                                                // Retrieve the last invoice number from tblsalesinvoices
-                                                $query1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where `userID`='$session' and status='1' ORDER BY `id` DESC LIMIT 1 ";
-                                                $result1 = mysqli_query($conn, $query1);
+                        $query1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where `userID`='$session' and status='1' ORDER BY `id` DESC LIMIT 1 ";
+                        $result1 = mysqli_query($conn, $query1);
                                                 
-                                                if ($result1 && mysqli_num_rows($result1) > 0) {
-                                                    $row = mysqli_fetch_assoc($result1);
-                                                    $lastInvoiceNumber = $row['sales_invoice_number'];
-                                                    $nextInvoiceNumber = $lastInvoiceNumber + 1;
-                                                }else{
-                                                  $nextInvoiceNumber=1;
-                                                }
+                        if ($result1 && mysqli_num_rows($result1) > 0) {
+                            $row = mysqli_fetch_assoc($result1);
+                            $lastInvoiceNumber = $row['sales_invoice_number'];
+                            $nextInvoiceNumber = $lastInvoiceNumber + 1;
+                        }else{
+                            $nextInvoiceNumber=1;
+                        }
                                                 
-                                                ?>
+                    ?>
 
                     <!-- Update the "Sale Invoice Number" input field -->
                     <div class="col-lg-3 col-md-12 my-2">
@@ -334,28 +134,23 @@ function handleSelectChange(selectElement, val) {
                             value="<?php echo date("Y-m-d") ?>" class="form-control" required>
                     </div>
                 </div>
-
             </div>
     </div>
 
+ 
+
+
     <div class="card planned_task">
         <div class="body">
-
-            <!-- <button type="button" value="add_new" class="btn btn-secondary btn-sm m-b-15" onClick="$('#product_modal').modal('show');">Add New Product</button> -->
             <div class="body table-responsive">
                 <table class="table table-bordered  table-striped table-hover" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Sl.No</th>
                             <th>Item Name</th>
-                            <!-- <th>HSN</th> -->
-                            <!-- <th>Batch No</th>
-                                        <th>Expire Date</th>
-                                        <th>Manuf. Date</th> -->
                             <th>Size</th>
                             <th>Qty</th>
                             <th>Sales Price</th>
-                            <!-- <th>Discount</th> -->
                             <th>Tax</th>
                             <th>Amount</th>
                             <th>Action</th>
@@ -365,14 +160,9 @@ function handleSelectChange(selectElement, val) {
                         <tr>
                             <th>Sl.No</th>
                             <th>Item Name</th>
-                            <!-- <th>HSN</th> -->
-                            <!-- <th>Batch No</th>
-                                        <th>Expire Date</th>
-                                        <th>Manuf. Date</th> -->
                             <th>Size</th>
                             <th>Qty</th>
                             <th>Sales Price</th>
-                            <!-- <th>Discount</th> -->
                             <th>Tax</th>
                             <th>Amount</th>
                             <th>Action</th>
@@ -382,9 +172,6 @@ function handleSelectChange(selectElement, val) {
 
                     </tbody>
                 </table>
-                <button id="add-row-btn" class="btn btn-primary m-b-15 btn-sm" type="button" onclick="addRow();">
-                    Add Item&nbsp;<i class="fa fa-plus"></i>
-                </button>
             </div>
 
         </div>
@@ -438,13 +225,6 @@ function handleSelectChange(selectElement, val) {
                     </div>
 
                 </div>
-                <!-- <div class="col-lg-2 col-md-12 my-2">
-                                                <label>Amount remaining</label>
-                                                <input type="text" name="amt_remaining"  id="amt_remaining" 
-                                                readonly
-                                                class="form-control" >
-                                            </div> -->
-
                 <div class="col-lg-2 col-md-12 my-2">
                     <label>Total Balance</label>
                     <input type="text" name="balance_total" id="balance_total" readonly class="form-control">
@@ -524,6 +304,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 </script>
 
 <script>
+    // Apply select2 on page load
+$(document).ready(function() {
+    $('#barcodeproduct').select2({
+        placeholder: "Select Item",
+        allowClear: true // Allows clearing the selection
+    });
+});
+
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey && event.key === 'y') {
         event.preventDefault();
@@ -531,62 +319,61 @@ document.addEventListener('keydown', function(event) {
     }
     if (event.key === "-") {
         event.preventDefault();
-        // Optionally, you can provide feedback to the user
-        console.log("The '-' key is disabled in this project.");
     }
 });
 
 
-let rowCount = 0;
+let rowCount = 1;
 
 
 // Function to add a new row to the table
-function addRow() {
+function addRow(id,name,price, sizetype, gst) {
 
-    rowCount++;
-
+    
     const rowId = 'row-' + rowCount;
     const newRow = document.createElement('tr');
     newRow.id = rowId;
     newRow.className = 'gradeA';
-
+    
     const newRowContent =
-        '<td><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount +
-        '" name="slno[]" readonly></td>' +
-        '<td>' +
-        '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' +
-        rowCount +
-        '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' +
-        rowCount + ',this.options[this.selectedIndex].dataset.gst),clear_product_error(' + rowCount + ')">' +
-        '    <option value="null">Select Product</option>' +
-        '  </select>' +
-        '  <small id="product_errorMessage-' + rowCount +
-        '" class="text-danger" style="display: none;">Select Product</small>' +
-        '</td>' +
-        '<td><input type="text" style="width:100px" class="form-control" id="sizetype-' + rowCount +
+    '<td><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount +
+    '" name="slno[]" readonly></td>' +
+    '<td><input type="text" style="width:200px" class="form-control" id="itemname-' + rowCount +
+        '"  name="product[]" type="text" value="'+name+'('+sizetype+')" readonly>'+
+        '<input type="text" style="width:200px" class="form-control" id="itemname-' + rowCount +
+        '"  name="itemname[]" type="text" value="'+id+'" hidden></td>' +
+        '<td><input type="text" style="width:100px" class="form-control" value="'+sizetype+'" id="sizetype-' + rowCount +
         '"  name="size[]" type="text" readonly></td>' +
         '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount +
         '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
         '<td><input type="text" style="width:100px" class="form-control" id="price-' + rowCount +
         '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-        '<td><input type="text" style="width:100px" class="form-control" readonly id="tax-' + rowCount +
+        '<td><input type="text" style="width:100px" class="form-control" value="'+gst+'" readonly id="tax-' + rowCount +
         '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
         '<td><input type="text" style="width:100px" class="form-control" id="amount-' + rowCount +
         '" name="amount[]" value="0" readonly></td>' +
         '<td><button type="button" onclick="deleteRow(' + rowCount +
         ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
-
-
+        
+        
     newRow.innerHTML = newRowContent;
     document.getElementById('table-body').appendChild(newRow);
-
+    
     // Initialize Select2 for the new select element
-    const selectElement = newRow.querySelector('select[name="itemname[]"]');
-    $(selectElement).select2();
+   // const selectElement = newRow.querySelector('select[name="itemname[]"]');
+    
+    //$(selectElement).select2();
     //addRow();
-    document.getElementById('add-row-btn').disabled = true;
-    getproducts(rowCount);
+   // document.getElementById('add-row-btn').disabled = true;
+    //getproducts(rowCount);
+    const selectElement = document.getElementById("barcodeproduct");
+
+    selectElement.selectedIndex = 0; // Clears the selection by setting it to the first option
+    selectElement.focus(); 
+     $('#barcodeproduct').select2('open'); 
+    update_price(price,sizetype,rowCount,gst)
     calculate_total_discount();
+    rowCount++;
 }
 
 function update_price(val, sizetype, row, gst) {
@@ -594,12 +381,13 @@ function update_price(val, sizetype, row, gst) {
         if (gst < 0) {
             gst = 0;
         }
+        console.log(val,sizetype,row,gst)
         // document.getElementById(`hsn-${row}`).value = hsn;
         document.getElementById(`price-${row}`).value = val;
         document.getElementById(`sizetype-${row}`).value = sizetype;
         document.getElementById(`tax-${row}`).value = gst;
         update_amount(rowCount);
-        document.getElementById('add-row-btn').disabled = false;
+        // document.getElementById('add-row-btn').disabled = false;
     } else {
         document.getElementById(`price-${row}`).value = '';
         document.getElementById('add-row-btn').disabled = true;
@@ -805,13 +593,6 @@ function update_paid() {
 }
 
 
-// const inputField = document.getElementById("amount_received");
-
-
-// inputField.addEventListener("change", function() {
-// // Call your function with the new value
-// update_remaining();
-// });
 
 
 function update_remaining() {
@@ -1003,7 +784,7 @@ function check_product_data() {
 
 document.addEventListener('DOMContentLoaded', function() {
     getparties();
-    addRow();
+   // addRow();
 
 });
 

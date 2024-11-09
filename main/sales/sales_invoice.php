@@ -60,6 +60,7 @@ $(document).ready(function() {
                 </div>            
                 <div class="col-lg-7 col-md-4 col-sm-12">
                     <div class="text-right">
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_sales_invoic'"><i class="fa fa-plus"></i> <span>&nbsp;New Sales Invoice</span></button>
                         <button type="button" class="btn btn-primary" onclick="window.location.href='create_sales_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Sales Invoice</span></button>
                     </div>
                 </div>

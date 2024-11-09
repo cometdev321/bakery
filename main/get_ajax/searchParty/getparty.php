@@ -23,7 +23,7 @@ if (isset($_POST['query'])) {
     $new_party = $conn->real_escape_string($_POST['new_party']);
 
     // Check if the party already exists
-    $check_sql = "SELECT * FROM tblparty WHERE name = '$new_party'";
+    $check_sql = "SELECT * FROM tblparty WHERE name = '$new_party' and userID='$session'";
     $result = $conn->query($check_sql);
 
     if ($result->num_rows > 0) {

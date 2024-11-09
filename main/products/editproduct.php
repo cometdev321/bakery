@@ -40,11 +40,18 @@ if(isset($_POST['submit'])){
                 barcode='$barcode'
               WHERE id = '$id'";
 
+$checkQuery = "SELECT * FROM tblproducts WHERE (productname = '$productname' AND size = '$sizeJoined' AND status = '1') OR (barcode = '$barcode' AND status = '1')";
+  $result = mysqli_query($conn, $checkQuery);
+  if (mysqli_num_rows($result) > 0) {
+        echo "<script>window.location.href='manage-products?status=exists'</script>";
+    } else {
+
     if(mysqli_query($conn, $query)){
         echo "<script>window.location.href='manage-products?status=success'</script>";
     } else {
         echo "<script>window.location.href='manage-products?status=error'</script>";
     }
+}
 }
 ?>
 <div id="main-content">

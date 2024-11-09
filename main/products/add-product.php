@@ -42,7 +42,7 @@ $(document).ready(function() {
   }
    if (status === 'exists') {
     Toastify({
-      text: "Product with the same name and size already exists!!",
+      text: "Product already exists!!",
       duration: 3000,
       newWindow: true,
       close: true,

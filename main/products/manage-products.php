@@ -28,6 +28,23 @@ $(document).ready(function() {
       },
     }).showToast();
   }
+  if (status === 'exists') {
+    Toastify({
+      text: "Product exists",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+      margintop:"202px",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
    if (status === 'error') {
     Toastify({
       text: "Product update failed",

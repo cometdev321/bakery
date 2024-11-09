@@ -73,11 +73,12 @@ if (isset($_POST['submit'])) {
     $gst = $_POST['gst'];
     $sizetype = $size_number . $size;
     $discount = $_POST['default_discount_per_unit'];
+    $barcode = $_POST['barcode'];
     $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0;
     $sizeJoined = $size_number . $size;
 
     // Check if the product with the same name and size exists
-    $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
+    $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND barcode = '$barcode' AND status = '1'";
     $result = mysqli_query($conn, $checkQuery);
 
     if (mysqli_num_rows($result) > 0) {
@@ -85,14 +86,14 @@ if (isset($_POST['submit'])) {
         echo "<script>window.location.href='add-product?status=exists'</script>";
     } else {
         // Insert the new product if no duplicate is found
-        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`) 
-                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled')";
+        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`,`barcode`) 
+                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled','$barcode')";
 
         if (mysqli_query($conn, $insertQuery)) {
             echo "<script>window.location.href='add-product?status=success'</script>";
         } else {
             echo "<script>window.location.href='add-product?status=error'</script>";
-        }
+        } 
     }
 }
 ?>
@@ -231,6 +232,10 @@ if (isset($_POST['submit'])) {
                                                     <span><i></i>Non-Gst</span>
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Barcode</label>
+                                            <input type="text" required name="barcode" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12 my-2">
                                             <label>Is Branch Purchase Enabled</label>

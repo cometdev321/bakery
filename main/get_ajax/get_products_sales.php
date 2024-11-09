@@ -6,17 +6,17 @@
 ?>
 <option value="null">Select Item</option>
 <?php
-$get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst` FROM tblproducts  where status='1'");
+$get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst`,`barcode` FROM tblproducts  where status='1'");
 while($product = mysqli_fetch_array($get_p)){
 ?>
-<option value="<?php echo $product['id']; ?>"
+<option value="<?php echo $product['id']; ?>" 
         data-Existingqty="<?php echo $product['openingstock']; ?>"
         data-hsn="<?php echo $product['HSN']; ?>"
         data-price="<?php echo $product['saleprice']; ?>"
         data-sizetype="<?php echo $product['size']; ?>"
         data-gst="<?php echo $product['gst']; ?>"
         >
-<?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['HSN']; ?>)</option>
+<?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)</option>
 <?php
 }
 ?> 

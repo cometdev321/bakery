@@ -356,9 +356,13 @@ if(isset($_SESSION['user'])){
     function horizontalTotal(){
         var table = document.getElementById("Purchase-list");
         var tableRowcount = table.rows.length;
+        const firstRow = table.rows[tableRowcount-1];
+        const rowId = firstRow.getAttribute("id");
+        const rowNumber = rowId.replace(/\D/g, ""); 
+
         var total=0;
         var gst=0;
-        for(var i=1;i<=10;i++){
+        for(var i=1;i<=rowNumber;i++){
             if (!document.getElementById('exempted-' + i)) {
                 continue; 
             }
@@ -391,6 +395,9 @@ if(isset($_SESSION['user'])){
     function verticalTotal(){
         var table = document.getElementById("Purchase-list");
         var tableRowcount = table.rows.length;
+        const firstRow = table.rows[tableRowcount-1];
+        const rowId = firstRow.getAttribute("id");
+        const rowNumber = rowId.replace(/\D/g, "");
         var exemptedTotal=0;
 
         var eighteenTotal=0;
@@ -411,8 +418,7 @@ if(isset($_SESSION['user'])){
 
         var total=0;
         var gst=0;
-console.log(tableRowcount)
-        for(var i=1;i<=10;i++){
+        for(var i=1;i<=rowNumber;i++){
             if (!document.getElementById('exempted-' + i)) {
                 continue; 
             }

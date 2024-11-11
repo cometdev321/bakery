@@ -149,16 +149,16 @@ if (isset($_POST['submit'])) {
                                         <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" >
                                         <?php
                                           
-                                          if(isset($_SESSION['subSession'])){
-                                            $userID=$_SESSION['subSession'];
-                                            if($userID=='ALL' || $userID=='all'){
-                                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1'  GROUP BY name");
-                                            }else{
-                                                $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$userID'  GROUP BY name");
-                                            }
-                                        }else{
-                                            $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$session'  GROUP BY name");
-                                          }
+                                        //   if(isset($_SESSION['subSession'])){
+                                        //     $userID=$_SESSION['subSession'];
+                                        //     if($userID=='ALL' || $userID=='all'){
+                                        //         $getct=mysqli_query($conn,"select id,name from tblcategory where status='1'  GROUP BY name");
+                                        //     }else{
+                                        //         $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' and userID='$userID'  GROUP BY name");
+                                        //     }
+                                        // }else{
+                                            $getct=mysqli_query($conn,"select id,name from tblcategory where status='1' GROUP BY name");
+                                          
                                         while($fetchcat=mysqli_fetch_array($getct)){
                                         ?>
                                         <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>

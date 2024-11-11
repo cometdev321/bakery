@@ -390,10 +390,10 @@ if (isset($_POST['ProductSubmit'])) {
                             <a href="#" data-toggle="modal" data-target="#userDetailsModal" title="Add New Product" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-briefcase"></i></a>
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/sales/create_sales_invoice"  title="Sales Invoice"  class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a>
+                            <!-- <a href="<?php echo $base ?>/sales/create_sales_invoice"  title="Sales Invoice"  class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a> -->
                         </li>
                         <li>
-                            <a href="<?php echo $base ?>/purchase/create_purchase_invoice   "  title="Purchase Invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a>
+                            <!-- <a href="<?php echo $base ?>/purchase/create_purchase_invoice   "  title="Purchase Invoice" class="icon-menu d-none d-sm-block"><i class="icon-bag"></i></a> -->
                             <!-- <span class="notification-dot"></span> -->
                         </li>
                         

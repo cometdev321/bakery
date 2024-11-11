@@ -354,12 +354,14 @@ if(isset($_SESSION['user'])){
     }
     
     function horizontalTotal(){
-        const table = document.getElementById("Purchase-list");
-        const tableRowcount = table.rows.length;
+        var table = document.getElementById("Purchase-list");
+        var tableRowcount = table.rows.length;
         var total=0;
         var gst=0;
-        for(var i=1;i<=tableRowcount;i++){
-
+        for(var i=1;i<=10;i++){
+            if (!document.getElementById('exempted-' + i)) {
+                continue; 
+            }
             total += parseFloat(document.getElementById('exempted-' + i)?.value) || 0;
 
             total += parseFloat(document.getElementById('eighteen_amount-' + i)?.value) || 0;
@@ -387,8 +389,8 @@ if(isset($_SESSION['user'])){
     }
     
     function verticalTotal(){
-        const table = document.getElementById("Purchase-list");
-        const tableRowcount = table.rows.length;
+        var table = document.getElementById("Purchase-list");
+        var tableRowcount = table.rows.length;
         var exemptedTotal=0;
 
         var eighteenTotal=0;
@@ -409,9 +411,12 @@ if(isset($_SESSION['user'])){
 
         var total=0;
         var gst=0;
-
-        for(var i=1;i<=tableRowcount;i++){
-
+console.log(tableRowcount)
+        for(var i=1;i<=10;i++){
+            if (!document.getElementById('exempted-' + i)) {
+                continue; 
+            }
+            console.log(i)
             exemptedTotal += parseFloat(document.getElementById('exempted-' + i)?.value) || 0;
 
             eighteenTotal += parseFloat(document.getElementById('eighteen_amount-' + i)?.value) || 0;

@@ -9,6 +9,25 @@ $month = isset($_GET['month']) ? $_GET['month'] : null;
 if(isset($_SESSION['user'])){
     echo "<script>window.location.href='$base/purchase/enabledpurchase/purchase_invoice'</script>";
 }
+
+$getPId="SELECT tp.id as purchase_id
+FROM tblheadpurchases tp
+WHERE tp.year = '$year' AND tp.month = '$month'
+and tp.status='1' ";
+$resultP = mysqli_query($conn, $getPId);
+$r1 = mysqli_fetch_array($resultP);
+
+
+$query = "SELECT tp.id as purchase_id, td.*
+FROM tblheadpurchases tp
+JOIN tblhead_purchase_details td ON tp.id = td.purchaseID
+WHERE tp.year = '$year' AND tp.month = '$month'
+and tp.status='1' and td.status='1'";
+$result = mysqli_query($conn, $query);
+$r = mysqli_fetch_array($result);
+
+
+
 ?>
 <style>
     #exportTable input[type="text"] {
@@ -23,6 +42,11 @@ if(isset($_SESSION['user'])){
     }
 
 </style>
+<!-- Toastify CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<!-- Toastify JS -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 <div id="main-content">
         <div class="container-fluid">
@@ -48,8 +72,9 @@ if(isset($_SESSION['user'])){
     <div class="header">
     <h3>Nayan Food Products</h3>
     </div>
-    <!-- <button type="button" class="btn btn-secondary mt-2 btn-sm" onclick="toggleCheckboxes()">Check/Uncheck All</button> -->
+    <input type="text" hidden id="current_purchase_id" value="<?php echo $r1['purchase_id']; ?>" />
 
+    <!-- <button type="button" class="btn btn-secondary mt-2 btn-sm" onclick="toggleCheckboxes()">Check/Uncheck All</button> -->
         <div class="body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
@@ -83,18 +108,11 @@ if(isset($_SESSION['user'])){
                         <?php
                         $slno = 1;
                     if ($year && $month) {
-    // Database connection - replace $connection with your actual DB connection variable
-                                    $query = "SELECT tp.id, td.*
-                                            FROM tblheadpurchases tp
-                                            JOIN tblhead_purchase_details td ON tp.id = td.purchaseID
-                                            WHERE tp.year = '$year' AND tp.month = '$month'
-                                            and tp.status='1' and td.status='1'";
-                                    $result = mysqli_query($conn, $query);
-
                                     if (mysqli_num_rows($result) > 0) {
+                                        mysqli_data_seek($result, 0); 
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo "<tr id='row-{$slno}'>";
-                                            echo '<td><input type="text" class="form-control" placeholder="Type here" id="slno-' . $slno . '" value="' . $slno . '" name="slno[]"><input type="text" hidden  value="old" name="type[]"></td>';
+                                            echo '<td><input type="text" hidden name="pvalue[]"  id="purchaseID-' . $slno . '" value="' . $row['id']  . '"><input type="text" class="form-control" placeholder="Type here" id="slno-' . $slno . '" value="' . $slno . '" name="slno[]"></td>';
                                             echo "<td><div class='checkbox-container'><input type='checkbox' name='include[]' " . ($row['purchase_date'] ? "checked" : "") . " id='include-{$slno}'></div></td>";
                                             echo '<td><input type="date" class="form-control" placeholder="Type here" id="date-' . $slno . '" value="' . $row['purchase_date'] . '" name="date[]"></td>';
                                             echo '<td><input type="text" class="form-control" placeholder="Type here" id="billno-' . $slno . '" value="' . $row['billno'] . '" name="billno[]"></td>';
@@ -113,16 +131,14 @@ if(isset($_SESSION['user'])){
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" id="twenty_sgst-' . $slno . '" value="' . $row['twenty_sgst'] . '" name="twenty_sgst[]"></td>';
                                             echo '<td><input type="text" class="form-control" placeholder="Type here" id="ro-' . $slno . '" value="' . $row['ro'] . '" name="ro[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" id="total-' . $slno . '" value="' . $row['total'] . '" name="total[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="gst-' . $slno . '" value="' . $row['gst'] . '" name="gst[]"></td>';
+                                            echo '<td><input hidden type="text" class="form-control" placeholder="Type here" id="type-' . $slno . '" value="update" name="type[]"><input type="number" class="form-control" placeholder="Type here" id="gst-' . $slno . '" value="' . $row['gst'] . '" name="gst[]"></td>';
                                             echo "<td><button type='button' onclick='deleteRow({$slno})' class='btn btn-danger'><i class='icon-trash'></i></button></td>";
                                             echo "</tr>";
                                             $slno++;
                                         }
                                     } else {
-                                        echo "<tr><td colspan='21'>No records found for the specified year and month.</td></tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='21'>Year and month parameters are required.</td></tr>";
                                 }
 
                                 
@@ -242,7 +258,7 @@ if(isset($_SESSION['user'])){
                                             </div>
                                             
                                             <div class="col-lg-3 col-md-12 my-4">
-                                                 <button type="button" class="btn btn-success mx-2" onclick="create_purchase_invoice()">
+                                                 <button type="button" class="btn btn-success mx-2" id="saveRecords">
                                                     <i class="fa fa-check-circle"></i> <span>Save </span>
                                                 </button>
                                                 <button type="button" class="btn btn-primary" onclick="location.reload()">
@@ -266,86 +282,90 @@ if(isset($_SESSION['user'])){
     var existingslno=document.getElementById('existingslno').value;
     let rowCount = existingslno-1; 
 
-    function addrow(){
+
+    function addrow() {
         // Increment row count for each new row
         rowCount++;
 
-        // Create the new row content with dynamic IDs and names
-        const newRowContent =
-            '<td><input type="text" class="form-control" placeholder="Type here" id="slno-' + rowCount + '" value="' + rowCount + '" readonly name="purchaseID[]"><input type="text"  value="new" hidden name="type[]"></td>' +
-            '<td ><div class="checkbox-container"><input type="checkbox" checked  id="include-' + rowCount + '" name="include[]"></div></td>' +
-            '<td><input type="date" class="form-control" placeholder="Type here" id="date-' + rowCount + '" value="" name="date[]"></td>' +
-            '<td><input type="text" class="form-control" placeholder="Type here" id="billno-' + rowCount + '" value="" name="billno[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here"  onkeyup="callmajor()" id="exempted-' + rowCount + '" value="" name="exempted[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculateighteen(' + rowCount + ')" id="eighteen_amount-' + rowCount + '" value="" name="eighteen_amount[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="eighteen_cgst-' + rowCount + '" value="" name="eighteen_cgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="eighteen_sgst-' + rowCount + '" value="" name="eighteen_sgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculatetwelve(' + rowCount + ')" id="twelve_amount-' + rowCount + '" value="" name="twelve_amount[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="twelve_cgst-' + rowCount + '" value="" name="twelve_cgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="twelve_sgst-' + rowCount + '" value="" name="twelve_sgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculatefive(' + rowCount + ')"  id="five_amount-' + rowCount + '" value="" name="five_amount[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="five_cgst-' + rowCount + '" value="" name="five_cgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="five_sgst-' + rowCount + '" value="" name="five_sgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here"  onkeyup="calculatetwenty(' + rowCount + ')" id="twenty_amount-' + rowCount + '" value="" name="twenty_amount[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="twenty_cgst-' + rowCount + '" value="" name="twenty_cgst[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="twenty_sgst-' + rowCount + '" value="" name="twenty_sgst[]"></td>' +
-            '<td><input type="text" class="form-control" placeholder="Type here" id="ro-' + rowCount + '" value="" name="ro[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="total-' + rowCount + '" value="" name="total[]"></td>' +
-            '<td><input type="number" class="form-control" placeholder="Type here" id="gst-' + rowCount + '" value="" name="gst[]"></td>' +
-            '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
+        // Constructing new row content
+        const newRowContent = `
+            <td>
+                <input type="text" class="form-control" placeholder="Type here" id="slno-${rowCount}" value="${rowCount}" readonly name="slno[]">
+                <input type="text" value="insert" id="type-${rowCount}" hidden name="type[]">
+            </td>
+            <td>
+                <div class="checkbox-container">
+                    <input type="checkbox" checked id="include-${rowCount}" name="include[]">
+                </div>
+            </td>
+            <td><input type="date" class="form-control" id="date-${rowCount}" name="date[]"></td>
+            <td><input type="text" class="form-control" id="billno-${rowCount}" name="billno[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()" id="exempted-${rowCount}" name="exempted[]"></td>
+            <td><input type="number" class="form-control" onkeyup="calculateighteen(${rowCount})" id="eighteen_amount-${rowCount}" name="eighteen_amount[]"></td>
+            <td><input type="number" class="form-control" id="eighteen_cgst-${rowCount}" name="eighteen_cgst[]"></td>
+            <td><input type="number" class="form-control" id="eighteen_sgst-${rowCount}" name="eighteen_sgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="calculatetwelve(${rowCount})" id="twelve_amount-${rowCount}" name="twelve_amount[]"></td>
+            <td><input type="number" class="form-control" id="twelve_cgst-${rowCount}" name="twelve_cgst[]"></td>
+            <td><input type="number" class="form-control" id="twelve_sgst-${rowCount}" name="twelve_sgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="calculatefive(${rowCount})" id="five_amount-${rowCount}" name="five_amount[]"></td>
+            <td><input type="number" class="form-control" id="five_cgst-${rowCount}" name="five_cgst[]"></td>
+            <td><input type="number" class="form-control" id="five_sgst-${rowCount}" name="five_sgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="calculatetwenty(${rowCount})" id="twenty_amount-${rowCount}" name="twenty_amount[]"></td>
+            <td><input type="number" class="form-control" id="twenty_cgst-${rowCount}" name="twenty_cgst[]"></td>
+            <td><input type="number" class="form-control" id="twenty_sgst-${rowCount}" name="twenty_sgst[]"></td>
+            <td><input type="text" class="form-control" id="ro-${rowCount}" name="ro[]"></td>
+            <td><input type="number" class="form-control" id="total-${rowCount}" name="total[]"></td>
+            <td><input type="number" class="form-control" id="gst-${rowCount}" name="gst[]"></td>
+            <td>
+                <button type="button" onclick="deleteRow(${rowCount})" class="btn btn-danger">
+                    <i class="icon-trash"></i>
+                </button>
+            </td>
+        `;
+
         // Append the new row to the table body
-        const tableBody = document.getElementById('Purchase-list');
-        const newRow = document.createElement('tr');
-        newRow.id='row-' + rowCount;
+        const tableBody = document.getElementById("Purchase-list");
+        const newRow = document.createElement("tr");
+        newRow.id = `row-${rowCount}`;
         newRow.innerHTML = newRowContent;
         tableBody.appendChild(newRow);
-
-        
-    };
-
-    function calculatefive(i){
-        var amount=parseFloat(document.getElementById('five_amount-' + i).value);
-        const percentage=0.05;
-        let result = Math.round(((amount * percentage) / 2 )* 100) /100; 
-        document.getElementById('five_cgst-' + i).value=result;
-        document.getElementById('five_sgst-' + i).value=result;
-        callmajor();
-    }
-
-    function calculatetwelve(i){
-        var amount=parseFloat(document.getElementById('twelve_amount-' + i).value);
-        const percentage=0.12;
-        let result = Math.round(((amount * percentage) / 2 )* 100) / 100; 
-        document.getElementById('twelve_cgst-' + i).value=result;
-        document.getElementById('twelve_sgst-' + i).value=result;
-        callmajor();
-    }
-
-    function calculateighteen(i){
-        var amount=parseFloat(document.getElementById('eighteen_amount-' + i).value);
-        const percentage=0.18;
-        let result = Math.round((amount * percentage) / 2 * 100) / 100;
-        document.getElementById('eighteen_sgst-' + i).value=result;
-        callmajor();
-    }
-
-    function calculatetwenty(i){
-        var amount = parseFloat(document.getElementById('twenty_amount-' + i).value);
-        const percentage = 0.28; 
-        let result = Math.round(((amount * percentage) / 2) * 100) / 100; 
-        document.getElementById('twenty_cgst-' + i).value = result;
-        document.getElementById('twenty_sgst-' + i).value = result;
-        callmajor();
     }
 
     
+   function deleteRow(row) {
     
-    function deleteRow(row) {
-        const rowId = `row-${row}`;
-        const rowElement = document.getElementById(rowId);
+    const purchaseId = `purchaseID-${row}`;
+    const purchaseIdElement = document.getElementById(purchaseId);
+    if (purchaseIdElement) {
+        console.error("Element with ID purchaseID-" + row + " not found.");
+        const purchaseIdValue = purchaseIdElement.value;
+
+        $.ajax({
+            url: '../../get_ajax/headpurchases/remove_item.php', 
+            type: 'POST',
+            data: {
+                purchaseID: purchaseIdValue,
+                status: 0
+            },
+            success: function(response) {
+                
+            },
+            error: function() {
+                alert("Error in AJAX request.");
+            }
+        });
+    }
+  
+    const rowId = `row-${row}`;
+    const rowElement = document.getElementById(rowId);
+
+    if (rowElement) {
         rowElement.remove();
-        callmajor();
     }
+    callmajor();
+}
+
+    
 
     function toggleCheckboxes() {
         const checkboxes = document.querySelectorAll('#Purchase-list input[type="checkbox"]');
@@ -353,160 +373,90 @@ if(isset($_SESSION['user'])){
         checkboxes.forEach(checkbox => checkbox.checked = !allChecked);
     }
     
-    function horizontalTotal(){
-        var table = document.getElementById("Purchase-list");
-        var tableRowcount = table.rows.length;
-        const firstRow = table.rows[tableRowcount-1];
-        const rowId = firstRow.getAttribute("id");
-        const rowNumber = rowId.replace(/\D/g, ""); 
-
-        var total=0;
-        var gst=0;
-        for(var i=1;i<=rowNumber;i++){
-            if (!document.getElementById('exempted-' + i)) {
-                continue; 
-            }
-            total += parseFloat(document.getElementById('exempted-' + i)?.value) || 0;
-
-            total += parseFloat(document.getElementById('eighteen_amount-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('eighteen_cgst-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('eighteen_sgst-' + i)?.value) || 0;
-
-            total += parseFloat(document.getElementById('twelve_amount-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('twelve_cgst-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('twelve_sgst-' + i)?.value) || 0;
-
-            total += parseFloat(document.getElementById('five_amount-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('five_cgst-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('five_sgst-' + i)?.value) || 0;
-
-            total += parseFloat(document.getElementById('twenty_amount-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('twenty_cgst-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('twenty_sgst-' + i)?.value) || 0;
-
-            document.getElementById('total-' + i).value=(total+gst);
-            document.getElementById('gst-' + i).value=gst/2;
-            total=0;
-            gst=0;
-        }
-
-    }
-    
-    function verticalTotal(){
-        var table = document.getElementById("Purchase-list");
-        var tableRowcount = table.rows.length;
-        const firstRow = table.rows[tableRowcount-1];
-        const rowId = firstRow.getAttribute("id");
-        const rowNumber = rowId.replace(/\D/g, "");
-        var exemptedTotal=0;
-
-        var eighteenTotal=0;
-        var eighteenCgst=0;
-        var eighteenSgst=0;
-
-        var twelveTotal=0;
-        var twelveCgst=0;
-        var twelveSgst=0;
-
-        var fiveTotal=0;
-        var fiveCgst=0;
-        var fiveSgst=0;
-
-        var twentyTotal=0;
-        var twentyCgst=0;
-        var twentySgst=0;
-
-        var total=0;
-        var gst=0;
-        for(var i=1;i<=rowNumber;i++){
-            if (!document.getElementById('exempted-' + i)) {
-                continue; 
-            }
-            console.log(i)
-            exemptedTotal += parseFloat(document.getElementById('exempted-' + i)?.value) || 0;
-
-            eighteenTotal += parseFloat(document.getElementById('eighteen_amount-' + i)?.value) || 0;
-            eighteenCgst += parseFloat(document.getElementById('eighteen_cgst-' + i)?.value) || 0;
-            eighteenSgst += parseFloat(document.getElementById('eighteen_sgst-' + i)?.value) || 0;
-
-            twelveTotal += parseFloat(document.getElementById('twelve_amount-' + i)?.value) || 0;
-            twelveCgst += parseFloat(document.getElementById('twelve_cgst-' + i)?.value) || 0;
-            twelveSgst += parseFloat(document.getElementById('twelve_sgst-' + i)?.value) || 0;
-            
-            fiveTotal += parseFloat(document.getElementById('five_amount-' + i)?.value) || 0;
-            fiveCgst += parseFloat(document.getElementById('five_cgst-' + i)?.value) || 0;
-            fiveSgst += parseFloat(document.getElementById('five_sgst-' + i)?.value) || 0;
-            
-            twentyTotal += parseFloat(document.getElementById('twenty_amount-' + i)?.value) || 0;
-            twentyCgst += parseFloat(document.getElementById('twenty_cgst-' + i)?.value) || 0;
-            twentySgst += parseFloat(document.getElementById('twenty_sgst-' + i)?.value) || 0;
-            
-            total += parseFloat(document.getElementById('total-' + i)?.value) || 0;
-            gst += parseFloat(document.getElementById('gst-' + i)?.value) || 0;
-        }
-
-        total_exempted.value=exemptedTotal;
-
-        total_eighteen_amount.value=eighteenTotal;
-        total_eighteen_cgst.value=eighteenCgst;
-        total_eighteen_sgst.value=eighteenSgst;
-
-        total_twelve_amount.value=twelveTotal;
-        total_twelve_cgst.value=twelveCgst;
-        total_twelve_sgst.value=twelveSgst;
-        
-        total_five_amount.value=fiveTotal;
-        total_five_cgst.value=fiveCgst;
-        total_five_sgst.value=fiveSgst;
-        
-        total_twenty_amount.value=twentyTotal;
-        total_twenty_cgst.value=twentyCgst;
-        total_twenty_sgst.value=twentySgst;
-
-        total_total.value=total;
-        total_gst.value=gst;
-    }
-
-    function calculateTotal(){
-        var totalPurchase = 0;
-        var totalPurchaseInput = 0;
-        var finalTotal = 0;
-
-        totalPurchase += parseFloat(total_exempted.value) || 0;
-        totalPurchase += parseFloat(total_eighteen_amount.value) || 0;
-        totalPurchaseInput += parseFloat(total_eighteen_cgst.value) || 0;
-        totalPurchaseInput += parseFloat(total_eighteen_sgst.value) || 0;
-
-        totalPurchase += parseFloat(total_twelve_amount.value) || 0;
-        totalPurchaseInput += parseFloat(total_twelve_cgst.value) || 0;
-        totalPurchaseInput += parseFloat(total_twelve_sgst.value) || 0;
-
-        totalPurchase += parseFloat(total_five_amount.value) || 0;
-        totalPurchaseInput += parseFloat(total_five_cgst.value) || 0;
-        totalPurchaseInput += parseFloat(total_five_sgst.value) || 0;
-
-        totalPurchase += parseFloat(total_twenty_amount.value) || 0;
-        totalPurchaseInput += parseFloat(total_twenty_cgst.value) || 0;
-        totalPurchaseInput += parseFloat(total_twenty_sgst.value) || 0;
-
-        purchases.value = totalPurchase;
-        totalpurchaseinput.value = totalPurchaseInput;
-        finaltotal.value = (totalPurchase + totalPurchaseInput);
-    
-    }
-
-    function callmajor(){
-        horizontalTotal();
-        verticalTotal();
-        calculateTotal();
-    }
+ 
     $(document).ready(()=>{
         addrow();
+        console.log("called")
         callmajor();
     })
+
+  document.getElementById('saveRecords').addEventListener('click', function () {
+    let rows = [];
+   
+    let pID=document.getElementById('current_purchase_id').value;
+    document.querySelectorAll('#Purchase-list tr').forEach((row) => {
+        let rowData = {
+            purchaseID: pID,
+            date: row.querySelector('[id^="date-"]') ? row.querySelector('[id^="date-"]').value : '',
+            billno: row.querySelector('[id^="billno-"]') ? row.querySelector('[id^="billno-"]').value : '',
+            exempted: row.querySelector('[id^="exempted-"]') ? row.querySelector('[id^="exempted-"]').value : '',
+            eighteen_amount: row.querySelector('[id^="eighteen_amount-"]') ? row.querySelector('[id^="eighteen_amount-"]').value : '',
+            eighteen_cgst: row.querySelector('[id^="eighteen_cgst-"]') ? row.querySelector('[id^="eighteen_cgst-"]').value : '',
+            eighteen_sgst: row.querySelector('[id^="eighteen_sgst-"]') ? row.querySelector('[id^="eighteen_sgst-"]').value : '',
+            twelve_amount: row.querySelector('[id^="twelve_amount-"]') ? row.querySelector('[id^="twelve_amount-"]').value : '',
+            twelve_cgst: row.querySelector('[id^="twelve_cgst-"]') ? row.querySelector('[id^="twelve_cgst-"]').value : '',
+            twelve_sgst: row.querySelector('[id^="twelve_sgst-"]') ? row.querySelector('[id^="twelve_sgst-"]').value : '',
+            five_amount: row.querySelector('[id^="five_amount-"]') ? row.querySelector('[id^="five_amount-"]').value : '',
+            five_cgst: row.querySelector('[id^="five_cgst-"]') ? row.querySelector('[id^="five_cgst-"]').value : '',
+            five_sgst: row.querySelector('[id^="five_sgst-"]') ? row.querySelector('[id^="five_sgst-"]').value : '',
+            twenty_amount: row.querySelector('[id^="twenty_amount-"]') ? row.querySelector('[id^="twenty_amount-"]').value : '',
+            twenty_cgst: row.querySelector('[id^="twenty_cgst-"]') ? row.querySelector('[id^="twenty_cgst-"]').value : '',
+            twenty_sgst: row.querySelector('[id^="twenty_sgst-"]') ? row.querySelector('[id^="twenty_sgst-"]').value : '',
+            ro: row.querySelector('[id^="ro-"]') ? row.querySelector('[id^="ro-"]').value : '',
+            total: row.querySelector('[id^="total-"]') ? row.querySelector('[id^="total-"]').value : '',
+            gst: row.querySelector('[id^="gst-"]') ? row.querySelector('[id^="gst-"]').value : '',
+            type: row.querySelector('[id^="type-"]') ? row.querySelector('[id^="type-"]').value : '', // 'insert' or 'update'
+        };
+
+        // Check if date is not empty; if empty, skip the row
+        if (rowData.date) {
+            rows.push(rowData);
+        }
+    });
+
+    // Log rows data to make sure it's populated
+
+    // Send the data via AJAX
+    $.ajax({
+    url: "../../get_ajax/headpurchases/save_purchase.php",  // The PHP script to handle the data
+    type: 'POST',
+    data: { 
+        records: rows  // Send all the row data as an array of objects
+    },
+    success: function (response) {
+        // Show success notification using Toastify
+        Toastify({
+            text: "File updated!",  // Message to display
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",  // Gradient success color
+            duration: 3000,                      // Display time in milliseconds
+            close: true,                         // Show close button
+        }).showToast();
+        
+        // Optionally reload the page
+        setTimeout(() => {
+            window.location.href = "";
+        }, 500);
+    },
+    error: function (xhr, status, error) {
+        // Show error notification using Toastify
+        Toastify({
+            text: "An error occurred while updating the file.",  // Message to display
+            backgroundColor: "red",                               // Error color
+            duration: 3000,                                       // Display time
+            close: true,                                          // Show close button
+        }).showToast();
+
+        console.error("AJAX error:", error);  // Log detailed error message
+    }
+});
+
+});
+
+
 </script>
 
 <!-- Javascript -->
+<script src="calculation_file.js"></script>
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
 

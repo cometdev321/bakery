@@ -60,7 +60,7 @@ if(isset($_SESSION['user'])){
     <?php
 
         // Query to fetch year and full month name from tblheadpurchases where status = 1
-        $query = "SELECT year,month, DATE_FORMAT(STR_TO_DATE(CONCAT(year, '-', month, '-01'), '%Y-%m-%d'), '%M') AS month_name 
+        $query = "SELECT id,year,month, DATE_FORMAT(STR_TO_DATE(CONCAT(year, '-', month, '-01'), '%Y-%m-%d'), '%M') AS month_name 
           FROM tblheadpurchases 
           WHERE status = 1 
           ORDER BY year DESC, month DESC";
@@ -98,7 +98,7 @@ if(isset($_SESSION['user'])){
                                 echo "<tr>";
                                 echo "<td>" . $slno++ . "</td>";
                                 echo "<td>" . $row['year'] .'/'. $row['month_name'] . "</td>";
-                                echo "<td><button class='btn btn-success btn-sm' onclick='redirectto(" . $row['year'] .','. $row['month'] . ")'>Load Excel</button></td>";
+                                echo "<td><button class='btn btn-success btn-sm' onclick='redirectto(" . $row['year'] .','. $row['month'] .','.$row['id']. ")'>Load Excel</button></td>";
                                 echo "</tr>";
                             }
                         } else {
@@ -118,8 +118,8 @@ $conn->close();
 
 </div>
 <script>
-function redirectto(year,month){
-    window.location.href=`export_excel?year=${year}&&month=${month}`;
+function redirectto(year,month,id){
+    window.location.href=`export_excel?year=${year}&&month=${month}&&id=${id}`;
 }
 // Function to populate the Year dropdown with the current year and the previous 5 years
 function populateYears() {

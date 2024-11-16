@@ -181,8 +181,8 @@ function verticalTotal() {
     roundToInteger(twentyCgst);
   document.getElementById("total_twenty_sgst").value =
     roundToInteger(twentySgst);
-  document.getElementById("total_total").value = roundToInteger(total);
 
+  document.getElementById("total_total").value = roundToInteger(total);
   document.getElementById("total_gst").value = gst.toFixed(2);
 }
 

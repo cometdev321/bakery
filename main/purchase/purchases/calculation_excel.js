@@ -90,12 +90,16 @@ function horizontalTotal() {
     gst +=
       parseFloat(document.getElementById("twenty_sgst-" + i).textContent) || 0;
 
-    document.getElementById("total-" + i).textContent = total + gst; // Update total textContent
-    document.getElementById("gst-" + i).textContent = gst / 2; // Update GST textContent
+    document.getElementById("total-" + i).textContent = (total + gst).toFixed(
+      2
+    ); // Update total textContent
+    document.getElementById("gst-" + i).textContent = (gst / 2).toFixed(2); // Update GST textContent
     total = 0;
     gst = 0;
   }
 }
+let TotalBeforeRound = 0;
+let GstBeforeRound = 0;
 
 function verticalTotal() {
   var table = document.getElementById("Purchase-list");
@@ -167,26 +171,43 @@ function verticalTotal() {
     gst += parseFloat(document.getElementById("gst-" + i).textContent) || 0;
   }
 
-  total_exempted.textContent = exemptedTotal;
+  // Function to round values to nearest integer
+  function roundToInteger(num) {
+    return Math.round(num);
+  }
+  TotalBeforeRound =
+    exemptedTotal + eighteenTotal + twelveTotal + fiveTotal + twentyTotal;
 
-  total_eighteen_amount.textContent = eighteenTotal;
-  total_eighteen_cgst.textContent = eighteenCgst;
-  total_eighteen_sgst.textContent = eighteenSgst;
+  GstBeforeRound =
+    eighteenCgst +
+    eighteenSgst +
+    twelveCgst +
+    twelveSgst +
+    fiveCgst +
+    fiveSgst +
+    twentyCgst +
+    twentySgst;
 
-  total_twelve_amount.textContent = twelveTotal;
-  total_twelve_cgst.textContent = twelveCgst;
-  total_twelve_sgst.textContent = twelveSgst;
+  total_exempted.textContent = roundToInteger(exemptedTotal);
 
-  total_five_amount.textContent = fiveTotal;
-  total_five_cgst.textContent = fiveCgst;
-  total_five_sgst.textContent = fiveSgst;
+  total_eighteen_amount.textContent = roundToInteger(eighteenTotal);
+  total_eighteen_cgst.textContent = roundToInteger(eighteenCgst);
+  total_eighteen_sgst.textContent = roundToInteger(eighteenSgst);
 
-  total_twenty_amount.textContent = twentyTotal;
-  total_twenty_cgst.textContent = twentyCgst;
-  total_twenty_sgst.textContent = twentySgst;
+  total_twelve_amount.textContent = roundToInteger(twelveTotal);
+  total_twelve_cgst.textContent = roundToInteger(twelveCgst);
+  total_twelve_sgst.textContent = roundToInteger(twelveSgst);
 
-  total_total.textContent = total;
-  total_gst.textContent = gst;
+  total_five_amount.textContent = roundToInteger(fiveTotal);
+  total_five_cgst.textContent = roundToInteger(fiveCgst);
+  total_five_sgst.textContent = roundToInteger(fiveSgst);
+
+  total_twenty_amount.textContent = roundToInteger(twentyTotal);
+  total_twenty_cgst.textContent = roundToInteger(twentyCgst);
+  total_twenty_sgst.textContent = roundToInteger(twentySgst);
+
+  total_total.textContent = roundToInteger(total);
+  total_gst.textContent = gst.toFixed(2);
 }
 
 function calculateTotal() {
@@ -211,7 +232,7 @@ function calculateTotal() {
   totalPurchaseInput += parseFloat(total_twenty_cgst.textContent) || 0;
   totalPurchaseInput += parseFloat(total_twenty_sgst.textContent) || 0;
 
-  purchases.textContent = totalPurchase;
-  totalpurchaseinput.textContent = totalPurchaseInput;
-  finaltotal.textContent = totalPurchase + totalPurchaseInput;
+  purchases.textContent = TotalBeforeRound.toFixed(2);
+  totalpurchaseinput.textContent = GstBeforeRound.toFixed(2);
+  finaltotal.textContent = (TotalBeforeRound + GstBeforeRound).toFixed(2);
 }

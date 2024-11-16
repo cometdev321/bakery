@@ -11,9 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('ii', $status, $purchaseID);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true]);
+        // Construct the executed query with actual values
+        $executedQuery = "UPDATE tblhead_purchase_details SET status = $status WHERE id = $purchaseID";
+        echo json_encode(['success' => true, 'query' => $executedQuery]);
     } else {
-        echo json_encode(['success' => false]);
+        echo json_encode(['success' => false, 'error' => $stmt->error]);
     }
 
     $stmt->close();

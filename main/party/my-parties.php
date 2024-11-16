@@ -2,6 +2,10 @@
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
 
+if (!isset($_SESSION['admin'])) {
+    echo "<script>window.location.href='../dashboard'</script>";
+    exit();  
+}
  ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -52,11 +56,11 @@ $(document).ready(function() {
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Manage Party</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> My Parties</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.php"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active">Manage Party</li>
+                            <li class="breadcrumb-item active">My Parties</li>
                         </ul>
                     </div>            
                 </div>
@@ -65,7 +69,7 @@ $(document).ready(function() {
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>Manage Details<small>Edit and Remove your party here</small> </h2>                            
+                            <h2>My Parties<small>Edit and Remove your party here</small> </h2>                            
                         </div>
                         <div class="body">
 						<div class="table-responsive">
@@ -95,21 +99,8 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    if(!isset($_SESSION['admin'])){
-                                       
+                                    if(isset($_SESSION['admin'])){
                                         $query = "SELECT * FROM tblparty WHERE status = '1'  and userID='$session' order by id desc";
-
-                                        
-                                    }else{
-                                        $selectedBranch=isset($_SESSION['subSession'])?$_SESSION['subSession']:'';
-                                        if($selectedBranch=='ALL'){
-                                            $Csession=$_SESSION['admin'];
-                                            $query = "SELECT * FROM tblparty WHERE status = '1'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
-                                        }else{
-                                            $query = "SELECT * FROM tblparty WHERE status = '1'  and userID='$selectedBranch' order by id desc";
-
-                                        }
-
                                     }
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
@@ -169,18 +160,8 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    if(!isset($_SESSION['admin'])){
-                                        $query = "SELECT * FROM tblparty WHERE status = '0' and userID='$session' order by id desc";
-                                    }else{
-                                        $selectedBranch=isset($_SESSION['subSession'])?$_SESSION['subSession']:'';
-                                        if($selectedBranch=='ALL'){
-                                            $Csession=$_SESSION['admin'];
-                                            $query = "SELECT * FROM tblparty WHERE status = '0'  and userID in (select userID from tblusers where superAdminID='$Csession') order by id desc";
-                                        }else{
-                                            $query = "SELECT * FROM tblparty WHERE status = '0'  and userID='$selectedBranch' order by id desc";
-
-                                        }
-
+                                    if(isset($_SESSION['admin'])){
+                                        $query = "SELECT * FROM tblparty WHERE status = '0'  and userID='$session' order by id desc";
                                     }$result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

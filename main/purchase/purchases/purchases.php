@@ -1,6 +1,7 @@
 <?php 
     include('../../common/header3.php');
     include('../../common/sidebar.php');
+
 date_default_timezone_set('Asia/Kolkata');
 if(isset($_SESSION['user'])){
     echo "<script>window.location.href='$base/purchase/enabledpurchase/purchase_invoice'</script>";

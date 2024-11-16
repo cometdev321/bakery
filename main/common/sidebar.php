@@ -544,11 +544,14 @@ if (isset($_POST['ProductSubmit'])) {
                             <li>
                                 <a href="#App" class="has-arrow"><i class=" icon-users"></i> <span>Party</span></a>
                                 <ul>
-                              
+                                    
                                     <li><a href="<?php echo $base ?>/party/add-party"><i class="fa icon-mouse"></i> Add New Party</a></li>
                                     <li><a href="<?php echo $base ?>/party/manage-party"><i class="fa icon-mouse"></i> Manage Party</a></li>
+                                    <?php if(isset($_SESSION['admin'])){ ?>
+                                        <li><a href="<?php echo $base ?>/party/my-parties"><i class="fa icon-mouse"></i> SuperAdmin Parties</a></li>
+                                    <?php } ?>
                                     <li><a href="<?php echo $base ?>/party/import-party"><i class="fa icon-mouse"></i> Import/Export Party</a></li>
-                               
+                                        
                                 </ul>
                             </li>
                             

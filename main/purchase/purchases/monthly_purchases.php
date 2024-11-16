@@ -18,9 +18,10 @@ $resultP = mysqli_query($conn, $getPId);
 $r1 = mysqli_fetch_array($resultP);
 
 
-$query = "SELECT tp.id as purchase_id, td.*
+$query = "SELECT tp.id as purchase_id,tblp.id as partyid,tblp.name as partyname,td.*
 FROM tblheadpurchases tp
-JOIN tblhead_purchase_details td ON tp.id = td.purchaseID
+LEFT JOIN tblhead_purchase_details td ON tp.id = td.purchaseID
+LEFT join tblparty tblp on tblp.id=td.trader
 WHERE tp.year = '$year' AND tp.month = '$month'
 and tp.status='1' and td.status='1'";
 $result = mysqli_query($conn, $query);
@@ -31,6 +32,10 @@ $r = mysqli_fetch_array($result);
 ?>
 <style>
     #exportTable input[type="text"] {
+        width: 100px; 
+        maxlength: 5;      
+    }
+    #exportTable input[type="number"] {
         width: 100px; 
         maxlength: 5;      
     }
@@ -73,16 +78,16 @@ $r = mysqli_fetch_array($result);
     <h3>Nayan Food Products</h3>
     </div>
     <input type="text" hidden id="current_purchase_id" value="<?php echo $r1['purchase_id']; ?>" />
-
-    <!-- <button type="button" class="btn btn-secondary mt-2 btn-sm" onclick="toggleCheckboxes()">Check/Uncheck All</button> -->
-        <div class="body">
-            <div class="table-responsive">
+    <div class="body">
+        <div class='checkbox-container'> <input type="checkbox" id="toggle-all" class="mt-2" onclick="toggleCheckboxes()">&nbsp;&nbsp;&nbsp;Check/Uncheck All</div>
+        &nbsp;   
+        <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
-
                     <thead>
                         <tr>
                             <th>Slno</th>
                             <th>Inlude for export</th>
+                            <th>Trader</th>
                             <th>Date</th>
                             <th>Bill No</th>
                             <th>Exempted</th>
@@ -112,8 +117,19 @@ $r = mysqli_fetch_array($result);
                                         mysqli_data_seek($result, 0); 
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo "<tr id='row-{$slno}'>";
-                                            echo '<td><input type="text" hidden name="pvalue[]"  id="purchaseID-' . $slno . '" value="' . $row['id']  . '"><input type="text" class="form-control" placeholder="Type here" id="slno-' . $slno . '" value="' . $slno . '" name="slno[]"></td>';
-                                            echo "<td><div class='checkbox-container'><input type='checkbox' name='include[]' " . ($row['purchase_date'] ? "checked" : "") . " id='include-{$slno}'></div></td>";
+                                            echo '<td><input type="text" hidden name="id[]"  id="id-' . $slno . '" value="' . $row['id']  . '"><input type="text" class="form-control" placeholder="Type here" id="slno-' . $slno . '" value="' . $slno . '" name="slno[]"></td>';
+                                            echo "<td><div class='checkbox-container'><input type='checkbox' name='include[]' " . ($row['include']=='yes' ? "checked" : "") . " id='include-{$slno}'></div></td>";
+                                            echo "<td>
+                                            <select style='width:200px' name='party[]' class='form-control show-tick ms select2' id='party-{$slno}'>";
+                                                echo "<option value='{$row['trader']}'>{$row['partyname']}</option>";
+                                                $P_query = "SELECT * FROM tblparty WHERE status = '1' AND userID='$session' ORDER BY id DESC";
+                                                $P_result = mysqli_query($conn, $P_query);
+                                                while ($P_row = mysqli_fetch_array($P_result)) {
+                                                    echo "<option value='{$P_row['id']}'>{$P_row['name']}</option>";
+                                                }
+                                                echo "</select>";
+                                                echo "</td>";
+                                            echo "</td>";
                                             echo '<td><input type="date" class="form-control" placeholder="Type here" id="date-' . $slno . '" value="' . $row['purchase_date'] . '" name="date[]"></td>';
                                             echo '<td><input type="text" class="form-control" placeholder="Type here" id="billno-' . $slno . '" value="' . $row['billno'] . '" name="billno[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()" id="exempted-' . $slno . '" value="' . $row['exempted'] . '" name="exempted[]"></td>';
@@ -132,7 +148,7 @@ $r = mysqli_fetch_array($result);
                                             echo '<td><input type="text" class="form-control" placeholder="Type here" id="ro-' . $slno . '" value="' . $row['ro'] . '" name="ro[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" id="total-' . $slno . '" value="' . $row['total'] . '" name="total[]"></td>';
                                             echo '<td><input hidden type="text" class="form-control" placeholder="Type here" id="type-' . $slno . '" value="update" name="type[]"><input type="number" class="form-control" placeholder="Type here" id="gst-' . $slno . '" value="' . $row['gst'] . '" name="gst[]"></td>';
-                                            echo "<td><button type='button' onclick='deleteRow({$slno})' class='btn btn-danger'><i class='icon-trash'></i></button></td>";
+                                            echo "<td><button type='button' onclick='deleteRow({$row['id']},{$slno})' class='btn btn-danger'><i class='icon-trash'></i></button></td>";
                                             echo "</tr>";
                                             $slno++;
                                         }
@@ -147,93 +163,91 @@ $r = mysqli_fetch_array($result);
                     </tbody>
                     <tfoot>
                         <tr>
-                        <td colspan="4"></td>
+                            <td colspan="5"></td>
+                            <td>
+                                <label for="total_exempted">Exempted</label>
+                                <input type="text" class="form-control" id="total_exempted" value="0" name="exempted[]">
+                            </td>
 
-                        <td>
-                            <label for="total_exempted">Exempted</label>
-                            <input type="text" class="form-control" id="total_exempted" value="0" name="exempted[]">
-                        </td>
+                            <td>
+                                <label for="total_eighteen_amount">18% Amount</label>
+                                <input type="text" class="form-control" id="total_eighteen_amount" value="0" name="eighteen_amount[]">
+                            </td>
 
-                        <td>
-                            <label for="total_eighteen_amount">18% Amount</label>
-                            <input type="text" class="form-control" id="total_eighteen_amount" value="0" name="eighteen_amount[]">
-                        </td>
+                            <td>
+                                <label for="total_eighteen_cgst">18% CGST</label>
+                                <input type="text" class="form-control" id="total_eighteen_cgst" value="" name="eighteen_cgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_eighteen_cgst">18% CGST</label>
-                            <input type="text" class="form-control" id="total_eighteen_cgst" value="" name="eighteen_cgst[]">
-                        </td>
+                            <td>
+                                <label for="total_eighteen_sgst">18% SGST</label>
+                                <input type="text" class="form-control" id="total_eighteen_sgst" value="" name="eighteen_sgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_eighteen_sgst">18% SGST</label>
-                            <input type="text" class="form-control" id="total_eighteen_sgst" value="" name="eighteen_sgst[]">
-                        </td>
+                            <td>
+                                <label for="total_twelve_amount">12% Amount</label>
+                                <input type="text" class="form-control" id="total_twelve_amount" value="" name="twelve_amount[]">
+                            </td>
 
-                        <td>
-                            <label for="total_twelve_amount">12% Amount</label>
-                            <input type="text" class="form-control" id="total_twelve_amount" value="" name="twelve_amount[]">
-                        </td>
+                            <td>
+                                <label for="total_twelve_cgst">12% CGST</label>
+                                <input type="text" class="form-control" id="total_twelve_cgst" value="" name="twelve_cgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_twelve_cgst">12% CGST</label>
-                            <input type="text" class="form-control" id="total_twelve_cgst" value="" name="twelve_cgst[]">
-                        </td>
+                            <td>
+                                <label for="total_twelve_sgst">12% SGST</label>
+                                <input type="text" class="form-control" id="total_twelve_sgst" value="" name="twelve_sgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_twelve_sgst">12% SGST</label>
-                            <input type="text" class="form-control" id="total_twelve_sgst" value="" name="twelve_sgst[]">
-                        </td>
+                            <td>
+                                <label for="total_five_amount">5% Amount</label>
+                                <input type="text" class="form-control" id="total_five_amount" value="" name="five_amount[]">
+                            </td>
 
-                        <td>
-                            <label for="total_five_amount">5% Amount</label>
-                            <input type="text" class="form-control" id="total_five_amount" value="" name="five_amount[]">
-                        </td>
+                            <td>
+                                <label for="total_five_cgst">5% CGST</label>
+                                <input type="text" class="form-control" id="total_five_cgst" value="" name="five_cgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_five_cgst">5% CGST</label>
-                            <input type="text" class="form-control" id="total_five_cgst" value="" name="five_cgst[]">
-                        </td>
+                            <td>
+                                <label for="total_five_sgst">5% SGST</label>
+                                <input type="text" class="form-control" id="total_five_sgst" value="" name="five_sgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_five_sgst">5% SGST</label>
-                            <input type="text" class="form-control" id="total_five_sgst" value="" name="five_sgst[]">
-                        </td>
+                            <td>
+                                <label for="total_twenty_amount">20% Amount</label>
+                                <input type="text" class="form-control" id="total_twenty_amount" value="" name="twenty_amount[]">
+                            </td>
 
-                        <td>
-                            <label for="total_twenty_amount">20% Amount</label>
-                            <input type="text" class="form-control" id="total_twenty_amount" value="" name="twenty_amount[]">
-                        </td>
+                            <td>
+                                <label for="total_twenty_cgst">20% CGST</label>
+                                <input type="text" class="form-control" id="total_twenty_cgst" value="" name="twenty_cgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_twenty_cgst">20% CGST</label>
-                            <input type="text" class="form-control" id="total_twenty_cgst" value="" name="twenty_cgst[]">
-                        </td>
+                            <td>
+                                <label for="total_twenty_sgst">20% SGST</label>
+                                <input type="text" class="form-control" id="total_twenty_sgst" value="" name="twenty_sgst[]">
+                            </td>
 
-                        <td>
-                            <label for="total_twenty_sgst">20% SGST</label>
-                            <input type="text" class="form-control" id="total_twenty_sgst" value="" name="twenty_sgst[]">
-                        </td>
-
-                        <td>
-                        
-                        </td>
-
-                        <td>
-                            <label for="total_total">Total</label>
-                            <input type="text" class="form-control" id="total_total" value="" name="total[]">
-                        </td>
-
-                        <td>
-                            <label for="total_gst">GST</label>
-                            <input type="text" class="form-control" id="total_gst" value="" name="gst[]">
-                        </td>
-                        <td>
+                            <td>
                             
-                        </td>
-                    </tr>
+                            </td>
+
+                            <td>
+                                <label for="total_total">Total</label>
+                                <input type="text" class="form-control" id="total_total" value="" name="total[]">
+                            </td>
+
+                            <td>
+                                <label for="total_gst">GST</label>
+                                <input type="text" class="form-control" id="total_gst" value="" name="gst[]">
+                            </td>
+                            <td>
+                                
+                            </td>
+                        </tr>
 
                     </tfoot>
-
                     </table>
                     <button type="button" class="btn btn-primary mt-2 btn-sm" onclick="addrow()"><i class="fa fa-plus"></i> <span>Add Row</span></button>
             </div>
@@ -298,6 +312,12 @@ $r = mysqli_fetch_array($result);
                     <input type="checkbox" checked id="include-${rowCount}" name="include[]">
                 </div>
             </td>
+            <td>
+              <select style="width:200px" name="party[]" class="form-control show-tick ms select2" id="party-${rowCount}">
+                <option selected value="null">Select Trader Name</option>
+
+              </select>
+            </td>
             <td><input type="date" class="form-control" id="date-${rowCount}" name="date[]"></td>
             <td><input type="text" class="form-control" id="billno-${rowCount}" name="billno[]"></td>
             <td><input type="number" class="form-control" onkeyup="callmajor()" id="exempted-${rowCount}" name="exempted[]"></td>
@@ -317,7 +337,7 @@ $r = mysqli_fetch_array($result);
             <td><input type="number" class="form-control" id="total-${rowCount}" name="total[]"></td>
             <td><input type="number" class="form-control" id="gst-${rowCount}" name="gst[]"></td>
             <td>
-                <button type="button" onclick="deleteRow(${rowCount})" class="btn btn-danger">
+                <button type="button" onclick="deleteRow(-1,${rowCount})" class="btn btn-danger">
                     <i class="icon-trash"></i>
                 </button>
             </td>
@@ -329,33 +349,51 @@ $r = mysqli_fetch_array($result);
         newRow.id = `row-${rowCount}`;
         newRow.innerHTML = newRowContent;
         tableBody.appendChild(newRow);
+        const selectElement = newRow.querySelector('select[name="party[]"]');
+        $(selectElement).select2();
+        getproducts(rowCount);
     }
 
-    
-   function deleteRow(row) {
-    
-    const purchaseId = `purchaseID-${row}`;
-    const purchaseIdElement = document.getElementById(purchaseId);
-    if (purchaseIdElement) {
-        console.error("Element with ID purchaseID-" + row + " not found.");
-        const purchaseIdValue = purchaseIdElement.value;
-
+    function getproducts(val) {
         $.ajax({
-            url: '../../get_ajax/headpurchases/remove_item.php', 
+            url: "../../get_ajax/get_party_name.php",
+            method: "GET",
+            success: function(response) {
+                $("#party-" + val).html(response);
+            },
+            error: function() {
+                console.log("Error occurred while fetching products.");
+            }
+        });
+    }
+
+   function deleteRow(id,row) {
+    if (id !== -1) {
+        $.ajax({
+            url: '../../get_ajax/headpurchases/remove_item.php',
             type: 'POST',
             data: {
-                purchaseID: purchaseIdValue,
+                purchaseID: id,
                 status: 0
             },
             success: function(response) {
-                
+                try {
+                    const res = JSON.parse(response); // Parse the JSON response
+                    if (res.success) {
+                        // console.log("Executed Query: ", res.query); // Log the executed query
+                    } else {
+                        console.error("Error: ", res.error); // Log any errors
+                    }
+                } catch (e) {
+                    console.error("Invalid JSON response", response);
+                }
             },
             error: function() {
                 alert("Error in AJAX request.");
             }
         });
     }
-  
+                
     const rowId = `row-${row}`;
     const rowElement = document.getElementById(rowId);
 
@@ -376,7 +414,6 @@ $r = mysqli_fetch_array($result);
  
     $(document).ready(()=>{
         addrow();
-        console.log("called")
         callmajor();
     })
 
@@ -387,8 +424,11 @@ $r = mysqli_fetch_array($result);
     document.querySelectorAll('#Purchase-list tr').forEach((row) => {
         let rowData = {
             purchaseID: pID,
+            id: row.querySelector('[id^="id-"]') ? row.querySelector('[id^="id-"]').value : '',
             date: row.querySelector('[id^="date-"]') ? row.querySelector('[id^="date-"]').value : '',
+            trader: row.querySelector('[id^="party-"]') ? row.querySelector('[id^="party-"]').value : '',
             billno: row.querySelector('[id^="billno-"]') ? row.querySelector('[id^="billno-"]').value : '',
+            include: row.querySelector('[id^="include-"]') ? (row.querySelector('[id^="include-"]').checked ? 'yes' : 'no') : '',
             exempted: row.querySelector('[id^="exempted-"]') ? row.querySelector('[id^="exempted-"]').value : '',
             eighteen_amount: row.querySelector('[id^="eighteen_amount-"]') ? row.querySelector('[id^="eighteen_amount-"]').value : '',
             eighteen_cgst: row.querySelector('[id^="eighteen_cgst-"]') ? row.querySelector('[id^="eighteen_cgst-"]').value : '',
@@ -409,13 +449,14 @@ $r = mysqli_fetch_array($result);
         };
 
         // Check if date is not empty; if empty, skip the row
-        if (rowData.date) {
+        if (rowData.date && rowData.trader) {
             rows.push(rowData);
         }
     });
 
     // Log rows data to make sure it's populated
-
+// console.log(rows);
+// return
     // Send the data via AJAX
     $.ajax({
     url: "../../get_ajax/headpurchases/save_purchase.php",  // The PHP script to handle the data
@@ -432,6 +473,7 @@ $r = mysqli_fetch_array($result);
             close: true,                         // Show close button
         }).showToast();
         
+        // console.log(response)
         // Optionally reload the page
         setTimeout(() => {
             window.location.href = "";

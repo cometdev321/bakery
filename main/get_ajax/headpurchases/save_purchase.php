@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $billno = mysqli_real_escape_string($conn, $record['billno']);
         $exempted = mysqli_real_escape_string($conn, $record['exempted']);
         $eighteenAmount = mysqli_real_escape_string($conn, $record['eighteen_amount']);
+        $eighteenIgst = isset($record['eighteen_igst']) ? mysqli_real_escape_string($conn, $record['eighteen_igst']) : NULL;
         $eighteenCgst = mysqli_real_escape_string($conn, $record['eighteen_cgst']);
         $eighteenSgst = mysqli_real_escape_string($conn, $record['eighteen_sgst']);
         $twelveAmount = mysqli_real_escape_string($conn, $record['twelve_amount']);
@@ -49,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($type == 'update') {
             // Update record query
-            $updateQuery = "UPDATE tblhead_purchase_details SET purchase_date = '$date', billno = '$billno',trader='$trader', exempted = '$exempted',eighteen_amount = '$eighteenAmount', eighteen_cgst = '$eighteenCgst', eighteen_sgst = '$eighteenSgst',twelve_amount = '$twelveAmount', twelve_cgst = '$twelveCgst', twelve_sgst = '$twelveSgst',five_amount = '$fiveAmount', five_cgst = '$fiveCgst', five_sgst = '$fiveSgst',twenty_amount = '$twentyAmount', twenty_cgst = '$twentyCgst', twenty_sgst = '$twentySgst',ro = '$roValue', total = '$total', gst = '$gstValue', include = '$include' WHERE id = '$id'";
+            $updateQuery = "UPDATE tblhead_purchase_details SET purchase_date = '$date', billno = '$billno',trader='$trader', exempted = '$exempted',eighteen_amount = '$eighteenAmount', eighteen_cgst = '$eighteenCgst', eighteen_sgst = '$eighteenSgst',twelve_amount = '$twelveAmount', twelve_cgst = '$twelveCgst', twelve_sgst = '$twelveSgst',five_amount = '$fiveAmount', five_cgst = '$fiveCgst', five_sgst = '$fiveSgst',twenty_amount = '$twentyAmount', twenty_cgst = '$twentyCgst', twenty_sgst = '$twentySgst',ro = '$roValue', total = '$total', gst = '$gstValue', include = '$include',eighteen_igst='$eighteenIgst' WHERE id = '$id'";
 
             if (mysqli_query($conn, $updateQuery)) {
                 $response = array('status' => 'success', 'message' => 'Record updated successfully.');
@@ -58,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($type == 'insert') {
             // Insert new record query
-            $insertQuery = "INSERT INTO tblhead_purchase_details (purchase_date, billno, exempted, eighteen_amount, eighteen_cgst, eighteen_sgst,twelve_amount, twelve_cgst, twelve_sgst, five_amount, five_cgst, five_sgst,twenty_amount, twenty_cgst, twenty_sgst, ro, total, gst, include, purchaseID,trader) VALUES ('$date', '$billno', '$exempted', '$eighteenAmount', '$eighteenCgst', '$eighteenSgst','$twelveAmount', '$twelveCgst', '$twelveSgst', '$fiveAmount', '$fiveCgst', '$fiveSgst','$twentyAmount', '$twentyCgst', '$twentySgst', '$roValue', '$total', '$gstValue', '$include', '$purchaseID','$trader')";
+            $insertQuery = "INSERT INTO tblhead_purchase_details (purchase_date, billno, exempted, eighteen_amount, eighteen_cgst, eighteen_sgst,twelve_amount, twelve_cgst, twelve_sgst, five_amount, five_cgst, five_sgst,twenty_amount, twenty_cgst, twenty_sgst, ro, total, gst, include, purchaseID,trader,eighteen_igst) VALUES ('$date', '$billno', '$exempted', '$eighteenAmount', '$eighteenCgst', '$eighteenSgst','$twelveAmount', '$twelveCgst', '$twelveSgst', '$fiveAmount', '$fiveCgst', '$fiveSgst','$twentyAmount', '$twentyCgst', '$twentySgst', '$roValue', '$total', '$gstValue', '$include', '$purchaseID','$trader','$eighteenIgst')";
             if (mysqli_query($conn, $insertQuery)) {
                 $response = array('status' => 'success', 'message' => 'Record inserted successfully.');
             } else {

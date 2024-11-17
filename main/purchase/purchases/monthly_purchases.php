@@ -79,8 +79,15 @@ $r = mysqli_fetch_array($result);
     </div>
     <input type="text" hidden id="current_purchase_id" value="<?php echo $r1['purchase_id']; ?>" />
     <div class="body">
-        <div class='checkbox-container'> <input type="checkbox" id="toggle-all" class="mt-2" onclick="toggleCheckboxes()">&nbsp;&nbsp;&nbsp;Check/Uncheck All</div>
+        <div class="row">
+
+            <div class='checkbox-container'> <input type="checkbox" id="toggle-all" class="mt-2" onclick="toggleCheckboxes()">&nbsp;&nbsp;&nbsp;Check/Uncheck All</div>
+            <button type="button" class="btn btn-primary btn-sm mx-2" onclick="callmajor()">
+                <i class="icon-refresh"></i> <span>Re-Calcuate</span>
+            </button>
+        </div>
         &nbsp;   
+       
         <div class="table-responsive">
                 <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="exportTable">
                     <thead>
@@ -92,6 +99,7 @@ $r = mysqli_fetch_array($result);
                             <th>Bill No</th>
                             <th>Exempted</th>
                             <th>18%</th>
+                            <th>IGST</th>
                             <th>CGST</th>
                             <th>SGST</th>
                             <th>12%</th>
@@ -134,17 +142,18 @@ $r = mysqli_fetch_array($result);
                                             echo '<td><input type="text" class="form-control" placeholder="Type here" id="billno-' . $slno . '" value="' . $row['billno'] . '" name="billno[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()" id="exempted-' . $slno . '" value="' . $row['exempted'] . '" name="exempted[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculateighteen(' .$slno . ')" id="eighteen_amount-' . $slno . '" value="' . $row['eighteen_amount'] . '" name="eighteen_amount[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="eighteen_cgst-' . $slno . '" value="' . $row['eighteen_cgst'] . '" name="eighteen_cgst[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="eighteen_sgst-' . $slno . '" value="' . $row['eighteen_sgst'] . '" name="eighteen_sgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()" id="eighteen_igst-' . $slno . '" value="' . $row['eighteen_igst'] . '" name="eighteen_igst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculateighteenigst(' .$slno . ')" id="eighteen_cgst-' . $slno . '" value="' . $row['eighteen_cgst'] . '" name="eighteen_cgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculateighteenigst(' .$slno . ')" id="eighteen_sgst-' . $slno . '" value="' . $row['eighteen_sgst'] . '" name="eighteen_sgst[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculatetwelve(' .$slno. ')" id="twelve_amount-' . $slno . '" value="' . $row['twelve_amount'] . '" name="twelve_amount[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="twelve_cgst-' . $slno . '" value="' . $row['twelve_cgst'] . '" name="twelve_cgst[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="twelve_sgst-' . $slno . '" value="' . $row['twelve_sgst'] . '" name="twelve_sgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="twelve_cgst-' . $slno . '" value="' . $row['twelve_cgst'] . '" name="twelve_cgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="twelve_sgst-' . $slno . '" value="' . $row['twelve_sgst'] . '" name="twelve_sgst[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here"  onkeyup="calculatefive(' .$slno. ')" id="five_amount-' . $slno . '" value="' . $row['five_amount'] . '" name="five_amount[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="five_cgst-' . $slno . '" value="' . $row['five_cgst'] . '" name="five_cgst[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="five_sgst-' . $slno . '" value="' . $row['five_sgst'] . '" name="five_sgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="five_cgst-' . $slno . '" value="' . $row['five_cgst'] . '" name="five_cgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="five_sgst-' . $slno . '" value="' . $row['five_sgst'] . '" name="five_sgst[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculatetwenty(' .$slno. ')" id="twenty_amount-' . $slno . '" value="' . $row['twenty_amount'] . '" name="twenty_amount[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="twenty_cgst-' . $slno . '" value="' . $row['twenty_cgst'] . '" name="twenty_cgst[]"></td>';
-                                            echo '<td><input type="number" class="form-control" placeholder="Type here" id="twenty_sgst-' . $slno . '" value="' . $row['twenty_sgst'] . '" name="twenty_sgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="twenty_cgst-' . $slno . '" value="' . $row['twenty_cgst'] . '" name="twenty_cgst[]"></td>';
+                                            echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="twenty_sgst-' . $slno . '" value="' . $row['twenty_sgst'] . '" name="twenty_sgst[]"></td>';
                                             echo '<td><input type="text" class="form-control" placeholder="Type here" id="ro-' . $slno . '" value="' . $row['ro'] . '" name="ro[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" id="total-' . $slno . '" value="' . $row['total'] . '" name="total[]"></td>';
                                             echo '<td><input hidden type="text" class="form-control" placeholder="Type here" id="type-' . $slno . '" value="update" name="type[]"><input type="number" class="form-control" placeholder="Type here" id="gst-' . $slno . '" value="' . $row['gst'] . '" name="gst[]"></td>';
@@ -174,6 +183,11 @@ $r = mysqli_fetch_array($result);
                                 <input type="text" class="form-control" id="total_eighteen_amount" value="0" name="eighteen_amount[]">
                             </td>
 
+                            <td>
+                                <label for="total_eighteen_igst">18% IGST</label>
+                                <input type="text" class="form-control" id="total_eighteen_igst" value="" name="eighteen_igst[]">
+                            </td>
+                            
                             <td>
                                 <label for="total_eighteen_cgst">18% CGST</label>
                                 <input type="text" class="form-control" id="total_eighteen_cgst" value="" name="eighteen_cgst[]">
@@ -322,17 +336,18 @@ $r = mysqli_fetch_array($result);
             <td><input type="text" class="form-control" id="billno-${rowCount}" name="billno[]"></td>
             <td><input type="number" class="form-control" onkeyup="callmajor()" id="exempted-${rowCount}" name="exempted[]"></td>
             <td><input type="number" class="form-control" onkeyup="calculateighteen(${rowCount})" id="eighteen_amount-${rowCount}" name="eighteen_amount[]"></td>
-            <td><input type="number" class="form-control" id="eighteen_cgst-${rowCount}" name="eighteen_cgst[]"></td>
-            <td><input type="number" class="form-control" id="eighteen_sgst-${rowCount}" name="eighteen_sgst[]"></td>
+            <td><input type="number" class="form-control" id="eighteen_igst-${rowCount}" name="eighteen_igst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="calculateighteenigst(${rowCount})" id="eighteen_cgst-${rowCount}" name="eighteen_cgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="calculateighteenigst(${rowCount})" id="eighteen_sgst-${rowCount}" name="eighteen_sgst[]"></td>
             <td><input type="number" class="form-control" onkeyup="calculatetwelve(${rowCount})" id="twelve_amount-${rowCount}" name="twelve_amount[]"></td>
-            <td><input type="number" class="form-control" id="twelve_cgst-${rowCount}" name="twelve_cgst[]"></td>
-            <td><input type="number" class="form-control" id="twelve_sgst-${rowCount}" name="twelve_sgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()"   id="twelve_cgst-${rowCount}" name="twelve_cgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()"   id="twelve_sgst-${rowCount}" name="twelve_sgst[]"></td>
             <td><input type="number" class="form-control" onkeyup="calculatefive(${rowCount})" id="five_amount-${rowCount}" name="five_amount[]"></td>
-            <td><input type="number" class="form-control" id="five_cgst-${rowCount}" name="five_cgst[]"></td>
-            <td><input type="number" class="form-control" id="five_sgst-${rowCount}" name="five_sgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()"   id="five_cgst-${rowCount}" name="five_cgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()"   id="five_sgst-${rowCount}" name="five_sgst[]"></td>
             <td><input type="number" class="form-control" onkeyup="calculatetwenty(${rowCount})" id="twenty_amount-${rowCount}" name="twenty_amount[]"></td>
-            <td><input type="number" class="form-control" id="twenty_cgst-${rowCount}" name="twenty_cgst[]"></td>
-            <td><input type="number" class="form-control" id="twenty_sgst-${rowCount}" name="twenty_sgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()"   id="twenty_cgst-${rowCount}" name="twenty_cgst[]"></td>
+            <td><input type="number" class="form-control" onkeyup="callmajor()"   id="twenty_sgst-${rowCount}" name="twenty_sgst[]"></td>
             <td><input type="text" class="form-control" id="ro-${rowCount}" name="ro[]"></td>
             <td><input type="number" class="form-control" id="total-${rowCount}" name="total[]"></td>
             <td><input type="number" class="form-control" id="gst-${rowCount}" name="gst[]"></td>
@@ -431,6 +446,7 @@ $r = mysqli_fetch_array($result);
             include: row.querySelector('[id^="include-"]') ? (row.querySelector('[id^="include-"]').checked ? 'yes' : 'no') : '',
             exempted: row.querySelector('[id^="exempted-"]') ? row.querySelector('[id^="exempted-"]').value : '',
             eighteen_amount: row.querySelector('[id^="eighteen_amount-"]') ? row.querySelector('[id^="eighteen_amount-"]').value : '',
+            eighteen_igst: row.querySelector('[id^="eighteen_igst-"]') ? row.querySelector('[id^="eighteen_igst-"]').value : '',
             eighteen_cgst: row.querySelector('[id^="eighteen_cgst-"]') ? row.querySelector('[id^="eighteen_cgst-"]').value : '',
             eighteen_sgst: row.querySelector('[id^="eighteen_sgst-"]') ? row.querySelector('[id^="eighteen_sgst-"]').value : '',
             twelve_amount: row.querySelector('[id^="twelve_amount-"]') ? row.querySelector('[id^="twelve_amount-"]').value : '',

@@ -58,6 +58,7 @@ $r = mysqli_fetch_array($result);
                             <th>Bill No</th>
                             <th>Exempted</th>
                             <th>18%</th>
+                            <th>IGST</th>
                             <th>CGST</th>
                             <th>SGST</th>
                             <th>12%</th>
@@ -88,6 +89,7 @@ $r = mysqli_fetch_array($result);
                                             echo "<td id='billno-{$slno}'>{$row['billno']}</td>";
                                             echo "<td id='exempted-{$slno}'>{$row['exempted']}</td>";
                                             echo "<td id='eighteen_amount-{$slno}'>{$row['eighteen_amount']}</td>";
+                                            echo "<td id='eighteen_igst-{$slno}'>{$row['eighteen_igst']}</td>";
                                             echo "<td id='eighteen_cgst-{$slno}'>{$row['eighteen_cgst']}</td>";
                                             echo "<td id='eighteen_sgst-{$slno}'>{$row['eighteen_sgst']}</td>";
                                             echo "<td id='twelve_amount-{$slno}'>{$row['twelve_amount']}</td>";
@@ -119,6 +121,7 @@ $r = mysqli_fetch_array($result);
                         <td colspan="4"></td>
                         <td id="total_exempted"></td>
                         <td id="total_eighteen_amount"></td>
+                        <td id="total_eighteen_igst"></td>
                         <td id="total_eighteen_cgst"></td>
                         <td id="total_eighteen_sgst"></td>
                         <td id="total_twelve_amount"></td>

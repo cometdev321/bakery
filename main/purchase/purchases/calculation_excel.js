@@ -60,6 +60,9 @@ function horizontalTotal() {
     total +=
       parseFloat(document.getElementById("eighteen_amount-" + i).textContent) ||
       0;
+    total +=
+      parseFloat(document.getElementById("eighteen_igst-" + i).textContent) ||
+      0;
     gst +=
       parseFloat(document.getElementById("eighteen_cgst-" + i).textContent) ||
       0;
@@ -90,9 +93,9 @@ function horizontalTotal() {
     gst +=
       parseFloat(document.getElementById("twenty_sgst-" + i).textContent) || 0;
 
-    document.getElementById("total-" + i).textContent = (total + gst).toFixed(
-      2
-    ); // Update total textContent
+    var ro = parseFloat(document.getElementById("ro-" + i).textContent) || 0;
+    var RowTotal = total + gst + ro;
+    document.getElementById("total-" + i).textContent = RowTotal.toFixed(2);
     document.getElementById("gst-" + i).textContent = (gst / 2).toFixed(2); // Update GST textContent
     total = 0;
     gst = 0;
@@ -110,6 +113,7 @@ function verticalTotal() {
   var exemptedTotal = 0;
 
   var eighteenTotal = 0;
+  var eighteenIgst = 0;
   var eighteenCgst = 0;
   var eighteenSgst = 0;
 
@@ -136,6 +140,9 @@ function verticalTotal() {
 
     eighteenTotal +=
       parseFloat(document.getElementById("eighteen_amount-" + i).textContent) ||
+      0;
+    eighteenIgst +=
+      parseFloat(document.getElementById("eighteen_igst-" + i).textContent) ||
       0;
     eighteenCgst +=
       parseFloat(document.getElementById("eighteen_cgst-" + i).textContent) ||
@@ -235,4 +242,13 @@ function calculateTotal() {
   purchases.textContent = TotalBeforeRound.toFixed(2);
   totalpurchaseinput.textContent = GstBeforeRound.toFixed(2);
   finaltotal.textContent = (TotalBeforeRound + GstBeforeRound).toFixed(2);
+
+  purchases.textContent = TotalBeforeRound.toFixed(2);
+  totalpurchaseinput.textContent =
+    parseFloat(document.getElementById("total_gst").textContent) * 2;
+  purchaseValue = parseFloat(document.getElementById("purchases").textContent);
+  purchaseInput = parseFloat(
+    document.getElementById("totalpurchaseinput").textContent
+  );
+  finaltotal.textContent = (purchaseValue + purchaseInput).toFixed(2);
 }

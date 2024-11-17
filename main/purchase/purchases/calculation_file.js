@@ -36,6 +36,20 @@ function calculatetwenty(i) {
   callmajor();
 }
 
+function calculateighteenigst(i) {
+  var amount = parseFloat(
+    document.getElementById("eighteen_amount-" + i).value
+  );
+  const percentage = 0.18;
+  let result = Math.round(((amount * percentage) / 2) * 100) / 100;
+  document.getElementById("eighteen_cgst-" + i).value = 0;
+  document.getElementById("eighteen_sgst-" + i).value = 0;
+
+  document.getElementById("eighteen_igst-" + i).value = result * 2;
+
+  callmajor();
+}
+
 function horizontalTotal() {
   var table = document.getElementById("Purchase-list");
   var tableRowcount = table.rows.length;
@@ -50,6 +64,9 @@ function horizontalTotal() {
       continue;
     }
     total += parseFloat(document.getElementById("exempted-" + i)?.value) || 0;
+
+    total +=
+      parseFloat(document.getElementById("eighteen_igst-" + i)?.value) || 0;
 
     total +=
       parseFloat(document.getElementById("eighteen_amount-" + i)?.value) || 0;
@@ -73,7 +90,9 @@ function horizontalTotal() {
     gst += parseFloat(document.getElementById("twenty_cgst-" + i)?.value) || 0;
     gst += parseFloat(document.getElementById("twenty_sgst-" + i)?.value) || 0;
 
-    document.getElementById("total-" + i).value = (total + gst).toFixed(2);
+    var ro = parseFloat(document.getElementById("ro-" + i).value) || 0;
+    var RowTotal = total + gst + ro;
+    document.getElementById("total-" + i).value = RowTotal.toFixed(2);
     document.getElementById("gst-" + i).value = (gst / 2).toFixed(2);
     total = 0;
     gst = 0;
@@ -91,6 +110,7 @@ function verticalTotal() {
 
   var exemptedTotal = 0;
   var eighteenTotal = 0;
+  var eighteenIgst = 0;
   var eighteenCgst = 0;
   var eighteenSgst = 0;
   var twelveTotal = 0;
@@ -114,6 +134,8 @@ function verticalTotal() {
       parseFloat(document.getElementById("exempted-" + i)?.value) || 0;
     eighteenTotal +=
       parseFloat(document.getElementById("eighteen_amount-" + i)?.value) || 0;
+    eighteenIgst +=
+      parseFloat(document.getElementById("eighteen_igst-" + i)?.value) || 0;
     eighteenCgst +=
       parseFloat(document.getElementById("eighteen_cgst-" + i)?.value) || 0;
     eighteenSgst +=
@@ -148,6 +170,7 @@ function verticalTotal() {
     exemptedTotal + eighteenTotal + twelveTotal + fiveTotal + twentyTotal;
 
   GstBeforeRound =
+    eighteenIgst +
     eighteenCgst +
     eighteenSgst +
     twelveCgst +
@@ -161,6 +184,8 @@ function verticalTotal() {
     roundToInteger(exemptedTotal);
   document.getElementById("total_eighteen_amount").value =
     roundToInteger(eighteenTotal);
+  document.getElementById("total_eighteen_igst").value =
+    roundToInteger(eighteenIgst);
   document.getElementById("total_eighteen_cgst").value =
     roundToInteger(eighteenCgst);
   document.getElementById("total_eighteen_sgst").value =
@@ -190,9 +215,9 @@ function calculateTotal() {
   var totalPurchase = 0;
   var totalPurchaseInput = 0;
   var finalTotal = 0;
-
   totalPurchase += parseFloat(total_exempted.value) || 0;
   totalPurchase += parseFloat(total_eighteen_amount.value) || 0;
+  totalPurchaseInput += parseFloat(total_eighteen_igst.value) || 0;
   totalPurchaseInput += parseFloat(total_eighteen_cgst.value) || 0;
   totalPurchaseInput += parseFloat(total_eighteen_sgst.value) || 0;
 
@@ -209,8 +234,13 @@ function calculateTotal() {
   totalPurchaseInput += parseFloat(total_twenty_sgst.value) || 0;
 
   purchases.value = TotalBeforeRound.toFixed(2);
-  totalpurchaseinput.value = GstBeforeRound.toFixed(2);
-  finaltotal.value = (TotalBeforeRound + GstBeforeRound).toFixed(2);
+  totalpurchaseinput.value =
+    parseFloat(document.getElementById("total_gst").value) * 2;
+  purchaseValue = parseFloat(document.getElementById("purchases").value);
+  purchaseInput = parseFloat(
+    document.getElementById("totalpurchaseinput").value
+  );
+  finaltotal.value = (purchaseValue + purchaseInput).toFixed(2);
 }
 
 function callmajor() {

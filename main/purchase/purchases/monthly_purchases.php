@@ -154,7 +154,7 @@ $r = mysqli_fetch_array($result);
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="calculatetwenty(' .$slno. ')" id="twenty_amount-' . $slno . '" value="' . $row['twenty_amount'] . '" name="twenty_amount[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="twenty_cgst-' . $slno . '" value="' . $row['twenty_cgst'] . '" name="twenty_cgst[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" onkeyup="callmajor()"  id="twenty_sgst-' . $slno . '" value="' . $row['twenty_sgst'] . '" name="twenty_sgst[]"></td>';
-                                            echo '<td><input type="text" class="form-control" placeholder="Type here" id="ro-' . $slno . '" value="' . $row['ro'] . '" name="ro[]"></td>';
+                                            echo '<td><input type="text" class="form-control" placeholder="Type here"   onkeyup="callmajor()" id="ro-' . $slno . '" value="' . $row['ro'] . '" name="ro[]"></td>';
                                             echo '<td><input type="number" class="form-control" placeholder="Type here" id="total-' . $slno . '" value="' . $row['total'] . '" name="total[]"></td>';
                                             echo '<td><input hidden type="text" class="form-control" placeholder="Type here" id="type-' . $slno . '" value="update" name="type[]"><input type="number" class="form-control" placeholder="Type here" id="gst-' . $slno . '" value="' . $row['gst'] . '" name="gst[]"></td>';
                                             echo "<td><button type='button' onclick='deleteRow({$row['id']},{$slno})' class='btn btn-danger'><i class='icon-trash'></i></button></td>";
@@ -348,7 +348,7 @@ $r = mysqli_fetch_array($result);
             <td><input type="number" class="form-control" onkeyup="calculatetwenty(${rowCount})" id="twenty_amount-${rowCount}" name="twenty_amount[]"></td>
             <td><input type="number" class="form-control" onkeyup="callmajor()"   id="twenty_cgst-${rowCount}" name="twenty_cgst[]"></td>
             <td><input type="number" class="form-control" onkeyup="callmajor()"   id="twenty_sgst-${rowCount}" name="twenty_sgst[]"></td>
-            <td><input type="text" class="form-control" id="ro-${rowCount}" name="ro[]"></td>
+            <td><input type="text" class="form-control"   onkeyup="callmajor()" id="ro-${rowCount}" name="ro[]"></td>
             <td><input type="number" class="form-control" id="total-${rowCount}" name="total[]"></td>
             <td><input type="number" class="form-control" id="gst-${rowCount}" name="gst[]"></td>
             <td>

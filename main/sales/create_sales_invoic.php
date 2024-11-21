@@ -81,7 +81,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 >
                                 <?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)</option>
                                 <?php
-                                }
+                                } 
                                 ?> 
                             </select>
                         </div>
@@ -210,7 +210,7 @@ date_default_timezone_set('Asia/Kolkata');
                 </div>
 
                 <div class="col-lg-2 col-md-12 my-2">
-                    <label>Amount Received</label>
+                    <label>Amount To Be Received</label>
                     <div class="input-group">
                         <input type="text" id="amount_received" name="amount_received" readonly class="form-control"
                             aria-label="Text input with select button" fdprocessedid="nnp09r">
@@ -228,6 +228,14 @@ date_default_timezone_set('Asia/Kolkata');
                 <div class="col-lg-2 col-md-12 my-2">
                     <label>Total Balance</label>
                     <input type="text" name="balance_total" id="balance_total" readonly class="form-control">
+                </div>
+                <div class="col-lg-2 col-md-12 my-2">
+                    <label>Amount Received From Customer</label>
+                    <input type="number" onkeyup="calculator()" name="amt_received_Customer" id="amt_received_from_Customer"  class="form-control">
+                </div>
+                <div class="col-lg-2 col-md-12 my-2">
+                    <label>Amount To Be Paid Back To Customer</label>
+                    <input type="number" name="amt_to_pay_to_Customer" id="amt_to_pay_to_Customer"  class="form-control">
                 </div>
 
             </div>
@@ -262,6 +270,7 @@ date_default_timezone_set('Asia/Kolkata');
 
 </div>
 <script>
+
 function submitSalePosForm(val) {
     document.getElementById('Pos_sale_id').value = val;
     document.getElementById('PosInvoice').submit();
@@ -322,6 +331,12 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+function calculator(){
+    var amounttoberecived=parseFloat(amount_received.value) || 0;
+    var amt_received_Customer=parseFloat(amt_received_from_Customer.value) || 0;
+    amt_to_pay_to_Customer.value=amt_received_Customer-amounttoberecived;
+}
+
 
 let rowCount = 1;
 
@@ -381,7 +396,6 @@ function update_price(val, sizetype, row, gst) {
         if (gst < 0) {
             gst = 0;
         }
-        console.log(val,sizetype,row,gst)
         // document.getElementById(`hsn-${row}`).value = hsn;
         document.getElementById(`price-${row}`).value = val;
         document.getElementById(`sizetype-${row}`).value = sizetype;
@@ -793,7 +807,6 @@ $(document).ready(function() {
     $("#addNewPartyButton").on("click", function() {
         // No suggestion selected; assume new entry
         var newpartySelect = $("#partySelect").val().trim();
-        console.log("clicked")
         if (newpartySelect.length > 0) {
             $.ajax({
                 url: "../get_ajax/searchParty/getparty.php  ",

@@ -9,7 +9,7 @@ $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'Al
 
 if ($selectedBranch == 'ALL') {
     $adminID = $_SESSION['admin'];
-    $query = "SELECT pi.*, p.name AS party_name, u.username AS user_name
+    $query = "SELECT pi.*, p.name AS party_name, u.username AS username
         FROM tblpurchaseinvoices pi
         INNER JOIN tblparty p ON pi.party_name = p.id
         INNER JOIN tblusers u ON pi.userID = u.userID
@@ -42,6 +42,7 @@ if (mysqli_num_rows($result) > 0) {
         <tr>
             <td><?php echo $slno; ?></td>
             <td><?php echo $row['purchase_invoice_date']; ?></td>
+            <td><?php echo $row['username']; ?></td>
             <td><?php echo $row['purchase_invoice_number']; ?></td>
             <td><?php echo $row['party_name']; ?></td>
             <td><?php echo strtoupper($row['amount_paid_type']); ?></td>

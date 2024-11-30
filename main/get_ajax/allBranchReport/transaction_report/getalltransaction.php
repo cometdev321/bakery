@@ -7,7 +7,7 @@ $slno = 1;
 $fromDate=$_POST['fromDate'];
 $toDate=$_POST['toDate'];
 $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
-if ($selectedBranch == 'All') {
+if ($selectedBranch == 'All' || $selectedBranch == 'ALL') {
     
     $query="select ts.sales_invoice_date,tu.username as username,tp.name,ts.sales_invoice_number as refno,ts.recordType,ts.after_discount_total,ts.full_paid from tblsalesinvoices as ts
     join tblparty tp on tp.id=ts.party_name 

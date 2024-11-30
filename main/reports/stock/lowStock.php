@@ -66,7 +66,7 @@ if(isset($_POST['submit'])) {
     LEFT JOIN 
         tblsalesinvoice_details tsi ON tsi.ItemName = p.id 
     WHERE 
-        p.status = '1' 
+        p.status = '1' and 
     GROUP BY 
         p.productname, p.saleprice, p.size, p.openingstock
     HAVING 

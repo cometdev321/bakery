@@ -412,7 +412,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 <li><a href="<?php echo $base ?>/reports/party/partySummary"><i class="icon-credit-card"></i> <span>Sale Purchase By Party</span></a></li>
                                 <li class="menu-heading">Item/Stock Report</li>
                                 <li><a href="<?php echo $base ?>/reports/stock/stockDetails"><i class="icon-credit-card"></i> <span>Stock Details</span></a></li>
-                                <li><a href="<?php echo $base ?>/reports/stock/itemreport"><i class="icon-credit-card"></i> <span>Item Report By Party</span></a></li>
+                                <li><a href="<?php echo $base ?>/reports/stock/itemreport"><i class="icon-credit-card"></i> <span>Item Report </span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/stock/stocksummary"><i class="icon-credit-card"></i> <span>Stock Summary</span></a></li>
                                 <li><a href="<?php echo $base ?>/reports/stock/lowStock"><i class="icon-credit-card"></i> <span>Low Stock Summary</span></a></li>
                             </ul>

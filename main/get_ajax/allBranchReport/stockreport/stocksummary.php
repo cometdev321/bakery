@@ -10,7 +10,7 @@ $Csession = $_SESSION['admin'];
 if ($selectedBranch == 'All') {
     $query = mysqli_query($conn, "SELECT * FROM tblproducts WHERE status='1' AND userID IN (SELECT userID FROM tblusers WHERE superAdminID='$Csession')");
 } else {
-    $query = mysqli_query($conn, "SELECT * FROM tblproducts WHERE status='1' AND userID='$selectedBranch'");
+    $query = mysqli_query($conn, "SELECT * FROM tblproducts WHERE status='1'");
 }
 
 while ($row = mysqli_fetch_array($query)) {
@@ -32,7 +32,7 @@ while ($row = mysqli_fetch_array($query)) {
 
     $fetchSold = mysqli_fetch_array($queryForSales);
     
-    $closeQty = ($row['openingstock'] + $fetchBought['qty']) - $fetchSold['qty'];
+    $closeQty = intval($row['openingstock']) + intval($fetchBought['qty']) - intval($fetchSold['qty']);
     ?>
     <tr>
         <td><?php echo $slno; ?></td>

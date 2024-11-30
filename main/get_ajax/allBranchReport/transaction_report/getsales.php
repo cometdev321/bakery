@@ -7,7 +7,7 @@ $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
 $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'ALL'; // Default to 'All' if not set
 
-if ($selectedBranch == 'ALL') {
+if ($selectedBranch == 'ALL'||$selectedBranch == 'all') {
     $adminID = $_SESSION['admin'];
     $query = "SELECT si.*, p.name AS party_name, u.username AS user_name
         FROM tblsalesinvoices si
@@ -44,6 +44,7 @@ if (mysqli_num_rows($result) > 0) {
             <td><?php echo $slno; ?></td>
             <td><?php echo $row['sales_invoice_date']; ?></td>
             <td><?php echo $row['sales_invoice_number']; ?></td>
+            <td><?php echo $row['user_name']; ?></td>
             <td><?php echo $row['party_name']; ?></td>
             <td><?php echo strtoupper($row['amount_received_type']); ?></td>
             <td>&#8377;<?php echo $row['full_paid'] == 'Yes' ? $row['after_discount_total'] : $row['total_balance']; ?></td>

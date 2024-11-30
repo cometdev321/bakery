@@ -82,7 +82,8 @@ if(isset($_POST['submit'])) {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Date</th>
-                                                <th>Inovice No</th>
+                                                <th>Branch</th>
+                                                <th>Invoice No</th>
                                                 <th>Party Name</th>
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
@@ -94,7 +95,8 @@ if(isset($_POST['submit'])) {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Date</th>
-                                                <th>Inovice No</th>
+                                                <th>Branch</th>
+                                                <th>Invoice No</th>
                                                 <th>Party Name</th>
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>

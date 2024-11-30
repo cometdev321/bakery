@@ -27,9 +27,9 @@
                                         <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
                                         <ul>
                                             <li><a href="<?php echo $base ?>/allBranchReport/stock/stockDetails">Stock Details</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/itemreport">Item Report By Party</a></li>
+                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/itemreport">Item Report </a></li>
                                             <li><a href="<?php echo $base ?>/allBranchReport/stock/stocksummary">Stock Summary</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/lowStock">Low Stock Summary</a></li>
+                                            <!-- <li><a href="<?php echo $base ?>/allBranchReport/stock/lowStock">Low Stock Summary</a></li> -->
                                         </ul>
                                     </li>
                                     <!-- <li>
@@ -71,9 +71,9 @@
                                         <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
                                         <ul>
                                             <li><a href="<?php echo $base ?>/reports/stock/stockDetails">Stock Details</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/itemreport">Item Report By Party</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/stock/itemreport">Item Report </a></li>
                                             <li><a href="<?php echo $base ?>/reports/stock/stocksummary">Stock Summary</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li>
+                                            <!-- <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li> -->
                                         </ul>
                                     </li>
                                     <!-- <li>

@@ -6,7 +6,7 @@ $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
 $party=$_POST['partyName']; 
-$selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
+$selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'ALL'; // Default to 'All' if not set
 
 
     $query = "SELECT id,purchase_invoice_number,purchase_invoice_date,full_paid,after_discount_total from tblpurchaseinvoices

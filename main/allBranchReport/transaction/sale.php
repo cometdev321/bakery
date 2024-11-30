@@ -66,6 +66,7 @@
                                     <th>#</th>
                                     <th>Date</th>
                                     <th>Invoice No</th>
+                                    <th>Branch</th>
                                     <th>Party Name</th>
                                     <th>Payment Type</th>
                                     <th>Amount</th>
@@ -77,6 +78,7 @@
                                     <th>#</th>
                                     <th>Date</th>
                                     <th>Invoice No</th>
+                                    <th>Branch</th>
                                     <th>Party Name</th>
                                     <th>Payment Type</th>
                                     <th>Amount</th>
@@ -158,7 +160,7 @@
                 type: 'POST',
                 success: function(response) {
                     $("#table-body").empty();
-                    loadTabledata();
+                    //loadTabledata();
 
                     $("#table-body").html(response);
                     

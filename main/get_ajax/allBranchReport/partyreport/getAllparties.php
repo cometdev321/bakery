@@ -8,7 +8,7 @@ $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'Al
 $slno = 1;
 $credit;
 
-if($selectedBranch =='All'){
+if($selectedBranch =='All'|| $selectedBranch =='ALL'){
     $Csession=$_SESSION['admin'];
     $query = "SELECT tp.id, tp.name, tp.mobno, tu.username 
                 FROM tblparty tp
@@ -29,7 +29,7 @@ if (mysqli_num_rows($result) > 0) {
     ?>
         <?php while ($row = mysqli_fetch_array($result)) { 
                 $party=$row['id'];
-                if($selectedBranch =='All'){
+                if($selectedBranch =='All' || $selectedBranch =='ALL'){
                     $Csession=$_SESSION['admin'];
                     $querySalesTotal="select sum(total_balance) as totalSales from tblsalesinvoices 
                                 where party_name='$party' and full_paid='No' and userID in (select userID from tblusers where superAdminID='$Csession')";

@@ -679,13 +679,13 @@ if (isset($_POST['ProductSubmit'])) {
                                             <li><a href="<?php echo $base ?>/allBranchReport/stock/lowStock">Low Stock Summary</a></li>
                                         </ul>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="#menu-level-2" class="has-arrow">Expense Report</a>
                                         <ul>
                                             <li><a href="">Expense Details</a></li>
                                         </ul>
                                     </li>
-                                    
+                                     -->
                                 </ul>
                             </li>
                             <?php } ?>
@@ -723,12 +723,12 @@ if (isset($_POST['ProductSubmit'])) {
                                             <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li>
                                         </ul>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <a href="#menu-level-2" class="has-arrow">Expense Report</a>
                                         <ul>
                                             <li><a href="">Expense Details</a></li>
                                         </ul>
-                                    </li>
+                                    </li> -->
                                     
                                 </ul>
                             </li>

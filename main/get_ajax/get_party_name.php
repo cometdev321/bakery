@@ -3,7 +3,7 @@
  include('../common/session_control.php');
 
 
-$getParties = mysqli_query($conn, "SELECT `mobno`,`name`,`id` FROM `tblparty` where userID='$session' order by id desc");
+$getParties = mysqli_query($conn, "SELECT `mobno`,`name`,`id` FROM `tblparty` where userID='$session' and status='1' order by id desc");
 ?>
 <option selected value="null">Select Party Name</option>
 <?php

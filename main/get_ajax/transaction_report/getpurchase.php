@@ -40,14 +40,14 @@ if (mysqli_num_rows($result) > 0) {
                 <td><?php echo strtoupper($row['amount_paid_type']); ?></td>
                 <td>&#8377;<?php echo $row['full_paid']=='Yes'?$row['after_discount_total']:$row['total_balance']; ?></td>
                 <td><span class="red-text">&#8377;<?php echo $row['full_paid']=='Yes'?'0'.'&uarr;':$row['total_balance']-$row['amount_paid'].'&uarr;';?></span></td>
-
+<!-- 
                 <td >
                     <div class="row"> 
 
                         &nbsp;&nbsp;<button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit Sales Invoice"  onclick="edit_invoice('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
                     </div>
                     
-                </td>
+                </td> -->
             </tr> 
             <?php $slno++;
         } ?>

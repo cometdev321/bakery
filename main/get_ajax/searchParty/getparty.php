@@ -6,7 +6,7 @@ if (isset($_POST['query'])) {
     $query = $conn->real_escape_string($_POST['query']);
 
     // Search for matching party names
-    $sql = "SELECT name,mobno,id FROM tblparty WHERE name LIKE '$query%' and userID='$session' order by name  ";
+    $sql = "SELECT name,mobno,id FROM tblparty WHERE name LIKE '$query%' and userID='$session' and status='1' order by name  ";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

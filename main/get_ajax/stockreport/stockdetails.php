@@ -13,7 +13,7 @@ include('../../common/session_control.php');
         p.purchaseprice
         FROM 
         tblproducts p
-        where p.status='1' and p.userID='$session'
+        where p.status='1' 
         GROUP BY 
         p.productname, p.saleprice, p.openingstock, p.purchaseprice;
         ";
@@ -29,7 +29,7 @@ include('../../common/session_control.php');
             $queryForsales=mysqli_query($conn,"select COALESCE(SUM(Qty), 0) as qty from tblsalesinvoice_details where  ItemName='$prid' and date>='$fromDate' and date<='$toDate' and status='1' and userID='$session'");
             $fetchsold=mysqli_fetch_array($queryForsales);
 
-            $closeQty=($row['openingstock']+$fetchBought['qty'])-$fetchsold['qty'];
+            $closeQty = (intval($row['openingstock']) + intval($fetchBought['qty'])) - intval($fetchsold['qty']);
             ?>
                 <tr>
                     <td><?php echo $slno;?></td>

@@ -3,7 +3,7 @@ include('../../common/cnn.php');
 include('../../common/session_control.php');
 
 
-$slno = 1;
+$slno = 1; 
 $fromDate=$_POST['fromDate'];
 $toDate=$_POST['toDate'];
     $query="select ts.sales_invoice_date,tp.name,ts.sales_invoice_number as refno,ts.recordType,ts.after_discount_total,ts.full_paid from tblsalesinvoices as ts

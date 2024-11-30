@@ -127,7 +127,7 @@ if(isset($_POST['submit'])) {
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
                                                 <th>Balance Due</th>
-                                                <th>Action</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -139,7 +139,7 @@ if(isset($_POST['submit'])) {
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
                                                 <th>Balance Due</th>
-                                                <th>Action</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
@@ -211,7 +211,7 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
-            loadTabledata(response);
+            //loadTabledata(response);
             $("#table-body").html(response);
         },
         error: function() {

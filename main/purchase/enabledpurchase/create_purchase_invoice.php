@@ -275,7 +275,7 @@ function create_Purchase_invoice() {
   let amount_received_value = amount_received.value;
   let balance_total_value = balance_total.value;
   let purchase_type=purchasetype.value;
-  var  amount_received_type_value;
+  var  amount_received_type_value=amount_received_type.value;
 
   // let amount_remaining = amt_remaining.value;
 

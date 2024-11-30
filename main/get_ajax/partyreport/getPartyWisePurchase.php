@@ -23,14 +23,14 @@ if (mysqli_num_rows($result) > 0) {
                 <td><?php echo $row['purchase_invoice_number']; ?></td>
                 <td>&#8377;<?php echo $row['after_discount_total']; ?></td>
                 <td><?php echo strtoupper($row['full_paid'] == 'Yes' ? 'Paid' : 'Pending'); ?></td>
-                <td>
+                <!-- <td>
                     <div class="row">
                         
                     <button type="button" class="btn btn-outline-primary btn-sm mx-2"  data-toggle="tooltip" data-placement="top" title="View Sales Invoice"  onclick="submitSaleInvoiceForm('<?php echo $row['id']; ?>')"><i class="icon-drawer"></i></button>
                     <button type="button" class="btn btn-outline-primary btn-sm"  data-toggle="tooltip" data-placement="top" title="Edit Sales Invoice"  onclick="edit_invoice('<?php echo $row['id']; ?>')"><i class="icon-pencil"></i></button>
                     </div>
                     
-                </td>
+                </td> -->
             </tr> 
             <?php $slno++;
         } ?>

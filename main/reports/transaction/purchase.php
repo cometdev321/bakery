@@ -127,7 +127,7 @@ if(isset($_POST['submit'])) {
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
                                                 <th>Balance Due</th>
-                                                <th>Action</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -139,7 +139,7 @@ if(isset($_POST['submit'])) {
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
                                                 <th>Balance Due</th>
-                                                <th>Action</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
@@ -180,12 +180,12 @@ function get_list(val) {
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-1');?> ",
+            fromDate: "<?php echo date('Y-m-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> ",
+            fromDate: "<?php echo date('Y-4-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Last-7-days') {
@@ -212,7 +212,7 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
-            loadTabledata();
+            //loadTabledata();
             $("#table-body").html(response);
         },
         error: function() {

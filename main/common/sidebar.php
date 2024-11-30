@@ -455,7 +455,7 @@ if (isset($_POST['ProductSubmit'])) {
                     </ul>
                 </div>
                 <hr>
-                <ul class="row list-unstyled">
+                <!-- <ul class="row list-unstyled">
                     <li class="col-4">
                         <small>Sales</small>
                         <h6>0</h6>
@@ -468,7 +468,7 @@ if (isset($_POST['ProductSubmit'])) {
                         <small>Revenue</small>
                         <h6>0</h6>
                     </li>
-                </ul>
+                </ul> -->
             </div>
 
 
@@ -508,7 +508,7 @@ if (isset($_POST['ProductSubmit'])) {
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#menu">Menu</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#setting"><i class="icon-settings"></i></a></li>
+                <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#setting"><i class="icon-book-open"></i></a></li> -->
             </ul>
                 
             <!-- Tab panes -->
@@ -646,125 +646,14 @@ if (isset($_POST['ProductSubmit'])) {
                               
                                 </ul>
                             </li>
-                            <!-- reports for admin only -->
-                            <?php if(isset($_SESSION['admin'])){?>
-                            <li>
-                                <a href="#menu-level-1" class="has-arrow"><i class="icon-book-open"></i> <span>All Branches Reports</span></a>
-                                <ul>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/sale">Sale</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/purchase">Purchase</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/daybook">Day Book</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/transaction/alltransaction">All Transaction</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Party Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/party/party_sales_report">PartyWise Sales Report</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/party/party_purchase_report">PartyWise Purchase Report</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/party/allParties">All Parties</a></li>
-                                            <!-- <li><a href="<?php echo $base ?>/allBranchReport/party/partySummary">Sale Purchase By Party</a></li> -->
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/stockDetails">Stock Details</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/itemreport">Item Report By Party</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/stocksummary">Stock Summary</a></li>
-                                            <li><a href="<?php echo $base ?>/allBranchReport/stock/lowStock">Low Stock Summary</a></li>
-                                        </ul>
-                                    </li>
-                                    <!-- <li>
-                                        <a href="#menu-level-2" class="has-arrow">Expense Report</a>
-                                        <ul>
-                                            <li><a href="">Expense Details</a></li>
-                                        </ul>
-                                    </li>
-                                     -->
-                                </ul>
-                            </li>
-                            <?php } ?>
-                            <!-- reports for users -->
-                            <?php
-                                   if(!isset($_SESSION['admin'])){
-                                ?>
-                            <li>
-                                <a href="#menu-level-1" class="has-arrow"><i class="icon-book-open"></i> <span>Reports</span></a>
-                                <ul>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Transaction Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/sale">Sale</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/purchase">Purchase</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/daybook">Day Book</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/transaction/alltransaction">All Transaction</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Party Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/reports/party/party_sales_report">PartyWise Sales Report</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/party_purchase_report">PartyWise Purchase Report</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/allParties">All Parties</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/party/partySummary">Sale Purchase By Party</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#menu-level-2" class="has-arrow">Item/Stock Report</a>
-                                        <ul>
-                                            <li><a href="<?php echo $base ?>/reports/stock/stockDetails">Stock Details</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/itemreport">Item Report By Party</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/stocksummary">Stock Summary</a></li>
-                                            <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li>
-                                        </ul>
-                                    </li>
-                                    <!-- <li>
-                                        <a href="#menu-level-2" class="has-arrow">Expense Report</a>
-                                        <ul>
-                                            <li><a href="">Expense Details</a></li>
-                                        </ul>
-                                    </li> -->
-                                    
-                                </ul>
-                            </li>
-                            <?php } ?>
+                            <?php include('reports.php');?>
                             <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
                         </ul>
                     </nav>
                 </div>
                 <div class="tab-pane p-l-15 p-r-15" id="setting">
-                    <h6>Choose Skin</h6>
-                    <ul class="choose-skin list-unstyled">
-                        <li data-theme="purple">
-                            <div class="purple"></div>
-                            <span>Purple</span>
-                        </li>                   
-                        <li data-theme="blue">
-                            <div class="blue"></div>
-                            <span>Blue</span>
-                        </li>
-                        <li data-theme="cyan" class="active">
-                            <div class="cyan"></div>
-                            <span>Cyan</span>
-                        </li>
-                        <li data-theme="green">
-                            <div class="green"></div>
-                            <span>Green</span>
-                        </li>
-                        <li data-theme="orange">
-                            <div class="orange"></div>
-                            <span>Orange</span>
-                        </li>
-                        <li data-theme="blush">
-                            <div class="blush"></div>
-                            <span>Blush</span>
-                        </li>
-                    </ul>
+                    <?php include('reports.php');?>
+
                     <hr>
                 </div>
             </div>          

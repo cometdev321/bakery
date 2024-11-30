@@ -104,11 +104,13 @@ if(isset($_POST['submit'])) {
 </div>
 
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+<!-- <script src="../../../assets/bundles/libscripts.bundle.js"></script>      -->
 <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
+
 <script>
     setTimeout(() => {
         loadTabledata();
     }, 100);
 </script>
-</body>
+</body> 
 </html>

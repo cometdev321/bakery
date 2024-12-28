@@ -125,7 +125,7 @@ function getPurchase() {
     url: "../../get_ajax/partyreport/getPartyWisePurchase.php",
     data:formData,
     success: function(response){
-       // loadTabledata();
+       loadTabledata();
       $("#table-body").html(response);
     },
     error:function(){

@@ -200,7 +200,7 @@ function get_list(val) {
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?>",
+            fromDate: "<?php echo date('Y-04-01');?>",
             toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Last-7-days') {
@@ -212,8 +212,8 @@ function get_list(val) {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-        fromDate: start + " 00:00:00",
-        toDate: end + " 23:59:59"
+        fromDate: start ,
+        toDate: end
     };
     }
 
@@ -222,11 +222,9 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            $("#sales-list").empty();
             loadTabledata();
-            setTimeout(() => {
-                $("#sales-list").empty();
-                $("#sales-list").html(response);
-            }, 100);
+            $("#sales-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");

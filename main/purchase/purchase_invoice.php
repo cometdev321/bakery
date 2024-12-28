@@ -184,11 +184,9 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            $("#Purchase-list").empty();
             loadTabledata();
-            setTimeout(() => {
-                $("#Purchase-list").empty();
-                $("#Purchase-list").html(response);
-            }, 100);
+             $("#Purchase-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");

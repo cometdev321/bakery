@@ -40,9 +40,13 @@ if (mysqli_num_rows($result) > 0) {
 <?php
 } else {
     ?>
-         <tr>
-            <td colspan="6" class="text-center">No records found</td>
-        </tr>
+        <tr>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+    </tr>
 <?php
 }
 ?>

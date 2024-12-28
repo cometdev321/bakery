@@ -47,7 +47,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <label>Date</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
-                                        <input type="date" class="form-control" id="startDate" value="date-range" >
+                                        <input type="date" class="form-control" id="startDate" value="date-range" onchange="get_list(this.value)">
                                     </div>
                                     <span class="input-group-addon">TO</span>
                                     <div class="col-lg-4" style="width:250px">
@@ -159,7 +159,7 @@ function get_list(val) {
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?>",
+            fromDate: "<?php echo date('Y-04-01');?>",
             toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Last-7-days') {
@@ -181,11 +181,9 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            $("#Purchase-list").empty();
             loadTabledata();
-            setTimeout(() => {
-                $("#Purchase-list").empty();
-                $("#Purchase-list").html(response);
-            }, 100);
+            $("#Purchase-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");

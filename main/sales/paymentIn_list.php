@@ -91,7 +91,7 @@ $(document).ready(function() {
                                 <label>Time</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
-                                        <input type="date" class="form-control" id="startDate" value="date-range" >
+                                        <input type="date" class="form-control" id="startDate" value="date-range" onchange="get_list(this.value)" >
                                     </div>
                                     <span class="input-group-addon">TO</span>
                                     <div class="col-lg-4" style="width:250px">
@@ -212,7 +212,7 @@ function get_list(val) {
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
+            fromDate: "<?php echo date('Y-04-01');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     }else if (val === 'Last-7-days') {
@@ -224,8 +224,8 @@ function get_list(val) {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-        fromDate: start + " 00:00:00",
-        toDate: end + " 23:59:59"
+        fromDate: start,
+        toDate: end
     };
     }
     $.ajax({

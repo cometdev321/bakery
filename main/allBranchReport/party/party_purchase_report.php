@@ -127,7 +127,7 @@ function getPurchase() {
     url: "../../get_ajax/allBranchReport/partyreport/getPartyWisePurchase.php",
     data:formData,
     success: function(response){
-        //loadTabledata();
+        loadTabledata();
       $("#table-body").html(response);
     //   loadAdditionalScripts();
     },

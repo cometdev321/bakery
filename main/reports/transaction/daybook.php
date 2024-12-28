@@ -81,7 +81,7 @@
       type: "POST",
       data:{date:date},
       success: function(response) {
-          //loadTabledata();
+          loadTabledata();
         $("#table-body").html(response);
       },
     error:function(){

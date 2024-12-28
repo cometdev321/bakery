@@ -3,8 +3,9 @@ include('../../../common/cnn.php');
 include('../../../common/session_control.php');
 
 $slno = 1;
-$fromDate = $_POST['fromDate'];
-$toDate = $_POST['toDate'];
+$fromDate = isset($_POST['fromDate']) ? $_POST['fromDate'] : date('Y-m-01');
+$toDate = isset($_POST['toDate']) ? $_POST['toDate'] : date('Y-m-d');
+
 $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'ALL'; // Default to 'All' if not set
 
 if ($selectedBranch == 'ALL'||$selectedBranch == 'all') {
@@ -16,7 +17,7 @@ if ($selectedBranch == 'ALL'||$selectedBranch == 'all') {
         WHERE si.sales_invoice_date >= '$fromDate' 
         AND si.sales_invoice_date <= '$toDate' 
         AND u.superAdminID = '$adminID'
-        AND si.status = '1' 
+        AND si.status = '1'  
         ORDER BY si.id DESC;
 ";
 } else {
@@ -34,8 +35,10 @@ $result = mysqli_query($conn, $query);
 
 // Debugging: Check for SQL errors
 if (!$result) {
-    die("Query Failed: " . mysqli_error($conn));
-} 
+    error_log("SQL Error: " . mysqli_error($conn));
+    echo "<tr><td colspan='8'>Error fetching data. Please try again later.</td></tr>";
+}
+
 
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_array($result)) {
@@ -61,7 +64,14 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     ?>
     <tr>
-        <td colspan="8" class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
     </tr>
     <?php
 }

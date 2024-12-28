@@ -130,7 +130,7 @@ function getSales() {
     url: "../../get_ajax/allBranchReport/partyreport/getPartyWiseSales.php",
     data:formData,
     success: function(response){
-        //loadTabledata();
+        loadTabledata();
       $("#table-body").html(response);
     },
     error:function(){

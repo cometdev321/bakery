@@ -212,7 +212,7 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
-            //loadTabledata();
+            loadTabledata();
             $("#table-body").html(response);
         },
         error: function() {

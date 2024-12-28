@@ -166,7 +166,7 @@ function get_list(val) {
         };
     } else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-1');?> 00:00:00",
+            fromDate: "<?php echo date('Y-04-1');?> 00:00:00",
             toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
         };
     } else if (val === 'Last-7-days') {

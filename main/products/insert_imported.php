@@ -2,48 +2,50 @@
 include('../common/cnn.php'); 
 session_start();
 
-if (isset($_FILES['partyfile'])) {
+if (isset($_FILES['partyfile']) && $_FILES['partyfile']['error'] == UPLOAD_ERR_OK) {
     $uploadedFile = $_FILES['partyfile']['tmp_name'];
-    if($_POST['branch']){
-        $userID=$_POST['branch'];
-    }else{
-        $userID=$_SESSION['user'];
-    }
 
+    // Open the file
     if (($file = fopen($uploadedFile, "r")) !== FALSE) {
-        // Skip the first line (header)
+        // Skip the first line (header row)
         fgetcsv($file);
- 
+
+        // Prepare the SQL query
+        $stmt = $conn->prepare(
+            "INSERT INTO tblproducts 
+            (`barcode`, `productname`, `purchaseprice`, `saleprice`, `openingstock`, `category`, `gst`, `size`, `sizetype`) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
+        
+        // Bind the variables to the prepared statement
+        $stmt->bind_param("sssssssss", $barcode, $productname, $purchaseprice, $saleprice, $openingstock, $category, $gst, $size, $sizetype);
+
+        // Process each remaining row in the file
         while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
-            $category = mysqli_real_escape_string($conn, $data[0]);
-            $productname = mysqli_real_escape_string($conn, $data[1]);
-            $saleprice = mysqli_real_escape_string($conn, $data[2]);
-            $purchase = mysqli_real_escape_string($conn, $data[3]);
-            $sizeJoined = mysqli_real_escape_string($conn, $data[4]);
-            $size = mysqli_real_escape_string($conn, $data[5]);
-            $HSN = mysqli_real_escape_string($conn, $data[6]);
-            $openingstock = mysqli_real_escape_string($conn, $data[7]);
-            $gst = mysqli_real_escape_string($conn, $data[8]);
+            // Mapping CSV columns to table columns
+            $barcode = trim($data[1]);
+            $productname = trim($data[2]);
+            $purchaseprice = (float) $data[3];  // Cast to float
+            $saleprice = (float) $data[4];      // Cast to float
+            $openingstock = (int) $data[5];     // Cast to int
+            $category = (int) $data[6];         // Cast to int
+            $gst = (float) $data[7];            // Cast to float
+            $size = trim($data[8]);
+            $sizetype = trim($data[9]);         // This was missing previously
 
-            // Check if the record already exists
-            $checkSql = "SELECT COUNT(*) as count FROM tblproducts WHERE productname = '$product' AND size = '$size' and userID='$userID' and status='1'";
-            $result = $conn->query($checkSql);
-            $row = $result->fetch_assoc();
-
-            if ($row['count'] == 0) {
-                // Record does not exist, proceed with insertion
-                $sql = "INSERT INTO tblproducts (`category`, `productname`, `saleprice`,`purchaseprice`, `HSN`, `openingstock`, `gst`, `size`,`sizetype`,`userID`) 
-                VALUES ('$category', '$productname', '$saleprice','$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined','$size','$userID')";
-                if ($conn->query($sql) === TRUE) {
-                    // Insert successful
-                } else {
-                    // Insert failed
-                }
+            // Execute the prepared statement
+            if (!$stmt->execute()) {
+                echo "Error inserting row: " . $stmt->error . "<br>";
             }
         }
 
+        // Close the file and statement
         fclose($file);
-        header("Location:import-products");
+        $stmt->close();
+
+        // Redirect to the import-products page
+        header("Location: import-products");
+        exit;
     } else {
         echo "Error opening the file.";
     }
@@ -51,5 +53,6 @@ if (isset($_FILES['partyfile'])) {
     echo "File upload error.";
 }
 
+// Close the database connection
 $conn->close();
 ?>

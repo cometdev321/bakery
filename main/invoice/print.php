@@ -132,7 +132,12 @@ $row3 = mysqli_fetch_array($result3);
                             </div> 
                             <div class="title">
                                 <h4>Invoice #<?php echo (isset($row['sales_invoice_number']))?$row['sales_invoice_number']:$row['purchase_invoice_number']; ?></h4>
-                                <p>Issued:<?php echo (isset($row['sales_invoice_date']))?$row['sales_invoice_date']:$row['purchase_invoice_date']; ?> <br>
+                                <p>Issued: 
+                                    <?php 
+                                        $date = isset($row['sales_invoice_date']) ? $row['sales_invoice_date'] : $row['purchase_invoice_date'];
+                                        echo date("d/m/y", strtotime($date)); 
+                                    ?>
+                                </p>
                                     Payment Pending: <?php echo $row['full_paid'] == 'Yes' ? 'No' : 'Yes'; ?>
                                 </p>
                             </div>

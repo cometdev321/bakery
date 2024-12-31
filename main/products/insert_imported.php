@@ -13,7 +13,7 @@ if (isset($_FILES['partyfile'])) {
     if (($file = fopen($uploadedFile, "r")) !== FALSE) {
         // Skip the first line (header)
         fgetcsv($file);
-
+ 
         while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
             $category = mysqli_real_escape_string($conn, $data[0]);
             $productname = mysqli_real_escape_string($conn, $data[1]);

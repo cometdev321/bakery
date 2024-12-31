@@ -22,7 +22,7 @@ if (mysqli_num_rows($result) > 0) {
             ?>
             <tr>
                 <td><?php echo $slno; ?></td>
-                <td><?php echo $row['purchase_invoice_date']; ?></td>
+                <td><?php echo date("d/m/y", strtotime($row['purchase_invoice_date'])); ?></td>
                 <td><?php echo $row['purchase_invoice_number']; ?></td>
                 <td>&#8377;<?php echo $row['after_discount_total']; ?></td>
                 <td><?php echo strtoupper($row['full_paid'] == 'Yes' ? 'Paid' : 'Pending'); ?></td>

@@ -145,7 +145,7 @@ $(document).ready(function() {
                                       }
                                     $query = "SELECT tp.*,tc.id FROM tblproducts tp
                                      join tblcategory tc on tc.id=tp.category 
-                                     WHERE tp.status = '1'  and tp.userID='$userID'
+                                     WHERE tp.status = '1' 
                                       order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){

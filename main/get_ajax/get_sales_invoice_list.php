@@ -24,7 +24,7 @@ if (mysqli_num_rows($result) > 0) {
             ?>
             <tr>
                 <td><?php echo $slno; ?></td>
-                <td><?php echo $row['sales_invoice_date']; ?></td>
+                <td><?php echo date("d/m/y", strtotime($row['sales_invoice_date'])); ?></td>
                 <td><?php echo $row['sales_invoice_number']; ?></td>
                 <td><?php echo $row['party_name']; ?></td>
                 <td><?php echo $row['after_discount_total']; ?></td>

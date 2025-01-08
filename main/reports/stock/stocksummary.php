@@ -89,7 +89,7 @@ function getDetails() {
         url: "../../get_ajax/stockreport/stocksummary.php",
         data: formData,
         type: 'POST',
-        success: function(response) {
+        success: function(response) { 
             loadTabledata();
             $("#table-body").html(response);
         },

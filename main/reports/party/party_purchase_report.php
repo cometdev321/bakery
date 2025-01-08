@@ -65,7 +65,7 @@ if(isset($_POST['submit'])) {
                                                 <th>Invoice Number</th>
                                                 <th>Amount</th>
                                                 <th>Paid</th>
-                                                <th>Action</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -75,7 +75,7 @@ if(isset($_POST['submit'])) {
                                                 <th>Invoice Number</th>
                                                 <th>Amount</th>
                                                 <th>Paid</th>
-                                                <th>Action</th>
+                                                <!-- <th>Action</th> -->
                                             </tr>
                                         </tfoot>
                                         <tbody id="table-body">
@@ -125,7 +125,7 @@ function getPurchase() {
     url: "../../get_ajax/partyreport/getPartyWisePurchase.php",
     data:formData,
     success: function(response){
-        loadTabledata();
+       loadTabledata();
       $("#table-body").html(response);
     },
     error:function(){

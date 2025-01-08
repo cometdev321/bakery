@@ -1,6 +1,7 @@
 <?php  
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
+$adminID = $_SESSION['admin'];
 
  ?><!-- Add this to the "manage-products" page -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -19,6 +20,23 @@ $(document).ready(function() {
       gravity: "top", // top, bottom, left, right
       position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
       backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
+      margintop:"202px",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
+  if (status === 'exists') {
+    Toastify({
+      text: "Product exists",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
       margintop:"202px",
       stopOnFocus: true, // Prevents dismissing of toast on hover
       onClick: function(){}, // Callback after click
@@ -97,9 +115,9 @@ $(document).ready(function() {
                                         <th>Poduct</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
+                                        <th>Discount/Unit</th>
+                                        <th>Profit Margin</th>
                                         <th>Size</th>
-                                        <th>HSN</th>
-                                        <th>Opening_Stock</th>
                                         <th>GST</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
@@ -112,9 +130,9 @@ $(document).ready(function() {
                                         <th>Poduct</th>
                                         <th>Sale Price</th>
                                         <th>Purchase Price</th>
+                                        <th>Discount/Unit</th>
+                                        <th>Profit Margin</th>
                                         <th>Sizes</th>
-                                        <th>HSN</th>
-                                        <th>Opening_Stock</th>
                                         <th>GST</th>
                                         <th>Edit</th>
                                         <th>Remove</th>
@@ -123,15 +141,10 @@ $(document).ready(function() {
                                 <tbody>
                                 <?php
                                     $slno=1;
-                                    if(isset($_SESSION['subSession'])){
-                                        $userID=$_SESSION['subSession'];
-                                      }else{
-                                        $userID=$session;
-                                      }
-                                    $query = "SELECT tp.*,tc.name FROM tblproducts tp
-                                     join tblcategory tc on tc.id=tp.category 
-                                     WHERE tp.status = '1'  and tp.userID='$userID'
-                                      order by tp.id desc";
+                                        $query = "SELECT tp.*,tc.name FROM tblproducts tp
+                                        join tblcategory tc on tc.id=tp.category 
+                                        WHERE tp.status = '1'  
+                                        order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>
@@ -141,10 +154,10 @@ $(document).ready(function() {
                                         <td><?php echo $row['productname'];?></td>
                                         <td><?php echo $row['saleprice'];?></td>
                                         <td><?php echo $row['purchaseprice'];?></td>
+                                        <td><?php echo $row['default_discount'];?></td>
+                                        <td><?php echo intval($row['saleprice'])-(intval($row['purchaseprice'])+intval($row['default_discount']));?></td>
                                         <td><?php echo $row['size'];?></td>
-                                        <td><?php echo $row['HSN'];?></td>
-                                        <td><?php echo $row['openingstock'];?></td>
-                                        <td><?php echo $row['gst']=='0'?'Exempted':$row['gst'];?></td>
+                                        <td><?php echo $row['gst'] == '0' ? 'Exempted' : ($row['gst'] == '-1' ? 'Non-GST' : $row['gst']); ?></td>
                                         <td>
                                             <form action="editproduct" method="post">
                                             <input name="pid" value="<?php echo $row['id'];?>" hidden>

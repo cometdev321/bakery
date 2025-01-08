@@ -8,7 +8,7 @@ if(isset($_POST['month'])){
     // Construct SQL query to retrieve total sales for the specified month
     $sql = "SELECT SUM(total_balance) AS total_sales 
             FROM tblsalesinvoices 
-            WHERE MONTH(timestamp) = $month" AND userID = '$session';
+            WHERE MONTH(timestamp) = '$month' AND userID = '$session'";
 
     $result = mysqli_query($conn, $sql);
 

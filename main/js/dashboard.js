@@ -54,7 +54,6 @@ $(function () {
 
     new Chartist.Line("#multiple-chart", dataMultiple, options);
   }
-
   $.when(
     $.ajax({
       url: "get_ajax/dashboard/fetch_sales_data.php",

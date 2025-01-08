@@ -5,11 +5,12 @@ include('../../common/session_control.php'); // Ensure you include your session 
 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
 $startOfYear = date('Y-01-01'); // Set to the first day of the current year
 
-if ($userID == 'All') {
+if ($userID == 'All' || $userID == 'ALL') {
     $query = "SELECT DATE_FORMAT(purchase_invoice_date, '%Y-%m') AS month, SUM(after_discount_total) AS total 
               FROM tblpurchaseinvoices 
               WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session')
               AND purchase_invoice_date >= '$startOfYear' 
+              AND status=1
               GROUP BY DATE_FORMAT(purchase_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
 } else if (isset($_SESSION['subSession'])) {
@@ -17,6 +18,7 @@ if ($userID == 'All') {
               FROM tblpurchaseinvoices 
               WHERE userID='$userID' 
               AND purchase_invoice_date >= '$startOfYear' 
+              AND status=1
               GROUP BY DATE_FORMAT(purchase_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
 } else {
@@ -24,6 +26,7 @@ if ($userID == 'All') {
               FROM tblpurchaseinvoices 
               WHERE userID='$session' 
               AND purchase_invoice_date >= '$startOfYear' 
+              AND status=1
               GROUP BY DATE_FORMAT(purchase_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
 }

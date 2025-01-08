@@ -7,7 +7,7 @@ $slno = 1;
 $fromDate=$_POST['fromDate'];
 $toDate=$_POST['toDate'];
 $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
-if ($selectedBranch == 'All') {
+if ($selectedBranch == 'All' || $selectedBranch == 'ALL') {
     
     $query="select ts.sales_invoice_date,tu.username as username,tp.name,ts.sales_invoice_number as refno,ts.recordType,ts.after_discount_total,ts.full_paid from tblsalesinvoices as ts
     join tblparty tp on tp.id=ts.party_name 
@@ -61,7 +61,7 @@ if (mysqli_num_rows($result) > 0) {
             ?>
             <tr>
                 <td><?php echo $slno; ?></td>
-                <td><?php echo $row['sales_invoice_date']; ?></td>
+                <td><?php echo date("d/m/y", strtotime($row['sales_invoice_date'])); ?></td>
                 <td><?php echo strtoupper($row['username']); ?></td>
                 <td><?php echo $row['name']; ?></td>
                 <td><?php echo $row['refno']; ?></td>
@@ -76,8 +76,16 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     ?>
         <tr>
-        <td colspan="8" class="text-center">No records found</td>
-        </tr>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+    </tr>
 <?php
 }
 ?>

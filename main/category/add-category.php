@@ -80,31 +80,65 @@ $(document).ready(function() {
 </script>
 <?php
 
-if(isset($_POST['submit'])){
-           $name  =     $_POST["name"];
-           if(isset($_POST['branch'])){
-                $userID=$_POST['branch'];
-              }else{
-                $userID=$session;
-           }
-            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' and status='1'  and userID='$userID'";
+if(isset($_POST['submit'])) {
+    $name = $_POST["name"];
+    $userID = isset($_POST['branch']) ? $_POST['branch'] : $session;
+
+    // If the user selected "All Branch", gather all relevant user IDs
+    if ($userID == "all") {
+        $allUserIDs = [];
+        $branchQuery = "SELECT tu.userID FROM branch b
+                        JOIN tblusers tu ON tu.branch = b.id
+                        WHERE b.status = '1' AND b.userID = '$session'";
+        $result = mysqli_query($conn, $branchQuery);
+        
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $allUserIDs[] = $row['userID'];
+            }
+        }
+    }
+
+    // Check for category existence
+    if (isset($allUserIDs)) {
+        foreach ($allUserIDs as $userID) {
+            $query = "SELECT * FROM `tblcategory` WHERE name = '$name' AND status='1' AND userID='$userID'";
             $result = mysqli_query($conn, $query);
             
             if (mysqli_num_rows($result) > 0) {
-            echo"<script>window.location.href='add-category?status=category_error'</script>";
-            } else {
-              // If the branch does not exist, insert it into the database
-              $insert_query = "INSERT INTO tblcategory (name,userId) VALUES ('$name','$userID')";
-              $insert_result = mysqli_query($conn, $insert_query);
-            
-              if ($insert_result) {
-                echo"<script>window.location.href='add-category?status=success'</script>";
-              } else {
-                echo"<script>window.location.href='add-category?status=error'</script>";
-              }
-            }   
+                echo "<script>window.location.href='add-category?status=category_error'</script>";
+                exit; 
+            }
+        }
 
+        // Insert for all branches
+        foreach ($allUserIDs as $userID) {
+            $insert_query = "INSERT INTO tblcategory (name, userId) VALUES ('$name', '$userID')";
+            if (!mysqli_query($conn, $insert_query)) {
+                echo "<script>window.location.href='add-category?status=error'</script>";
+                exit; 
+            }
+        }
+        echo "<script>window.location.href='add-category?status=success'</script>";
+    } else {
+        // Regular check for a single user
+        $query = "SELECT * FROM `tblcategory` WHERE name = '$name' AND status='1' AND userID='$userID'";
+        $result = mysqli_query($conn, $query);
+        
+        if (mysqli_num_rows($result) > 0) {
+            echo "<script>window.location.href='add-category?status=category_error'</script>";
+        } else {
+            $insert_query = "INSERT INTO tblcategory (name, userId) VALUES ('$name', '$userID')";
+            if (mysqli_query($conn, $insert_query)) {
+                echo "<script>window.location.href='add-category?status=success'</script>";
+            } else {
+                echo "<script>window.location.href='add-category?status=error'</script>";
+            }
+        }
+    }
 }
+?>
+
 ?>
     <div id="main-content">
         <div class="container-fluid">
@@ -131,17 +165,22 @@ if(isset($_POST['submit'])){
                              <?php if(isset($_SESSION['subSession'])){?>
                                   <div class="col-lg-12 col-md-6 my-2">
                                   <label>Branch</label>
-                                  <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
-                                          <?php
+                                    <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
+                                         <option>Select Branch</option>
+                                         <?php
                                                 $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
                                                     join tblusers tu on tu.branch=b.id
                                                 where b.status='1' and b.userID='$session'";
                                                 $getbrx=mysqli_query($conn,$branchQ);
+                                                $row_count = mysqli_num_rows($getbrx);
+                                                if ($row_count > 0) {
                                                 while($fetchbx=mysqli_fetch_array($getbrx)){
                                             ?>
                                                 <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
                                             <?php   
                                                 }
+                                                echo "<option value='all'>All Branch</option>";
+                                              }
                                             ?>
                                         </select> 
                                         </div>
@@ -188,11 +227,23 @@ if(isset($_POST['submit'])){
                                 <?php
                                     $slno=1;
                                     if(isset($_SESSION['subSession'])){
-                                      $userID=$_SESSION['subSession'];
+                                      if($_SESSION['subSession'] == 'ALL' || $_SESSION['subSession'] == 'all' ){
+                                          $adminID = $_SESSION['admin'];
+                                          $query = "SELECT cat.id,cat.name FROM tblcategory cat join tblusers u on u.userID = cat.userID 
+                                          where cat.status = '1' 
+                                          and u.superAdminID = '$adminID'
+                                          GROUP BY cat.name 
+                                          order by cat.id desc
+                                          ";
+                                      }else{
+                                        $userID=$_SESSION['subSession'];
+                                        $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
+                                      }
                                     }else{
                                       $userID=$session;
+                                      $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
                                  }
-                                    $query = "SELECT * FROM tblcategory WHERE status = '1' and userID='$userID' order by id desc";
+                                    
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

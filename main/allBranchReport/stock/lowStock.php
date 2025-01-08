@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
                                       FROM tblproducts p
                                       JOIN tblpurchaseinvoice_details tpi ON tpi.ItemName = p.id 
                                       JOIN tblsalesinvoice_details tsi ON tsi.ItemName = p.id 
-                                      WHERE p.status = '1' AND p.userID = '$selectedBranch' 
+                                      WHERE p.status = '1' 
                                       GROUP BY p.productname, p.saleprice, p.size, p.openingstock
                                       HAVING (SUM(tpi.Qty) + p.openingstock) - SUM(tsi.Qty) < 10";
                         }
@@ -104,7 +104,7 @@ if (isset($_POST['submit'])) {
         </div> 
     </div>
 </div>
-<script>loadTabledata();</script>
+<script>settimeout(()=>{loadTabledata();},100)</script>
 <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
 <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
 </body>

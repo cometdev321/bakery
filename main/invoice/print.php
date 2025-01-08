@@ -129,11 +129,16 @@ $row3 = mysqli_fetch_array($result3);
                                 <h6><b><?php echo strtoupper($row3['name']); ?></b></h6>
                                 <p> <?php echo $row3['location']; ?> <br>
                                 </p>
-                            </div>
+                            </div> 
                             <div class="title">
                                 <h4>Invoice #<?php echo (isset($row['sales_invoice_number']))?$row['sales_invoice_number']:$row['purchase_invoice_number']; ?></h4>
-                                <p>Issued:<?php echo (isset($row['sales_invoice_date']))?$row['sales_invoice_date']:$row['purchase_invoice_date']; ?> <br>
-                                    Payment Pending: <?php echo $row['full_paid']; ?>
+                                <p>Issued: 
+                                    <?php 
+                                        $date = isset($row['sales_invoice_date']) ? $row['sales_invoice_date'] : $row['purchase_invoice_date'];
+                                        echo date("d/m/y", strtotime($date)); 
+                                    ?>
+                                </p>
+                                    Payment Pending: <?php echo $row['full_paid'] == 'Yes' ? 'No' : 'Yes'; ?>
                                 </p>
                             </div>
                         </div>

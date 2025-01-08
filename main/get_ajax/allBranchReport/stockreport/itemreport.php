@@ -6,10 +6,10 @@ include('../../../common/session_control.php');
     $toDate=$_POST['toDate'];
     $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
     $Csession=$_SESSION['admin'];
-    if($selectedBranch=='All'){
+    if($selectedBranch=='All'){ 
         $query=mysqli_query($conn,"Select * from tblproducts where status='1' and userID in (select userID from tblusers where superAdminID='$Csession')");
     }else{
-        $query=mysqli_query($conn,"Select * from tblproducts where status='1' and userID='$selectedBranch'");
+        $query=mysqli_query($conn,"Select * from tblproducts where status='1' ");
     }
 
     while($row=mysqli_fetch_array($query)){

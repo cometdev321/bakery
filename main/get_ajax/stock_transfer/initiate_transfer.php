@@ -8,6 +8,9 @@ $toBranch = $_POST['toBranch'];
 $product = $_POST['product']; 
 $requestQty = $_POST['qty'];
 
+
+
+
 // $query = "UPDATE tblproducts p
 // JOIN tblusers u ON p.userID = u.userID
 // SET p.openingstock = p.openingstock - $requestQty

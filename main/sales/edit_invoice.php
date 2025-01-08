@@ -14,232 +14,13 @@ $query = "SELECT si.*, p.name AS `name`
     date_default_timezone_set('Asia/Kolkata');
 
 ?>
-<style>
-  .required {
-    color: red;
-  }
-  
-  .modal-body {
-    margin-top: -10px;
-  }
-</style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script>
-  $(document).ready(function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const status = urlParams.get('status');
-    if (status === 'success') {
-      Toastify({
-        text: "Party added successfully",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-    if (status === 'error') {
-      Toastify({
-        text: "Party could not be added",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-    if (status === 'alreadyexists') {
-      Toastify({
-        text: "Party details already exist!",
-        duration: 3000,
-        newWindow: true,
-        close: true,
-        gravity: "top", // top, bottom, left, right
-        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-        stopOnFocus: true, // Prevent dismissing of toast on hover
-        onClick: function() {}, // Callback after click
-      }).showToast();
-    }
-  });
-</script>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="myModalLabel">Create New Party</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <label for="nameInput"><span class="required">*</span> Name:</label>
-          <input type="text" class="form-control" id="nameInput" name="name" placeholder="Enter name" required>
-        </div>
-        <div class="modal-body">
-          <label for="mobileInput"><span class="required">*</span> Mobile Number:</label>
-          <input type="number" class="form-control" id="mob1" name="mobile" placeholder="Enter mobile number" required onkeyup="update();">
-          <small id="mobile_errorMessage" class="text-danger" style="display: none;">Invalid Mobile Number</small>
-        </div>
-        <div class="modal-body">
-          <label for="gstInput">GST Number (Optional):</label>
-          <input type="text" class="form-control" id="gstInput" name="gstno" placeholder="Enter GST number" aria-describedby="gstHelpText">
-          <small id="gstHelpText" class="form-text text-muted">Example: GSTIN-12**34**56*78ZA</small>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm" id="saveButton" onclick="check_data();" name="add_party">Save</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-  </div>
-</div>
 
-<div class="modal fade" id="product_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="myModalLabel">Create New Product</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
-        </div>
-        <div class="modal-body">
-          <label for="categorySelect"><span class="required">*</span> Category:</label>
-            <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" id="category" required onchange="clear_product_error();">
-                <option value="null">Select Category</option>
-                <?php
-                    $getct=mysqli_query($conn,"select name from tblcategory where status='1'  and userID='$session'");
-                    while($fetchcat=mysqli_fetch_array($getct)){
-                    ?>
-                    <option value="<?php echo $fetchcat['name']; ?>"><?php echo $fetchcat['name']; ?></option>
-                <?php } ?>
-            </select>
-            <small id="category_errorMessage" class="text-danger" style="display: none;">Select Category</small>
-        </div>
-        <div class="modal-body">
-          <label for="productNameInput"><span class="required">*</span> Product Name:</label>
-          <input type="text" class="form-control" id="productNameInput" name="product_name" placeholder="Enter product name" required onkeyup="clear_product_error();"> 
-          <small id="product_errorMessage" class="text-danger" style="display: none;">Type Product Name</small>
-        </div>
-        <div class="modal-body">
-          <label for="salePriceInput"><span class="required">*</span> Sale Price:</label>
-          <input type="number" class="form-control" id="salePriceInput" name="sale_price" placeholder="Enter sale price" required onkeyup="clear_product_error();">
-          <small id="sale_errorMessage" class="text-danger" style="display: none;">Type Sale Price</small>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary btn-sm" id="saveButton" onclick="check_product_data();" name="add_product">Save</button>
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-  </div>
-</div>
 
-<script>
-  function update() {
-    mobile_errorMessage.style.display = 'none';
-    mob1.style.borderColor = "initial";
-  }
 
-  function check_data() {
-    let mobno = mob1.value;
-    let firstChar = mobno.charAt(0);
-
-    if (mobno.length !== 10) {
-      mobile_errorMessage.style.display = 'block';
-      mob1.style.borderColor = "red";
-      mob1.focus();
-      event.preventDefault();
-      return;
-    }else if (firstChar !== '6' && firstChar !== '7' && firstChar !== '8' && firstChar !== '9') {
-      mobile_errorMessage.style.display = 'block';
-      mob1.style.borderColor = "red";
-      mob1.focus();
-      event.preventDefault();
-      return;
-    }else{
-        let name=nameInput.value;
-        let gst=gstInput.value;
-
-        var formdata={
-            name:name,
-            mobno:mobno,
-            gstno:gst
-        }
-        
-              $.ajax({
-                url: '../get_ajax/create_party_ajax.php',
-                type: 'POST',
-                data: formdata,
-                success: function(response) {
-                if(response=='alreadyexists'){
-                    Toastify({
-                        text: "Party already exists",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                
-                if(response=='error'){
-                    Toastify({
-                        text: "Party could not be added.Error Occured",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                if(response=='success'){
-                     Toastify({
-                        text: "Party added successfully",
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top", // top, bottom, left, right
-                        position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
-                        backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
-                        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
-                        stopOnFocus: true, // Prevent dismissing of toast on hover
-                        onClick: function() {}, // Callback after click
-                      }).showToast();
-                }
-                
-                
-                
-                $('#myModal').modal('hide');
-                getparties();
-                },
-                error: function(xhr, status, error) {
-                  console.error('Error: ' + error);
-                }
-              });
-            }
-
-    }
-    
-    
-  
+<script> 
   
     function handleSelectChange(selectElement,val) {
         if (selectElement === 'add_new') {
@@ -271,11 +52,11 @@ $query = "SELECT si.*, p.name AS `name`
             <div class="block-header">
                 <div class="row">
                     <div class="col-lg-5 col-md-8 col-sm-12">                        
-                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a> Sales Invoice</h2>
+                        <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth"><i class="fa fa-arrow-left"></i></a>Edit Sales Invoice</h2>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item active"> Sales Invoice</li>
+                            <li class="breadcrumb-item active">Edit Sales Invoice</li>
                         </ul>
                         <br>
                         <button type="button" onclick="deleteInvoice(<?php echo $row['id']; ?>,<?php echo $row['sales_invoice_number']; ?>)" class="btn btn-danger"><i class="icon-trash"></i>&nbsp;&nbsp;Delete Invoice</button>
@@ -329,14 +110,14 @@ $query = "SELECT si.*, p.name AS `name`
                                     <tr>
                                         <th>Sl.No</th>
                                         <th>Item Name</th>
-                                        <th>HSN</th>
-                                        <th>Batch No</th>
+                                        <!-- <th>HSN</th> -->
+                                        <!-- <th>Batch No</th>
                                         <th>Expire Date</th>
-                                        <th>Manuf. Date</th>
+                                        <th>Manuf. Date</th> -->
                                         <th>Size</th>
                                         <th>Qty</th>
                                         <th>Price</th>
-                                        <th>Discount</th>
+                                        <!-- <th>Discount</th> -->
                                         <th>Tax</th>
                                         <th>Amount</th>
                                         <th>Action</th>
@@ -346,14 +127,14 @@ $query = "SELECT si.*, p.name AS `name`
                                     <tr>
                                         <th>Sl.No</th>
                                         <th>Item Name</th>
-                                        <th>HSN</th>
-                                        <th>Batch No</th>
+                                        <!-- <th>HSN</th> -->
+                                        <!-- <th>Batch No</th>
                                         <th>Expire Date</th>
-                                        <th>Manuf. Date</th>
+                                        <th>Manuf. Date</th> -->
                                         <th>Size</th>
                                         <th>Qty</th>
                                         <th>Price</th>
-                                        <th>Discount</th>
+                                        <!-- <th>Discount</th> -->
                                         <th>Tax</th>
                                         <th>Amount</th>
                                         <th>Action</th>
@@ -378,20 +159,19 @@ $query = "SELECT si.*, p.name AS `name`
                                           <input type="text" hidden  value="old" name="type[]">
                                           <input type="text" class="form-control" id="<?php echo $slno; ?>" value="<?php echo $slno; ?>" name="slno[]" readonly></td>
                                             <td>
-                                              <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-<?php echo $slno; ?>" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,<?php echo $slno; ?>),clear_product_error(<?php echo $slno; ?>)">
+                                              <select  style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-<?php echo $slno; ?>" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,<?php echo $slno; ?>,this.options[this.selectedIndex].dataset.gst),clear_product_error(<?php echo $slno; ?>)">
                                                 <option value="<?php echo $row1['ItemName']; ?>"><?php echo $row1['pname']; ?></option>
                                               </select>
-                                              <script> getproducts(<?php echo $slno; ?>);</script>
                                             </td>
-                                            <td><input type="text" style="width:100px" class="form-control" id="hsn-<?php echo $slno; ?>" value="<?php echo $row1['HSN']; ?>" name="hsn[]"></td>
-                                            <td><input type="text" style="width:100px" class="form-control" id="batchno-<?php echo $slno; ?>" value="<?php echo $row1['BatchNo']; ?>" name="batchno[]"></td>
-                                            <td><input type="date" style="width:150px" class="form-control" id="expiredate-<?php echo $slno; ?>" value="<?php echo $row1['ExpireDate']; ?>" name="expiredate[]"></td>
-                                            <td><input type="date" style="width:150px" class="form-control" id="mafdate-<?php echo $slno; ?>" value="<?php echo $row1['ManufactureDate']; ?>" name="mafdate[]"></td>
+                                            <!-- <td><input type="text" style="width:100px" class="form-control" id="hsn-<?php echo $slno; ?>" value="<?php echo $row1['HSN']; ?>" name="hsn[]"></td> -->
+                                            <!-- <td><input type="text" style="width:100px" class="form-control" id="batchno-<?php echo $slno; ?>" value="<?php echo $row1['BatchNo']; ?>" name="batchno[]"></td>
+                                            <td><input type="date" style="width:150px" class="form-control" id="expiredate-<?php echo $slno; ?>" value="<?php echo $row1['ExpireDate']; ?>" name="expiredate[]"></td> 
+                                            <td><input type="date" style="width:150px" class="form-control" id="mafdate-<?php echo $slno; ?>" value="<?php echo $row1['ManufactureDate']; ?>" name="mafdate[]"></td> -->
                                             <td><input type="text" style="width:100px" class="form-control" id="sizetype-<?php echo $slno; ?>" value="<?php echo $row1['Size']; ?>" readonly name="size[]"></td>
                                             <td><input type="number" style="width:100px" class="form-control" id="qty-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Qty']; ?>" name="qty[]"></td>
                                             <td><input type="number" style="width:100px" class="form-control" id="price-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" readonly value="<?php echo $row1['Price']; ?>" name="price[]"></td>
-                                            <td><input type="number" style="width:100px" class="form-control" id="discount-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Discount']; ?>" name="discount[]"></td>
-                                            <td><input type="number" style="width:100px" class="form-control" id="tax-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Tax']; ?>" name="tax[]"></td>
+                                            <!-- <td><input type="number" style="width:100px" class="form-control" id="discount-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Discount']; ?>" name="discount[]"></td> -->
+                                            <td><input type="number" style="width:100px" class="form-control" readonly id="tax-<?php echo $slno; ?>" onkeyup="update_amount(<?php echo $slno; ?>)" value="<?php echo $row1['Tax']; ?>" name="tax[]"></td>
                                             <td><input type="number" style="width:100px" class="form-control" readonly id="amount-<?php echo $slno; ?>" value="<?php echo $row1['Amount']; ?>" name="amount[]" ></td>
                                             <td><button type="button" onclick="deleteSales(<?php echo $slno; ?>,<?php echo $row1['id']; ?>)" class="btn btn-danger"><i class="icon-trash"></i></button></td>
                                         </tr>
@@ -443,7 +223,7 @@ $query = "SELECT si.*, p.name AS `name`
                                                 <center>
                                                 <label>Mark As Fully Paid</label><br>
                                                 <label class="control-inline fancy-checkbox">
-                                            <input id="received_pay" type="checkbox" value="No" <?php $paid=$row['full_paid']; if($paid=='Yes'){echo 'checked';}else{ }?> name="paid_checkbox"  onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
+                                            <input id="received_pay" type="checkbox" value="<?php echo $row['full_paid'];?>" <?php $paid=$row['full_paid']; if($paid=='Yes'){echo 'checked';}else{ }?> name="paid_checkbox"  onclick="update_paid()"  data-parsley-mincheck="2" data-parsley-errors-container="#error-checkbox2" data-parsley-multiple="checkbox2">
                                         <span></span>
                                             </label>
                                                 </center>
@@ -521,20 +301,20 @@ $query = "SELECT si.*, p.name AS `name`
         const newRowContent =
             '<td><input type="text" hidden name="salesID[]" ><input type="text" hidden value="new" name="type[]"><input type="text" class="form-control" id="' + rowCount + '" value="' + rowCount + '" name="slno[]" readonly></td>' +
             '<td>' +
-            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + '),clear_product_error(' + rowCount + ')">' +
+            '  <select style="width:200px" name="itemname[]" class="form-control show-tick ms select2" id="select_products-' + rowCount + '" data-placeholder="Select" onchange="update_price(this.options[this.selectedIndex].dataset.hsn,this.options[this.selectedIndex].dataset.price,this.options[this.selectedIndex].dataset.sizetype,' + rowCount + ',this.options[this.selectedIndex].dataset.gst),clear_product_error(' + rowCount + ')">' +
             '    <option value="null">Select Product</option>' +
             '  </select>' +
             '  <small id="product_errorMessage-' + rowCount + '" class="text-danger" style="display: none;">Select Product</small>' +
             '</td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="hsn-' + rowCount + '" name="hsn[]"></td>' +
-            '<td><input type="text" style="width:100px" class="form-control" id="batchno-' + rowCount + '" name="batchno[]"></td>' +
-            '<td><input type="date" style="width:150px" class="form-control" id="expiredate-' + rowCount + '" name="expiredate[]"></td>' +
-            '<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
+            // '<td><input type="text" style="width:100px" class="form-control" id="hsn-' + rowCount + '" name="hsn[]"></td>' +
+            //'<td><input type="text" style="width:100px" class="form-control" id="batchno-' + rowCount + '" name="batchno[]"></td>' +
+            // '<td><input type="date" style="width:150px" class="form-control" id="mafdate-' + rowCount + '" name="mafdate[]"></td>' +
+            // '<td><input type="date" style="width:150px" class="form-control" id="expiredate-' + rowCount + '" name="expiredate[]"></td>' +
             '<td><input type="text" style="width:100px" class="form-control" id="sizetype-' + rowCount + '"  name="size[]" type="text" readonly></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="qty-' + rowCount + '" value="1" name="qty[]" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="price-' + rowCount + '" readonly name="price[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="number" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
-            '<td><input type="number" style="width:100px" class="form-control" id="tax-' + rowCount + '" name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            // '<td><input type="number" style="width:100px" class="form-control" id="discount-' + rowCount + '" name="discount[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
+            '<td><input type="number" style="width:100px" class="form-control" id="tax-' + rowCount + '" readonly name="tax[]" value="0" onkeyup="update_amount(' + rowCount + ')" required></td>' +
             '<td><input type="number" style="width:100px" class="form-control" id="amount-' + rowCount + '" readonly name="amount[]" value="0" readonly></td>' +
             '<td><button type="button" onclick="deleteRow(' + rowCount + ')" class="btn btn-danger"><i class="icon-trash"></i></button></td>';
 
@@ -551,11 +331,16 @@ $query = "SELECT si.*, p.name AS `name`
         calculate_total_discount();
     }
     
-    function update_price(hsn,val,sizetype,row) {
+    function update_price(hsn,val,sizetype,row,gst) {
+     
         if (!isNaN(val)) {
-            document.getElementById(`hsn-${row}`).value = hsn;
+          if(gst<0){
+            gst=0;
+          }
+            // document.getElementById(`hsn-${row}`).value = hsn;
             document.getElementById(`price-${row}`).value = val;
             document.getElementById(`sizetype-${row}`).value = sizetype;
+            document.getElementById(`tax-${row}`).value = gst;
             update_amount(row);
             document.getElementById('add-row-btn').disabled = false;
         } else {
@@ -641,14 +426,16 @@ function create_sales_invoice() {
     const salesID = row.querySelector('[name="salesID[]"]').value;
     const type = row.querySelector('[name="type[]"]').value;
     const itemname = row.querySelector('[name="itemname[]"]').value;
-    const hsn = row.querySelector('[name="hsn[]"]').value;
-    const batchno = row.querySelector('[name="batchno[]"]').value;
-    const expiredate = row.querySelector('[name="expiredate[]"]').value;
-    const mafdate = row.querySelector('[name="mafdate[]"]').value;
+    const hsn = 0;
+    // const hsn = row.querySelector('[name="hsn[]"]').value;
+    // const batchno = row.querySelector('[name="batchno[]"]').value;
+    // const expiredate = row.querySelector('[name="expiredate[]"]').value;
+    // const mafdate = row.querySelector('[name="mafdate[]"]').value;
     const qty = row.querySelector('[name="qty[]"]').value;
     const size = row.querySelector('[name="size[]"]').value;
     const price = row.querySelector('[name="price[]"]').value;
-    const discount = row.querySelector('[name="discount[]"]').value;
+    const discount = 0;
+    // const discount = row.querySelector('[name="discount[]"]').value;
     const tax = row.querySelector('[name="tax[]"]').value;
     const amount = row.querySelector('[name="amount[]"]').value;
 
@@ -665,9 +452,9 @@ function create_sales_invoice() {
       type,
       itemname,
       hsn,
-      batchno,
-      expiredate,
-      mafdate,
+      // batchno,
+      // expiredate,
+      // mafdate,
       qty,
       size,
       price,
@@ -693,7 +480,7 @@ function create_sales_invoice() {
     .then(result => {
       if (result == 'error' || result=='   error') {
         Toastify({
-          text: "Party could not be added. Error Occurred",
+          text: " Error Occurred",
           duration: 3000,
           newWindow: true,
           close: true,
@@ -705,7 +492,7 @@ function create_sales_invoice() {
           onClick: function() {},
         }).showToast();
         window.location.href = "sales_invoice?status=error";
-      } else if (result == 'success' || result =='   success') {
+      } else if (result == 'success' || result =='   success' || result.trim()=='success') {
         Toastify({
           text: "updated successfully",
           duration: 3000,
@@ -776,17 +563,18 @@ function create_sales_invoice() {
     function update_amount(row) {
         const qtyInput = document.getElementById(`qty-${row}`);
         const priceInput = document.getElementById(`price-${row}`);
-        const discountInput = document.getElementById(`discount-${row}`);
+        // const discountInput = document.getElementById(`discount-${row}`);
         const taxInput = document.getElementById(`tax-${row}`);
         const amountInput = document.getElementById(`amount-${row}`);
-
         const qty = parseFloat(qtyInput.value);
         const price = parseFloat(priceInput.value);
-        const discount = parseFloat(discountInput.value);
+        const discount = 0;
         const tax = parseFloat(taxInput.value);
 
-        const subtotal = (qty * price) - discount;
-        const amount = subtotal + (subtotal * tax / 100);
+        let subtotal = (qty * price) - discount;
+        let amount = subtotal + (subtotal * tax / 100);
+        amount=subtotal;//skipping gst adding again
+
         amountInput.value = amount;
 
         calculate_subtotal();
@@ -840,7 +628,6 @@ function create_sales_invoice() {
 
  
  function clear_product_error(val) {
-    category_errorMessage.style.display = 'none';
     sale_errorMessage.style.display = 'none';
     product_errorMessage.style.display = 'none';
     party_errorMessage.style.display = 'none';
@@ -853,17 +640,10 @@ function create_sales_invoice() {
         let productName = productNameInput.value;
         let salePrice = salePriceInput.value;
         
-        let category_errorMessage = document.getElementById('category_errorMessage');
         let sale_errorMessage = document.getElementById('sale_errorMessage');
         let product_errorMessage = document.getElementById('product_errorMessage');
         
-        if (categoryName === 'null') {
-          category_errorMessage.style.display = 'block';
-          category_errorMessage.textContent = 'Category is required.';
-          event.preventDefault();
-          return;
-        }
-        
+   
         if (productName === '') {
           product_errorMessage.style.display = 'block';
           product_errorMessage.textContent = 'Product name is required.';
@@ -922,7 +702,7 @@ function create_sales_invoice() {
                       }).showToast();
                 }
                 if(response=='product_added'){
-                     Toastify({
+                     Toastify({ 
                         text: "Product added successfully",
                         duration: 3000,
                         newWindow: true,

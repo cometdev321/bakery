@@ -3,7 +3,7 @@
   include('../../common/sidebar.php'); 
   $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
 
- ?>
+ ?> 
 
 
 
@@ -32,7 +32,7 @@
                                         <select class="form-control show-tick ms select2" id="party" data-placeholder="Select" name="category" onchange="getPurchase()" >
                                         <option >Select Party</option>
                                         <?php
-                                        if($selectedBranch=='All'){
+                                        if($selectedBranch=='All'||$selectedBranch=='ALL'){
                                             $Csession=$_SESSION['admin'];
                                             $getct=mysqli_query($conn,"select id,name from tblparty where status='1' and userID in(select userID from tblusers where superAdminID='$Csession')");
                                         }else{

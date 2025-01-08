@@ -2,7 +2,9 @@
     include('../common/header2.php');
     include('../common/sidebar.php');
 date_default_timezone_set('Asia/Kolkata');
-
+if(isset($_SESSION['user'])){
+    echo "<script>window.location.href='$base/purchase/enabledpurchase/purchase_invoice'</script>";
+}
 ?>
 
     <div id="main-content">
@@ -19,7 +21,8 @@ date_default_timezone_set('Asia/Kolkata');
                 </div>            
                 <div class="col-lg-7 col-md-4 col-sm-12">
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_purchase_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Purchase Invoice</span></button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="window.location.href='create_purchase_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create GST Purchase Invoice</span></button>
+                        <button type="button" class="btn btn-primary mt-2" onclick="window.location.href='nongst_purchase'"><i class="fa fa-plus"></i> <span>&nbsp;Create Non-GST Purchase Invoice</span></button>
                     </div>
                 </div>
             </div>
@@ -38,14 +41,13 @@ date_default_timezone_set('Asia/Kolkata');
                                     <option value="Yesterday">Yesterday</option>
                                     <option value="This-Week">This-Week</option>
                                     <option  selected value="This-Month">This-Month</option>
-                                    <option value="Current-Fiscal-Year">Current Fiscal Year </option>
                                     <option value="Last-7-days">Last 7 days</option>
                                 </select>
                                 </div>
                             </div>
                          <div class="col-lg-9 col-md-12 row">
                             <div class="form-group">
-                                <label>Time</label>
+                                <label>Date</label>
                                 <div class="input-group">
                                     <div class="col-lg-4" style="width:250px">
                                         <input type="date" class="form-control" id="startDate" value="date-range" >
@@ -74,6 +76,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <thead>
                                     <tr>
                                         <th>SLNO</th>
+                                        <th>GST-Enabled</th>
                                         <th>DATE</th>
                                         <th>PURCHASE INVOICE NUMBER</th>
                                         <th>PARTY NAME</th>
@@ -85,6 +88,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 <tfoot>
                                     <tr>
                                         <th>SLNO</th>
+                                        <th>GST-Enabled</th>
                                         <th>DATE</th>
                                         <th>PURCHASE INVOICE NUMBER</th>
                                         <th>PARTY NAME</th>
@@ -107,18 +111,28 @@ date_default_timezone_set('Asia/Kolkata');
             <form id="PurchaseInvoice" action="../invoice/print" method="POST" style="display: none;">
                 <input type="text" hidden name="purchase_id" id="purchase_id">
             </form>
+            <form id="PosInvoice" action="../invoice/posprint" method="POST" style="display: none;">
+                <input type="text" hidden name="purchase_id" id="Pos_purchase_id">
+            </form>
             <form id="edit_PurchaseInvoice" action="edit_purchase" method="POST" style="display: none;">
                 <input type="text"  name="edit_purchase_id" id="edit_purchase_id">
+                <input type="text"  name="gst" id="gst">
             </form>
+            
 
 </div>
            <script> 
+                 function submitPurchasePosForm(val) {
+                    document.getElementById('Pos_purchase_id').value=val;
+                    document.getElementById('PosInvoice').submit();
+                }
                 function submitPurchaseInvoiceForm(val) {
                     document.getElementById('purchase_id').value=val;
                     document.getElementById('PurchaseInvoice').submit();
                 }
-                function edit_invoice(val) {
+                function edit_invoice(val,gst) {
                     document.getElementById('edit_purchase_id').value=val;
+                    document.getElementById('gst').value=gst;
                     document.getElementById('edit_PurchaseInvoice').submit();
                 }
             </script>
@@ -128,40 +142,40 @@ function get_list(val) {
 
       if (val === 'Today') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d'); ?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d'); ?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Yesterday') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>",
+            toDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>"
         };
     }else if (val === 'This-Week') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('this week'));?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('this week'));?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-01');?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-01');?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-04-01');?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Last-7-days') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-        fromDate: start + " 00:00:00",
-        toDate: end + " 23:59:59"
+        fromDate: start + "",
+        toDate: end + ""
     };
     }
     
@@ -170,8 +184,9 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            $("#Purchase-list").empty();
             loadTabledata();
-            $("#Purchase-list").html(response);
+             $("#Purchase-list").html(response);
         },
         error: function() {
             console.log("Error occurred while fetching parties.");

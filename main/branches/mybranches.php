@@ -115,7 +115,7 @@ if(isset($_POST['submit'])){
         }else{
          $branchname  =     $_POST["branchname"];
          $location    =     $_POST["location"];
-            $query = "SELECT * FROM branch WHERE name = '$branchname' AND location = '$location' and status='1' and userID='$session'";
+            $query = "SELECT * FROM branch WHERE name = '$branchname' and status='1' and userID='$session'";
             $result = mysqli_query($conn, $query);
 
             if (mysqli_num_rows($result) > 0) {
@@ -191,7 +191,6 @@ if(isset($_POST['submit'])){
                                         <th>Branch Name</th>
                                         <th>Location</th>
                                         <th>Edit</th>
-                                        <th>Remove</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -200,7 +199,6 @@ if(isset($_POST['submit'])){
                                         <th>Branch Name</th>
                                         <th>Location</th>
                                         <th>Edit</th>
-                                        <th>Remove</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -220,7 +218,7 @@ if(isset($_POST['submit'])){
                                             <button type="submit" class="btn btn-success btn-sm "><i class="icon-pencil"></i><span></span></button>
                                             </form>
                                         </td>
-                                        <td><button type="submit" name="submit" class="btn btn-danger btn-sm js-sweetalert" data-type="ajax-loader" onclick="ready(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td>
+                                        <!-- <td><button type="submit" name="submit" class="btn btn-danger btn-sm js-sweetalert" data-type="ajax-loader" onclick="ready(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td> -->
                                     </tr>
                                 <?php $slno++; } ?>
                                 </tbody>

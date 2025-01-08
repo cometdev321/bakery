@@ -3,7 +3,7 @@ include('../../common/cnn.php');
 include('../../common/session_control.php');
 
 
-$slno = 1;
+$slno = 1; 
 $fromDate=$_POST['fromDate'];
 $toDate=$_POST['toDate'];
     $query="select ts.sales_invoice_date,tp.name,ts.sales_invoice_number as refno,ts.recordType,ts.after_discount_total,ts.full_paid from tblsalesinvoices as ts
@@ -44,8 +44,15 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     ?>
         <tr>
-        <td colspan="8" class="text-center">No records found</td>
-        </tr>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+    </tr>
 <?php
 }
 ?>

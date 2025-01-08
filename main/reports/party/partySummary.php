@@ -94,8 +94,10 @@
                         </div> 
                     </div>
 
-                    <script> loadTabledata();</script>
                     <script src="../../../assets/bundles/mainscripts.bundle.js"></script>
                     <script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
-</body>
+                    <script> setTimeout(() => {
+                        loadTabledata()
+                    }, 100);</script>
+                </body>
 </html>

@@ -45,7 +45,7 @@
                                                 <th>#</th>
                                                 <th>Username</th>
                                                 <th>PartyName</th>
-                                                <th>Ref NO</th>
+                                                <th>Invoice No</th>
                                                 <th>Type</th>
                                                 <th>Total</th>
                                                 <th>Money In</th>
@@ -57,7 +57,7 @@
                                                 <th>#</th>
                                                 <th>Username</th>
                                                 <th>PartyName</th>
-                                                <th>Ref NO</th>
+                                                <th>Invoice No</th>
                                                 <th>Type</th>
                                                 <th>Total</th>
                                                 <th>Money In</th>

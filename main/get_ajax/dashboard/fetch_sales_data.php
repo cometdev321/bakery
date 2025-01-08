@@ -5,10 +5,11 @@ include('../../common/session_control.php'); // Ensure you include your session 
 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
 $startOfYear = date('Y-01-01'); // Set to the first day of the current year
 
-if ($userID == 'All') {
+if ($userID == 'all' || $userID == 'ALL') {
     $query = "SELECT DATE_FORMAT(sales_invoice_date, '%Y-%m') AS month, SUM(after_discount_total) AS total 
               FROM tblsalesinvoices 
               WHERE userID IN (SELECT userID FROM tblusers WHERE superAdminID='$session')
+              AND status=1
               AND sales_invoice_date >= '$startOfYear' 
               GROUP BY DATE_FORMAT(sales_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
@@ -16,6 +17,7 @@ if ($userID == 'All') {
     $query = "SELECT DATE_FORMAT(sales_invoice_date, '%Y-%m') AS month, SUM(after_discount_total) AS total 
               FROM tblsalesinvoices 
               WHERE userID='$userID' 
+              AND status=1
               AND sales_invoice_date >= '$startOfYear' 
               GROUP BY DATE_FORMAT(sales_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 
@@ -23,6 +25,7 @@ if ($userID == 'All') {
     $query = "SELECT DATE_FORMAT(sales_invoice_date, '%Y-%m') AS month, SUM(after_discount_total) AS total 
               FROM tblsalesinvoices 
               WHERE userID='$session' 
+              AND status=1
               AND sales_invoice_date >= '$startOfYear' 
               GROUP BY DATE_FORMAT(sales_invoice_date, '%Y-%m') 
               ORDER BY month ASC"; 

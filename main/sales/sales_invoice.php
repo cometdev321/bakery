@@ -60,7 +60,8 @@ $(document).ready(function() {
                 </div>            
                 <div class="col-lg-7 col-md-4 col-sm-12">
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_sales_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Sales Invoice</span></button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='create_sales_invoic'"><i class="fa fa-plus"></i> <span>&nbsp;New Sales Invoice</span></button>
+                        <!-- <button type="button" class="btn btn-primary" onclick="window.location.href='create_sales_invoice'"><i class="fa fa-plus"></i> <span>&nbsp;Create Sales Invoice</span></button> -->
                     </div>
                 </div>
             </div>
@@ -79,7 +80,6 @@ $(document).ready(function() {
                                     <option value="Yesterday">Yesterday</option>
                                     <option value="This-Week">This-Week</option>
                                     <option selected value="This-Month">This-Month</option>
-                                    <option value="Current-Fiscal-Year">Current Fiscal Year </option>
                                     <option value="Last-7-days">Last 7 days</option>
                                 </select>
                                 </div>
@@ -151,12 +151,19 @@ $(document).ready(function() {
             <form id="salesInvoice" action="../invoice/print" method="POST" style="display: none;">
                 <input type="text" hidden name="sale_id" id="sale_id">
             </form>
+            <form id="PosInvoice" action="../invoice/posprint" method="POST" style="display: none;">
+                <input type="text" hidden name="sale_id" id="Pos_sale_id">
+            </form>
             <form id="edit_salesInvoice" action="edit_invoice" method="POST" style="display: none;">
                 <input type="text" hidden name="edit_sale_id" id="edit_sale_id">
             </form>
-
+ 
 </div>
            <script>
+                function submitSalePosForm(val) {
+                    document.getElementById('Pos_sale_id').value=val;
+                    document.getElementById('PosInvoice').submit();
+                }
                 function submitSaleInvoiceForm(val) {
                     document.getElementById('sale_id').value=val;
                     document.getElementById('salesInvoice').submit();
@@ -173,40 +180,40 @@ function get_list(val) {
 
     if (val === 'Today') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d'); ?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d'); ?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Yesterday') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>",
+            toDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>"
         };
     }else if (val === 'This-Week') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('this week'));?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('this week'));?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'This-Month') {
         formData = {
-            fromDate: "<?php echo date('Y-m-01');?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-01');?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-04-01');?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else if (val === 'Last-7-days') {
         formData = {
-            fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?> 00:00:00",
-            toDate: "<?php echo date('Y-m-d'); ?> 23:59:59"
+            fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
         };
     }else {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
         formData = {
-        fromDate: start + " 00:00:00",
-        toDate: end + " 23:59:59"
+        fromDate: start ,
+        toDate: end
     };
     }
 
@@ -215,6 +222,7 @@ function get_list(val) {
         data: formData,
         type: 'POST',
         success: function(response) {
+            $("#sales-list").empty();
             loadTabledata();
             $("#sales-list").html(response);
         },

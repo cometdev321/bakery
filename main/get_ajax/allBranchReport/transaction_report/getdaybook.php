@@ -8,7 +8,7 @@ $date=$_POST['date'];
 $selectedBranch = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : 'All'; // Default to 'All' if not set
 
 
-if($selectedBranch=='All'){
+if($selectedBranch=='All' || $selectedBranch=='ALL'){
     $query="select tp.name,tu.username as username,ts.sales_invoice_number as refno,ts.recordType,ts.after_discount_total,ts.full_paid from tblsalesinvoices as ts
     join tblparty tp on tp.id=ts.party_name 
     join tblusers tu on tu.userID=ts.userID
@@ -74,8 +74,15 @@ if (mysqli_num_rows($result) > 0) {
 } else {
     ?>
         <tr>
-        <td colspan="8" class="text-center">No records found</td>
-        </tr>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+        <td  class="text-center">No records found</td>
+    </tr>
 <?php
 }
 ?>

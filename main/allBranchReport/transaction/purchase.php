@@ -82,7 +82,8 @@ if(isset($_POST['submit'])) {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Date</th>
-                                                <th>Inovice No</th>
+                                                <th>Branch</th>
+                                                <th>Invoice No</th>
                                                 <th>Party Name</th>
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
@@ -94,7 +95,8 @@ if(isset($_POST['submit'])) {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Date</th>
-                                                <th>Inovice No</th>
+                                                <th>Branch</th>
+                                                <th>Invoice No</th>
                                                 <th>Party Name</th>
                                                 <th>Payment Type</th>
                                                 <th>Amount</th>
@@ -145,7 +147,7 @@ function get_list(val) {
         };
     }else if (val === 'Current-Fiscal-Year') {
         formData = {
-            fromDate: "<?php echo date('Y-4-01');?> ",
+            fromDate: "<?php echo date('Y-04-01');?> ",
             toDate: "<?php echo date('Y-m-d'); ?> "
         };
     }else if (val === 'Last-7-days') {

@@ -65,37 +65,7 @@ $(document).ready(function() {
                     <form id="basic-form" method="post" action="insert_imported.php" enctype="multipart/form-data">
                         <div class="card">
                             <div class="body">
-                            <?php 
-                                    if(isset($_SESSION['subSession']) || isset($_SESSION['admin'])){
-                                        if(isset($_SESSION['subSession'])){
-                                            $S_O_branch=$_SESSION['subSession'];
-                                            $getSessionName=mysqli_query($conn,"SELECT name from branch where id in(select branch from tblusers where userID='$S_O_branch')");
-                                            $getSessionValue=mysqli_fetch_array($getSessionName);
-                                        }
-                                    ?>
-                                        <div class="col-lg-12 col-md-12 my-2">
-                                            <label>Select From Branches</label>
-                                            <select  class="form-control show-tick ms select2" id="branch" name="branch"  data-placeholder="Select"  > 
-                                            <?php  if(isset($_SESSION['subSession'])){ ?>
-                                            <option value="<?php echo $S_O_branch;?>"><?php echo isset($getSessionValue['name']) ? strtoupper($getSessionValue['name']) : 'All';?> </option>
-                                            <?php } ?>
-                                            <option >Select Branch</option>
-                                                <?php
-                                                    $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
-                                                        join tblusers tu on tu.branch=b.id
-                                                    where b.status='1' and b.userID='$session'";
-                                                    $getbrx=mysqli_query($conn,$branchQ);
-                                                    while($fetchbx=mysqli_fetch_array($getbrx)){
-                                                ?>
-                                                    <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
-                                                <?php   
-                                                    }
-                                                ?>
-                                            </select>   
-                                            </div>
-                                    <?php
-                                    }?>
-                            <div class="col-lg-12 col-md-12 ">
+                           <div class="col-lg-12 col-md-12 ">
                                 <label >Import file</label>
                                 <input type="file" name="partyfile" placeholder="Type Here" class="form-control" required>
                             </div>
@@ -145,7 +115,7 @@ $(document).ready(function() {
                                       }
                                     $query = "SELECT tp.*,tc.id FROM tblproducts tp
                                      join tblcategory tc on tc.id=tp.category 
-                                     WHERE tp.status = '1'  and tp.userID='$userID'
+                                     WHERE tp.status = '1' 
                                       order by tp.id desc";
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){

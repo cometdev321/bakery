@@ -1,8 +1,8 @@
 <?php
-include('../common/cnn.php');
-
+include('../../common/cnn.php');
+include('../../common/session_control.php'); 
 if (isset($_GET['product_id'])) {
-    $productId = $_GET['product_id'];
+    $productId = $_GET['product_id']; 
 
     // Query to fetch available stock for the selected product
     $query = "SELECT openingstock FROM tblproducts WHERE id = '$productId'";
@@ -12,8 +12,8 @@ if (isset($_GET['product_id'])) {
         $row = mysqli_fetch_assoc($result);
         $availableStock = $row['openingstock'];
 
-        // Return JSON response
-        echo json_encode(['stock' => $availableStock]);
+        // Return JSON response 
+        echo $availableStock;
     } else {
         // Handle error if product not found
         echo json_encode(['error' => 'Product not found']);

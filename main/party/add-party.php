@@ -64,40 +64,83 @@ $(document).ready(function() {
 
 <?php
 if(isset($_POST['submit'])) {
-  $name = $_POST['name'];
-  $mobile = $_POST['mobno'];
-  $gstno = $_POST['gstno'];
-    
-    if(isset($_POST['branch'])){
-      $userID=$_POST['branch'];
-    }else{
-      $userID=$session;
+    $name = $_POST['name'];
+    $mobile = $_POST['mobno'];
+    $gstno = $_POST['gstno'];
+    $address = isset($_POST['address']) ? $_POST['address'] : '';
+    $payment_info = isset($_POST['payment_info']) ? $_POST['payment_info'] : '';
+
+    if (isset($_POST['branch'])) {
+        $userID = $_POST['branch'];
+    } else {
+        $userID = $session;
     }
-      $checkQuery = "SELECT * FROM tblparty WHERE mobno = '$mobile'  and userID='$userID'";
-      
-      if (!empty($gstno)) {
-        $checkQuery .= " OR gstno = '$gstno'";
-      }
-      
-      $result = $conn->query($checkQuery);
-  
- 
-  if ($result->num_rows > 0) {
-         echo"<script>window.location.href='add-party?status=exists'</script>";
-  } else {
 
-      $query = "INSERT INTO `tblparty` (`name`, `mobno`, `gstno`,`userID`) VALUES ('$name', '$mobile', '$gstno','$userID')";
-      if(mysqli_query($conn, $query)) {
-        echo"<script>window.location.href='add-party?status=success'</script>";
-
-      } else {
-        echo"<script>window.location.href='add-party?status=error'</script>";
-
-      }
+    // If the user selected "All Branch", gather all relevant user IDs
+    if ($userID == "all") {
+        $allUserIDs = [];
+        $branchQuery = "SELECT tu.userID FROM branch b
+                        JOIN tblusers tu ON tu.branch = b.id
+                        WHERE b.status = '1' AND b.userID = '$session'";
+        $result = mysqli_query($conn, $branchQuery);
+        
+        if ($result) {
+            while ($row = mysqli_fetch_assoc($result)) {
+                $allUserIDs[] = $row['userID'];
+            }
+        }
     }
-  }
 
+    // Check for existence in the case of multiple branches
+    if (isset($allUserIDs)) {
+        foreach ($allUserIDs as $userID) {
+            $checkQuery = "SELECT * FROM tblparty WHERE mobno = '$mobile' AND userID='$userID'";
+            if (!empty($gstno)) {
+                $checkQuery .= " OR gstno = '$gstno'";
+            }
+
+            $result = $conn->query($checkQuery);
+
+            if ($result->num_rows > 0) {
+                echo "<script>window.location.href='add-party?status=exists'</script>";
+                exit; 
+            }
+        }
+
+        // Insert for all branches
+        foreach ($allUserIDs as $userID) {
+            $query = "INSERT INTO `tblparty` (`name`, `mobno`, `gstno`, `address`, `payment_info`, `userID`) 
+                      VALUES ('$name', '$mobile', '$gstno', '$address', '$payment_info', '$userID')";
+            if (!mysqli_query($conn, $query)) {
+                echo "<script>window.location.href='add-party?status=error'</script>";
+                exit; 
+            }
+        }
+        echo "<script>window.location.href='add-party?status=success'</script>";
+    } else {
+        // Regular check for a single user
+        $checkQuery = "SELECT * FROM tblparty WHERE mobno = '$mobile' AND userID='$userID'";
+        if (!empty($gstno)) {
+            $checkQuery .= " OR gstno = '$gstno'";
+        }
+
+        $result = $conn->query($checkQuery);
+
+        if ($result->num_rows > 0) {
+            echo "<script>window.location.href='add-party?status=exists'</script>";
+        } else {
+            $query = "INSERT INTO `tblparty` (`name`, `mobno`, `gstno`, `address`, `payment_info`, `userID`) 
+                      VALUES ('$name', '$mobile', '$gstno', '$address', '$payment_info', '$userID')";
+            if (mysqli_query($conn, $query)) {
+                echo "<script>window.location.href='add-party?status=success'</script>";
+            } else {
+                echo "<script>window.location.href='add-party?status=error'</script>";
+            }
+        }
+    }
+}
 ?>
+
 
  <div id="main-content">
         <div class="container-fluid">
@@ -115,53 +158,64 @@ if(isset($_POST['submit'])) {
                 </div>
             </div>
 
-                    <div class="card planned_task">
-                        <div class="header">
-                            <h2>User Details</h2>
-                        </div>
-                        <div class="body">
-                             <form id="basic-form" method="post" action="">
-                                 <div class="row clearfix">
-                                  <?php if(isset($_SESSION['subSession'])){?>
-                                  <div class="col-lg-6 col-md-12 my-2">
-                                  <label>Branch</label>
-                                  <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
-                                          <?php
+            <div class="card planned_task">
+    <div class="header">
+        <h2>User Details</h2>
+    </div>
+    <div class="body"> 
+        <form id="basic-form" method="post" action="">
+            <div class="row clearfix">
+                <?php if(isset($_SESSION['subSession'])){?>
+                <div class="col-lg-6 col-md-12 my-2">
+                    <label>Branch</label>
+                     <select class="form-control show-tick ms select2" id="branch" name="branch" data-placeholder="Select" required > 
+                                         <option>Select Branch</option>
+                                         <?php
                                                 $branchQ="select tu.userID as unicodeBranch,b.name as name from branch b
                                                     join tblusers tu on tu.branch=b.id
                                                 where b.status='1' and b.userID='$session'";
                                                 $getbrx=mysqli_query($conn,$branchQ);
+                                                $row_count = mysqli_num_rows($getbrx);
+                                                if ($row_count > 0) {
                                                 while($fetchbx=mysqli_fetch_array($getbrx)){
                                             ?>
                                                 <option value="<?php echo $fetchbx['unicodeBranch'];?>"><?php echo strtoupper($fetchbx['name']);?></option>
                                             <?php   
                                                 }
+                                                echo "<option value='all'>All Branch</option>";
+                                              }
                                             ?>
-                                        </select> 
-                                        </div>
-                                        <?php } ?>
-                                        <div class="col-lg-6 col-md-12 my-2">
-                                            <label>Party Name</label>
-                                            <input type="text" name="name" placeholder="Type Here" class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>Party Contact Info</label>
-                                            <input type="number" name="mobno" placeholder="Type Here"  class="form-control" required>
-                                        </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
-                                            <label>GST</label>
-                                            <input type="text" name="gstno" placeholder="Type Here"  class="form-control" required>
-                                        </div>
-                                       
+                                        </select>  
+                </div>
+                <?php } ?>
+                <div class="col-lg-6 col-md-12 my-2">
+                    <label>Party Name</label>
+                    <input type="text" name="name" placeholder="Type Here" class="form-control" required>
+                </div>
+                <div class="col-lg-6 col-md-12  my-2">
+                    <label>Party Contact Info</label>
+                    <input type="number" name="mobno" placeholder="Type Here"  class="form-control" required>
+                </div>
+                <div class="col-lg-6 col-md-12  my-2">
+                    <label>GST</label>
+                    <input type="text" name="gstno" placeholder="Type Here"  class="form-control" >
+                </div>
+                <div class="col-lg-6 col-md-12  my-2">
+                    <label>Address</label>
+                    <input type="text" name="address" placeholder="Type Here"  class="form-control">
+                </div>
+                <div class="col-lg-6 col-md-12  my-2">
+                    <label>Payment Info</label>
+                    <input type="text" name="payment_info" placeholder="Type Here"  class="form-control">
+                </div>
+            </div>
+            <div class="form-group my-2">
+                <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
+            </div>
+        </form>
+    </div>
+</div>
 
-                                    </div>
-                                <div class="form-group my-2">
-                                    <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
-                                </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
 
 <!-- Javascript -->
 <script src="../../assets/bundles/libscripts.bundle.js"></script>    

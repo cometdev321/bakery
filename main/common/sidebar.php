@@ -530,6 +530,9 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="<?php echo $base ?>/deliwheels/dashboard.php" class="has-arrow"><i class="icon-home"></i> <span>Deliwheels</span></a>
+                            </li>
                             
                             <li>
                                 <a href="#App" class="has-arrow"><i class="icon-link"></i> <span>Category</span></a>

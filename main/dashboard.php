@@ -2,6 +2,7 @@
 include('common/header.php'); 
 include('common/sidebar.php'); 
 ?>
+
 <style>
         .alert-placeholder {
             position: fixed;

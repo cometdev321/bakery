@@ -212,6 +212,16 @@ if(!$deliwheelsConn)
                             <li>
                                 <a href="<?php echo $base ?>/deliwheels/route/create" class=""><i class="fa fa-sitemap"></i> <span>Routes</span></a>
                             </li>
+                            <li>
+                                <a href="<?php echo $base ?>/deliwheels/assign_product/assign_products.php" class=""><i class="fa fa-cubes"></i> <span>Assign Products</span></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $base ?>/deliwheels/settle_payment/settle_page" class=""><i class="fa fa-taxi"></i><span>Settle payment</span></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $base ?>/deliwheels/products/create_product.php" class=""><i class="fa fa-cubes"></i> <span>Create Product</span></a>
+                            </li>
+                           
                             <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>
                         </ul>
                     </nav>

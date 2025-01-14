@@ -30,7 +30,7 @@ include('../../common/deliwheelsSidebar.php');
                                 <input type="text" placeholder="Type Here" class="form-control" name="name" required>
                             </div>
                             <div class="form-group">
-                                <label>Mobile</label>
+                                <label>mobile</label>
                                 <input type="text" placeholder="Type Here" class="form-control" name="mobile" required>
                             </div>
                             <div class="form-group">
@@ -142,7 +142,7 @@ include('../../common/deliwheelsSidebar.php');
                 data: JSON.stringify(employeeData),
                 success: function(response) {
                     const message = response.message;
-                    if (message === "Employee created successfully.") {
+                    if (message === "Employee created successfully.") { 
                         Toastify({
                             text: message,
                             duration: 3000,

@@ -6,10 +6,11 @@ header("Access-Control-Allow-Methods: POST");
 include_once '../db.php';
 
 $data = json_decode(file_get_contents("php://input"));
+// echo json_encode("hello world");
 
 if(!empty($data->name) && !empty($data->mobile) && !empty($data->role)) {
     // Check if the employee already exists
-    $checkQuery = "SELECT * FROM dw_employees WHERE name = :name AND mobile = :mobile";
+    $checkQuery = "SELECT * FROM line_men WHERE name = :name AND mobile = :mobile";
     $checkStmt = $conn->prepare($checkQuery);
     $checkStmt->bindParam(":name", $data->name);
     $checkStmt->bindParam(":mobile", $data->mobile);
@@ -20,7 +21,7 @@ if(!empty($data->name) && !empty($data->mobile) && !empty($data->role)) {
         echo json_encode(["message" => "Employee already exists."]);
     } else { 
         // Insert new employee
-        $query = "INSERT INTO dw_employees SET name=:name, mobile=:mobile, role=:role, status=1";
+        $query = "INSERT INTO line_men SET name=:name, mobile=:mobile, role=:role, status=1";
         $stmt = $conn->prepare($query);
 
         $stmt->bindParam(":name", $data->name);

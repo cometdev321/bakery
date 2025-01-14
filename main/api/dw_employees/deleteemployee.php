@@ -8,7 +8,7 @@ include_once '../db.php';
 $data = json_decode(file_get_contents("php://input"));
 
 if(!empty($data->id)) {
-    $query = "DELETE FROM dw_employees WHERE id = :id";
+    $query = "DELETE FROM line_men WHERE id = :id";
     $stmt = $conn->prepare($query);
     $stmt->bindParam(":id", $data->id);
 

@@ -10,6 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
+
+
+    
+
     <style>
         body {
             margin: 0;
@@ -29,13 +33,14 @@
 </head>
 <body class="flex justify-center items-center h-screen bg-custom">
     <div class="p-8 rounded-lg shadow-md text-left w-full max-w-md mx-4 md:mx-auto bg-white">
+        
         <form action="../common/session_control.php" method="post">
           <div class="flex justify-center mb-6">
           <img src="../../Images/nayanlogo.png" alt="Nayan Bakery Logo" class=" h-16 rounded-full object-cover">
         </div>
             <h2 class="text-2xl font-semibold mb-8 mt-0 text-center">Welcome to Nayan Bakery</h2>
             <div class="mb-4">
-                <label for="email" class="block text-gray-700">UserName</label>
+                <label for="email" class="block text-gray-700">Username</label>
                 <input type="text" id="email" name="username" class="mt-1 px-4 py-2 w-full rounded-full border border-gray-300 focus:outline-none focus:border-blue-500 font-light text-sm bg-gray-200">
             </div>
             <div class="mb-4 relative">
@@ -49,7 +54,7 @@
             </div>
             <button type="submit" name="login-submit" class="w-full text-white py-4 px-4 rounded-full focus:outline-none" style="background-color: rgb(231,1,19); margin-top: 1rem;">Login</button>
         </form>
-        <h6 class="text-sm font-semibold mb-8 mt-0 text-center mt-3">HelpLIne:9686920756</h6>
+        <h6 class="text-sm font-semibold mb-8 mt-0 text-center mt-3">Helpline : 9686920756</h6>
     </div>
 
     <!-- Include jQuery and Toastify -->

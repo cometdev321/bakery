@@ -6,16 +6,16 @@ include_once '../db.php';
 
 $id = isset($_GET['id']) ? $_GET['id'] : die();
 
-$query = "SELECT * FROM line_men where status='1' and id = ?";
+$query = "SELECT * FROM products WHERE status = '1' AND id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bindParam(1, $id);
 $stmt->execute();
 
-$employee = $stmt->fetch(PDO::FETCH_ASSOC);
+$product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if($employee) {
-    echo json_encode($employee);
+if ($product) {
+    echo json_encode($product);
 } else {
-    echo json_encode(["message" => "Employee not found."]);
+    echo json_encode(["message" => "Product not found."]);
 }
 ?>

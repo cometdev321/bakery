@@ -4,11 +4,10 @@ header("Content-Type: application/json; charset=UTF-8");
 
 include_once '../db.php';
 
-$query = "SELECT * FROM line_men where status='1' order by id desc ";
+$query = "SELECT * FROM products";
 $stmt = $conn->prepare($query);
 $stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-echo json_encode($employees);
+echo json_encode($products);
 ?>

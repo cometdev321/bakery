@@ -79,7 +79,7 @@ date_default_timezone_set('Asia/Kolkata');
                                 data-sizetype="<?php echo $product['size']; ?>"
                                 data-gst="<?php echo $product['gst']; ?>"
                                 >
-                                <?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)</option>
+                                <?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)&nbsp;(&#8377;<?php echo $product['saleprice']; ?>)</option>
                                 <?php
                                 } 
                                 ?> 

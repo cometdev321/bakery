@@ -16,7 +16,7 @@ while($product = mysqli_fetch_array($get_p)){
         data-sizetype="<?php echo $product['size']; ?>"
         data-gst="<?php echo $product['gst']; ?>"
         >
-<?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)</option>
+<?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)&nbsp;(<?php echo $product['saleprice']; ?>)</option>
 <?php
 }
 ?> 

@@ -1,19 +1,19 @@
 <?php include('base.php');?>
 <?php include('baseScript.php');?>
 <?php
-$db_host ='localhost';
-$db_user='root';
-$db_pass='';
-$db_databse='deliwheels';
+// $db_host ='localhost';
+// $db_user='root';
+// $db_pass='';
+// $db_databse='deliwheels';
 
-$deliwheelsConn= mysqli_connect($db_host,$db_user,$db_pass,$db_databse);
+// $deliwheelsConn= mysqli_connect($db_host,$db_user,$db_pass,$db_databse);
 
-if(!$deliwheelsConn)
-{
-    die("Connection Failed".mysqli_connect_error());
-}
+// if(!$deliwheelsConn)
+// {
+//     die("Connection Failed".mysqli_connect_error());
+// }
 
-?>
+// ?>
  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />

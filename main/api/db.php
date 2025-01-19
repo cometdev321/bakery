@@ -6,8 +6,8 @@ $db_name = "u736864550_deliwheels";
 $username = "u736864550_deliwheels";
 $password = "Deliwheels@123";
 }else{
-$host = "127.0.0.1";
-$db_name = "deliwheels";
+$host = "localhost";
+$db_name = "deliwheels_athul";
 $username = "root";
 $password = "";
 }

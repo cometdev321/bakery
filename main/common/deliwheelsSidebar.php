@@ -1,19 +1,7 @@
 <?php include('base.php');?>
 <?php include('baseScript.php');?>
-<?php
-// $db_host ='localhost';
-// $db_user='root';
-// $db_pass='';
-// $db_databse='deliwheels';
+<?php @include('../api/db.php'); ?>
 
-// $deliwheelsConn= mysqli_connect($db_host,$db_user,$db_pass,$db_databse);
-
-// if(!$deliwheelsConn)
-// {
-//     die("Connection Failed".mysqli_connect_error());
-// }
-
-// ?>
  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
@@ -207,19 +195,19 @@
                                 <a href="<?php echo $base ?>/deliwheels/employee/create" class=""><i class="fa fa-users"></i> <span>Employees</span></a>
                             </li>
                             <li>
-                                <a href="<?php echo $base ?>/deliwheels/vehicle/create" class=""><i class="fa fa-taxi"></i><span>Vehicle</span></a>
+                                <a href="<?php echo $base ?>/deliwheels/dashboard" class=""><i class="fa fa-taxi"></i><span>Vehicle</span></a>
                             </li>
                             <li>
-                                <a href="<?php echo $base ?>/deliwheels/route/create" class=""><i class="fa fa-sitemap"></i> <span>Routes</span></a>
+                                <a href="<?php echo $base ?>/deliwheels/dashboard" class=""><i class="fa fa-sitemap"></i> <span>Routes</span></a>
                             </li>
                             <li>
-                                <a href="<?php echo $base ?>/deliwheels/assign_product/assign_products.php" class=""><i class="fa fa-cubes"></i> <span>Assign Products</span></a>
+                                <a href="<?php echo $base ?>/deliwheels/assign_product/assign_products" class=""><i class="fa fa-cubes"></i> <span>Assign Products</span></a>
                             </li>
                             <li>
                                 <a href="<?php echo $base ?>/deliwheels/settle_payment/settle_page" class=""><i class="fa fa-taxi"></i><span>Settle payment</span></a>
                             </li>
                             <li>
-                                <a href="<?php echo $base ?>/deliwheels/products/create_product.php" class=""><i class="fa fa-cubes"></i> <span>Create Product</span></a>
+                                <a href="<?php echo $base ?>/deliwheels/products/create_product" class=""><i class="fa fa-cubes"></i> <span>Create Product</span></a>
                             </li>
                            
                             <li>&nbsp;</li><li>&nbsp;</li><li>&nbsp;</li>

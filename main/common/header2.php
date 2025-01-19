@@ -24,7 +24,17 @@ include('session_control.php');
 <link rel="stylesheet" href="../../assets/vendor/multi-select/css/multi-select.css">
 <link rel="stylesheet" href="../../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
 <link rel="stylesheet" href="../../assets/vendor/nouislider/nouislider.min.css" />
+
+<link rel="stylesheet" href="../../assets/vendor/toastr/toastr.min.css">
+
+<link rel="stylesheet" href="../../assets/vendor/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css">
+
+ 
+<link rel="stylesheet" href="../../assets/vendor/chartist/css/chartist.min.css">
+<link rel="stylesheet" href="../../assets/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css">
+
 <!-- MAIN CSS -->
 <link rel="stylesheet" href="../../assets/css/main.css">
 <link rel="stylesheet" href="../../assets/css/color_skins.css">
+
 </head>

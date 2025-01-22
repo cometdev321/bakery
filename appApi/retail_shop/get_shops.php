@@ -6,9 +6,23 @@ header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 require_once '../db.php'; // Your database connection file
 
-$query = "SELECT * FROM retail_shops";
-$stmt = $pdo->query($query);
-$shops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    // Write the query to get all retail shops
+    $query = "SELECT * FROM retail_shops";
+    $stmt = $conn->query($query); // Execute the query
 
-echo json_encode(["success" => true, "shops" => $shops]);
+    // Check if we fetched any data
+    $shops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // If no shops found, return an empty array with success status
+    if ($shops) {
+        echo json_encode(["success" => true, "shops" => $shops]);
+    } else {
+        echo json_encode(["success" => false, "message" => "No shops found"]);
+    }
+
+} catch (PDOException $exception) {
+    // Handle query execution errors
+    echo json_encode(["success" => false, "message" => "Error fetching data: " . $exception->getMessage()]);
+}
 ?>

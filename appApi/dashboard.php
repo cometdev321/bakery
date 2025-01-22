@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['driver_id'])) {
                 FROM delivery_product_updates dpu
                 JOIN deliveries d ON dpu.delivery_id = d.id
                 JOIN products p ON dpu.product_id = p.id
-                WHERE d.line_man_id = :line_man_id AND d.status = 1
+                WHERE d.line_man_id = :line_man_id AND d.status = 1 and dpu.delivery_status = 1
             ");
             $delivery_stmt->bindValue(':line_man_id', $driver_id, PDO::PARAM_INT);
             $delivery_stmt->execute();

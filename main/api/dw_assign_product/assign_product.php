@@ -66,6 +66,7 @@ try {
     $deliveryId = $conn->lastInsertId();
 
     // Process each product
+    // Process each product
     foreach ($products as $product) {
         // Validate product structure
         if (!isset($product['id']) || !isset($product['quantity'])) {
@@ -121,7 +122,24 @@ try {
             exit;
         }
 
+        // Insert into delivery_product_updates to track the delivery modification
+        $query = "INSERT INTO delivery_product_updates (delivery_id, product_id, original_quantity, updated_quantity, line_man_id, delivery_status)
+                VALUES (:deliveryId, :productId, :originalQuantity, :updatedQuantity, :lineManId, :deliveryStatus)";
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':deliveryId', $deliveryId, PDO::PARAM_INT);
+        $stmt->bindValue(':productId', $productId, PDO::PARAM_INT);
+        $stmt->bindValue(':originalQuantity', $quantity, PDO::PARAM_INT);  // Assuming the assigned quantity is the original quantity
+        $stmt->bindValue(':updatedQuantity', $quantity, PDO::PARAM_INT);    // Initially, the updated quantity is the same as original
+        $stmt->bindValue(':lineManId', $lineManId, PDO::PARAM_INT);
+        $stmt->bindValue(':deliveryStatus', 'delivered', PDO::PARAM_STR); // Default status as 'delivered'
+
+        if (!$stmt->execute()) {
+            http_response_code(500);
+            echo json_encode(["message" => "Failed to insert delivery product update for product ID: $productId."]);
+            exit;
+        }
     }
+
 
     $response["message"] = "Assignment successful.";
     http_response_code(200);

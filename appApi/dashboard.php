@@ -15,19 +15,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['driver_id'])) {
     // Validate the driver_id
     if ($driver_id) {
         try {
-            // Fetch the assigned deliveries for the driver
+            // Fetch the assigned deliveries for the driver from the delivery_product_updates table
             $delivery_stmt = $conn->prepare("
                 SELECT 
-                    d.id AS delivery_id, 
+                    dpu.id AS update_id,
+                    dpu.delivery_id, 
                     p.id AS product_id,
                     p.name AS product_name,
                     p.hsn AS product_hsn,
                     p.price AS product_price,
-                    dp.quantity AS product_quantity,
-                    (p.price * dp.quantity) AS total_price
-                FROM deliveries d
-                JOIN delivery_products dp ON d.id = dp.delivery_id
-                JOIN products p ON dp.product_id = p.id
+                    dpu.original_quantity,
+                    dpu.updated_quantity,
+                    (p.price * dpu.updated_quantity) AS total_price,
+                    dpu.delivery_status
+                FROM delivery_product_updates dpu
+                JOIN deliveries d ON dpu.delivery_id = d.id
+                JOIN products p ON dpu.product_id = p.id
                 WHERE d.line_man_id = :line_man_id AND d.status = 1
             ");
             $delivery_stmt->bindValue(':line_man_id', $driver_id, PDO::PARAM_INT);
@@ -52,8 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['driver_id'])) {
                     'product_name' => $delivery['product_name'],
                     'product_hsn' => $delivery['product_hsn'],
                     'product_price' => $delivery['product_price'],
-                    'product_quantity' => $delivery['product_quantity'],
-                    'total_price' => $delivery['total_price']
+                    'original_quantity' => $delivery['original_quantity'],
+                    'updated_quantity' => $delivery['updated_quantity'],
+                    'total_price' => $delivery['total_price'],
+                    'delivery_status' => $delivery['delivery_status']
                 ];
 
                 // Add the total price to the individual total for this delivery

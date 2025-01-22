@@ -120,6 +120,7 @@ try {
             echo json_encode(["message" => "Failed to update stock for product ID: $productId."]);
             exit;
         }
+
     }
 
     $response["message"] = "Assignment successful.";

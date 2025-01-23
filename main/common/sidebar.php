@@ -556,6 +556,7 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
                                     <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
                                     <li><a href="<?php echo $base ?>/products/mass-products"><i class="fa icon-mouse"></i> Mass-products</a></li>
+                                    <li><a href="<?php echo $base ?>/products/barcode-products"><i class="fa icon-mouse"></i> Barcode-products</a></li>
                                     <li><a href="<?php echo $base ?>/products/import-products"><i class="fa icon-mouse"></i> Import/Export Products</a></li>
                                     
                                 </ul>

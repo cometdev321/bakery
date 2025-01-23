@@ -133,18 +133,70 @@ if (isset($_POST['ProductSubmit'])) {
     $discount = $_POST['default_discount_per_unit'];
     $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0;
     $sizeJoined = $size_number . $size;
+    $barcode = isset($_POST['barcode']) ? $_POST['barcode'] : null; // Check if barcode is submitted
 
+    
+    if (!$barcode) {
+        // Fetch the last barcode and increment it
+        $barcodeQuery = "SELECT last_barcode_number FROM tbllast_barcode_number ORDER BY id DESC LIMIT 1";
+        $barcodeResult = mysqli_query($conn, $barcodeQuery);
+
+        if ($barcodeResult && mysqli_num_rows($barcodeResult) > 0) {
+            $row = mysqli_fetch_assoc($barcodeResult);
+            $barcode = str_pad((int)$row['last_barcode_number'] + 1, 5, '0', STR_PAD_LEFT); // Increment and pad to keep 5 digits
+        } else {
+            $barcode = '00001'; // Default barcode if no entry exists
+        }
+
+        // Update the last barcode in the table
+        $updateBarcodeQuery = "UPDATE tbllast_barcode_number SET last_barcode_number = '$barcode' ORDER BY id DESC LIMIT 1";
+        mysqli_query($conn, $updateBarcodeQuery);
+    }
+
+    $checkQuery = "SELECT * FROM tblproducts WHERE barcode = '$barcode' AND status = '1'";
+    $result = mysqli_query($conn, $checkQuery);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Redirect if a duplicate product exists
+        echo "<script>
+                Toastify({
+                    text: 'Barcode is already available',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)',
+                    marginTop: '202px',
+                    stopOnFocus: true,
+                    style: { margin: '70px 15px 10px 15px' },
+                }).showToast();
+                </script>";
+    }
     // Check if a product with the same name and size exists
     $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
     $result = mysqli_query($conn, $checkQuery);
 
     if (mysqli_num_rows($result) > 0) {
         // Redirect if a duplicate product exists
-        echo "<script>window.location.href='products/add-product?status=exists'</script>";
+        echo "<script>
+                Toastify({
+                    text: 'Product already there',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)',
+                    marginTop: '202px',
+                    stopOnFocus: true,
+                    style: { margin: '70px 15px 10px 15px' },
+                }).showToast();
+                </script>";
     } else {
         // Insert the product if no duplicate is found
-        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`) 
-                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled')";
+        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`,`barcode`) 
+                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled','$barcode')";
 
         if (mysqli_query($conn, $insertQuery)) {
             echo "<script>
@@ -321,6 +373,10 @@ if (isset($_POST['ProductSubmit'])) {
                                 </label>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Barcode</label>
+                                            <input type="text"  name="barcode" placeholder="Type Here" class="form-control" >
+                                        </div>
                         <div class="col-lg-6 col-md-12 my-2">
                                 <label>Is Purchase Enabled</label>
                                 <div class="fancy-checkbox">

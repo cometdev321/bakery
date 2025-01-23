@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Methods: GET');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE'); // Add DELETE here
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
 require_once '../db.php'; // Your database connection file

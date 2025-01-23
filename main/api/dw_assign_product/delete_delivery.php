@@ -15,6 +15,10 @@ if (isset($data['delivery_id'])) {
         $stmt = $conn->prepare("DELETE FROM delivery_products WHERE delivery_id = ?");
         $stmt->execute([$deliveryId]);
 
+
+        $stmt = $conn->prepare("DELETE FROM delivery_product_updates WHERE delivery_id = ?");
+        $stmt->execute([$deliveryId]);
+
         // Delete the delivery
         $stmt = $conn->prepare("DELETE FROM deliveries WHERE id = ?");
         $stmt->execute([$deliveryId]);

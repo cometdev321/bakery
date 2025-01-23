@@ -31,60 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Check if the user's status is active
                 if ($user['status'] == 1) {
-                    // Fetch the assigned deliveries for the driver (where status = 1, already delivered)
-                    $delivery_stmt = $conn->prepare("
-                        SELECT 
-                            d.id AS delivery_id, 
-                            p.id AS product_id,
-                            p.name AS product_name,
-                            p.price AS product_price,
-                            dp.quantity AS product_quantity,
-                            (p.price * dp.quantity) AS total_price
-                        FROM deliveries d
-                        JOIN delivery_products dp ON d.id = dp.delivery_id
-                        JOIN products p ON dp.product_id = p.id
-                        WHERE d.line_man_id = :line_man_id AND d.status = 1
-                    ");
-                    $delivery_stmt->bindValue(':line_man_id', $user['id'], PDO::PARAM_INT);
-                    $delivery_stmt->execute();
-                    $deliveries = $delivery_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                    // Initialize an array to group deliveries by delivery_id
-                    $grouped_deliveries = [];
-
-                    foreach ($deliveries as $delivery) {
-                        // Group deliveries by delivery_id
-                        if (!isset($grouped_deliveries[$delivery['delivery_id']])) {
-                            $grouped_deliveries[$delivery['delivery_id']] = [
-                                'delivery_id' => $delivery['delivery_id'],
-                                'products' => [],
-                                'individual_total' => 0
-                            ];
-                        }
-
-                        // Add product to the grouped delivery
-                        $grouped_deliveries[$delivery['delivery_id']]['products'][] = [
-                            'product_id' => $delivery['product_id'],
-                            'product_name' => $delivery['product_name'],
-                            'product_price' => $delivery['product_price'],
-                            'product_quantity' => $delivery['product_quantity'],
-                            'total_price' => $delivery['total_price']
-                        ];
-
-                        // Add the total price to the individual total
-                        $grouped_deliveries[$delivery['delivery_id']]['individual_total'] += $delivery['total_price'];
-                    }
-
-                    // Flatten the grouped deliveries into an array
-                    $unique_deliveries = array_values($grouped_deliveries);
-
-                    // Prepare response
+                    // Prepare response with the driver id
                     $response = [
                         'success' => true,
                         'message' => 'Login successful',
-                        'employee' => $user,  // Include user data
-                        'token' => bin2hex(random_bytes(16)), // Generate a random token
-                        'deliveries' => $unique_deliveries // Include unique deliveries
+                        'driver_id' => $user['id'], // Return the driver id
                     ];
                 } else {
                     $response = [

@@ -106,6 +106,39 @@ include('../../common/deliwheelsSidebar.php');
 
 
     </div>
+
+    <div id="trackModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delivery Stock Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Placeholder for dynamic data -->
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Line Man</th>
+                                <th>Delivery ID</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trackModalTableBody">
+                            <!-- Data will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 <script>
@@ -158,6 +191,9 @@ $(document).ready(function() {
                                 </button>
                                 <button class="btn btn-success btn-sm finish-delivery-btn" onclick="finishDelivery(${delivery.id})">
                                     <i class="fa fa-check"></i> Finish
+                                </button>
+                                <button class="btn btn-info btn-sm track-delivery-btn" onclick="trackDelivery(${delivery.id})">
+                                    <i class="fa fa-map-marker"></i> Track
                                 </button>
                             </td>
                         </tr>
@@ -257,12 +293,6 @@ $(document).ready(function() {
 
     if (!isValid) return;
 
-    // Log the data being sent
-    console.log({
-        delivery_id: deliveryId,
-        line_man_id: lineManId,
-        products: updatedProducts
-    });
 
     $.ajax({
         url: '../../api/dw_assign_product/update_delivery.php',

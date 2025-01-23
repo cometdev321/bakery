@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
     if (mysqli_num_rows($result) > 0) {
         // Redirect if a duplicate product exists
         echo "<script>window.location.href='add-product?status=exists'</script>";
-    }
+    }else{
 
     // Check if the product with the same name and size exists
     $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
@@ -120,6 +120,7 @@ if (isset($_POST['submit'])) {
             echo "<script>window.location.href='add-product?status=error'</script>";
         } 
     }
+}
 }
 ?>
 

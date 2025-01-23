@@ -172,7 +172,7 @@ if (isset($_POST['ProductSubmit'])) {
                     style: { margin: '70px 15px 10px 15px' },
                 }).showToast();
                 </script>";
-    }
+    }else{
     // Check if a product with the same name and size exists
     $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
     $result = mysqli_query($conn, $checkQuery);
@@ -229,6 +229,7 @@ if (isset($_POST['ProductSubmit'])) {
                 }).showToast();
                 </script>";
         }
+    }
     }
 }
 ?>

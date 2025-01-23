@@ -234,16 +234,7 @@ if (isset($_POST['ProductSubmit'])) {
                             <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" required>
                                 <option value="6360">Select Category</option>
                                 <?php
-                                    if(isset($_SESSION['subSession'])){
-                                        $userID = $_SESSION['subSession'];
-                                        if($userID == 'ALL' || $userID == 'all'){
-                                            $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' GROUP BY name");
-                                        } else {
-                                            $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' AND userID='$userID' GROUP BY name");
-                                        }
-                                    } else {
-                                        $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' AND userID='$session' GROUP BY name");
-                                    }
+                                    $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1'");
                                     while($fetchcat = mysqli_fetch_array($getct)){
                                 ?>
                                 <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>

@@ -564,9 +564,12 @@ if (isset($_POST['ProductSubmit'])) {
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">    
+                            <?php
+                                   if(isset($_SESSION['admin'])){
+                                       ?>
                             <li>
                                 <a href="<?php echo $base ?>/deliwheels/dashboard" class=""><i class="fa fa-truck"></i><span>DeliWheels</span></a>
-                               
+                                <?php } ?>
                             </li>                        
                                <?php
                                    if(isset($_SESSION['admin'])){
@@ -577,9 +580,6 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/branches/mybranches"><i class="fa fa-building-o"></i> My Branch</a></li>
                                     <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
                                 </ul>
-                            </li>
-                            <li>
-                                <a href="<?php echo $base ?>/deliwheels/dashboard.php" class="has-arrow"><i class="icon-home"></i> <span>Deliwheels</span></a>
                             </li>
                             
                             <li>

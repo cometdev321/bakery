@@ -23,6 +23,6 @@ try {
 
 } catch (PDOException $exception) {
     // Handle query execution errors
-    echo json_encode(["success" => false, "message" => "Error fetching data: " . $exception->getMessage()]);
+    echo json_encode(["success" => false, "message" => "Error data: " . $exception->getMessage()]);
 }
 ?>

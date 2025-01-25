@@ -23,6 +23,19 @@ if (json_last_error() === JSON_ERROR_NONE) {
         // Bind the delivery_id parameter using bindParam
         $stmt->bindParam(':deliveryId', $deliveryId, PDO::PARAM_INT);
 
+        $stmt->execute();
+
+        $sql = "UPDATE delivery_product_updates SET delivery_status = 0 WHERE delivery_id = :deliveryId";
+
+        // Prepare the statement
+        $stmt = $conn->prepare($sql);
+
+        // Bind the delivery_id parameter using bindParam
+        $stmt->bindParam(':deliveryId', $deliveryId, PDO::PARAM_INT);
+
+
+
+
         // Execute the statement
         if ($stmt->execute()) {
             // Check if rows were affected

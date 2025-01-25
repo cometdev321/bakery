@@ -95,29 +95,33 @@ $(document).ready(function() {
 $(document).ready(function() {
     // Update sale price on change
     $(document).on('change', '.saleprice-input', function() {
-        var productname = $(this).data('productname');
+        var productID = $(this).data('productid'); // Get the productID
         var newSalePrice = $(this).val();
         if (isNaN(newSalePrice) || newSalePrice === '') {
-        Toastify({
-            text: "Invalid input: Please enter a valid number",
-            duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "red"
-        }).showToast();
-        return; // Prevent saving if not a number
-    }
+            Toastify({
+                text: "Invalid input: Please enter a valid number",
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "red"
+            }).showToast();
+            return; // Prevent saving if not a number
+        }
+        console.log({ 
+            productID: productID,
+            saleprice: newSalePrice
+        })
         $.ajax({
             url: "../get_ajax/products/update_price.php",
             type: "POST",
-            data: {
-                productname: productname,
+            data: { 
+                productID: productID,
                 saleprice: newSalePrice
             },
             success: function(response) {
-                response = response.trim(); 
+                response = response.trim();
                 if (response == 'success') {
-                    Toastify({ 
+                    Toastify({
                         text: "Sale price updated successfully",
                         duration: 3000,
                         gravity: "top",
@@ -139,27 +143,27 @@ $(document).ready(function() {
 
     // Update purchase price on change
     $(document).on('change', '.purchaseprice-input', function() {
-        var productname = $(this).data('productname');
+        var productID = $(this).data('productid'); // Get the productID
         var newPurchasePrice = $(this).val();
         if (isNaN(newPurchasePrice) || newPurchasePrice === '') {
-        Toastify({
-            text: "Invalid input: Please enter a valid number",
-            duration: 3000,
-            gravity: "top",
-            position: "center",
-            backgroundColor: "red"
-        }).showToast();
-        return; // Prevent saving if not a number
-    }
+            Toastify({
+                text: "Invalid input: Please enter a valid number",
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "red"
+            }).showToast();
+            return; // Prevent saving if not a number
+        }
         $.ajax({
             url: "../get_ajax/products/update_price.php",
             type: "POST",
             data: {
-                productname: productname,
+                productID: productID,
                 purchaseprice: newPurchasePrice
             },
             success: function(response) {
-                response = response.trim(); 
+                response = response.trim();
                 if (response == 'success') {
                     Toastify({
                         text: "Purchase price updated successfully",
@@ -181,6 +185,7 @@ $(document).ready(function() {
         });
     });
 });
+
 </script>
 
 <!-- Javascript -->

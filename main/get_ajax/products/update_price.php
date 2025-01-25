@@ -2,22 +2,21 @@
 include('../../common/cnn.php');
 include('../../common/session_control.php');
 
-// Check if productname and price data is being updated
-if (isset($_POST['productname'])) {
-    $productname = $_POST['productname']; 
+// Check if productID and price data are being updated
+if (isset($_POST['productID'])) {
+    $productID = $_POST['productID']; 
 
     if (isset($_POST['saleprice'])) {
         $newSalePrice = $_POST['saleprice'];
 
-        // Update sale price query using productname
+        // Update sale price query using productID
         $updateQuery = "UPDATE tblproducts 
-                        SET saleprice='$newSalePrice' 
-                        WHERE productname='$productname' 
-                      ";
+                        SET saleprice = '$newSalePrice' 
+                        WHERE id = '$productID'";
         
         if (mysqli_query($conn, $updateQuery)) {
             echo 'success';
-        } else {
+        } else { 
             echo 'error';
         }
     }
@@ -25,11 +24,10 @@ if (isset($_POST['productname'])) {
     if (isset($_POST['purchaseprice'])) {
         $newPurchasePrice = $_POST['purchaseprice'];
 
-        // Update purchase price query using productname
+        // Update purchase price query using productID
         $updateQuery = "UPDATE tblproducts 
-                        SET purchaseprice='$newPurchasePrice' 
-                        WHERE productname='$productname' 
-                       ";
+                        SET purchaseprice = '$newPurchasePrice' 
+                        WHERE id = '$productID'";
         
         if (mysqli_query($conn, $updateQuery)) {
             echo 'success';

@@ -78,7 +78,7 @@ $(document).ready(function() {
                                         <th>Address</th>
                                         <th>Pay Info</th>
                                         <th>Edit</th>
-                                        <th>Remove</th>
+                                        <!-- <th>Remove</th> -->
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -89,7 +89,7 @@ $(document).ready(function() {
                                         <th>Address</th>
                                         <th>Pay Info</th>
                                         <th>Edit</th>
-                                        <th>Remove</th>
+                                        <!-- <th>Remove</th> -->
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -127,7 +127,7 @@ $(document).ready(function() {
                                             <button type="submit" class="btn btn-success btn-sm "><i class="icon-pencil"></i><span></span></button>
                                             </form>
                                         </td>
-                                        <td><button type="submit" name="submit" class="btn btn-danger btn-sm " onclick="delete_party(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td>
+                                        <!-- <td><button type="submit" name="submit" class="btn btn-danger btn-sm " onclick="delete_party(<?php echo $row['id'];?>)"><i class="icon-trash"></i></button></td> -->
                                     </tr>
                                 <?php $slno++; } ?>
                                 </tbody>

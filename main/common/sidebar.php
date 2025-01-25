@@ -133,18 +133,70 @@ if (isset($_POST['ProductSubmit'])) {
     $discount = $_POST['default_discount_per_unit'];
     $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0;
     $sizeJoined = $size_number . $size;
+    $barcode = isset($_POST['barcode']) ? $_POST['barcode'] : null; // Check if barcode is submitted
 
+    
+    if (!$barcode) {
+        // Fetch the last barcode and increment it
+        $barcodeQuery = "SELECT last_barcode_number FROM tbllast_barcode_number ORDER BY id DESC LIMIT 1";
+        $barcodeResult = mysqli_query($conn, $barcodeQuery);
+
+        if ($barcodeResult && mysqli_num_rows($barcodeResult) > 0) {
+            $row = mysqli_fetch_assoc($barcodeResult);
+            $barcode = str_pad((int)$row['last_barcode_number'] + 1, 5, '0', STR_PAD_LEFT); // Increment and pad to keep 5 digits
+        } else {
+            $barcode = '00001'; // Default barcode if no entry exists
+        }
+
+        // Update the last barcode in the table
+        $updateBarcodeQuery = "UPDATE tbllast_barcode_number SET last_barcode_number = '$barcode' ORDER BY id DESC LIMIT 1";
+        mysqli_query($conn, $updateBarcodeQuery);
+    }
+
+    $checkQuery = "SELECT * FROM tblproducts WHERE barcode = '$barcode' AND status = '1'";
+    $result = mysqli_query($conn, $checkQuery);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Redirect if a duplicate product exists
+        echo "<script>
+                Toastify({
+                    text: 'Barcode is already available',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)',
+                    marginTop: '202px',
+                    stopOnFocus: true,
+                    style: { margin: '70px 15px 10px 15px' },
+                }).showToast();
+                </script>";
+    }else{
     // Check if a product with the same name and size exists
     $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
     $result = mysqli_query($conn, $checkQuery);
 
     if (mysqli_num_rows($result) > 0) {
         // Redirect if a duplicate product exists
-        echo "<script>window.location.href='products/add-product?status=exists'</script>";
+        echo "<script>
+                Toastify({
+                    text: 'Product already there',
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)',
+                    marginTop: '202px',
+                    stopOnFocus: true,
+                    style: { margin: '70px 15px 10px 15px' },
+                }).showToast();
+                </script>";
     } else {
         // Insert the product if no duplicate is found
-        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`) 
-                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled')";
+        $insertQuery = "INSERT INTO tblproducts (`category`, `sub_category`, `productname`, `saleprice`, `purchaseprice`, `HSN`, `openingstock`, `gst`, `size`, `sizetype`, `default_discount`, `ispurchaseEnabled`,`barcode`) 
+                        VALUES ('$category', '$sub_category', '$productname', '$saleprice', '$purchase', '$HSN', '$openingstock', '$gst', '$sizeJoined', '$size', '$discount', '$ispurchaseenabled','$barcode')";
 
         if (mysqli_query($conn, $insertQuery)) {
             echo "<script>
@@ -177,6 +229,7 @@ if (isset($_POST['ProductSubmit'])) {
                 }).showToast();
                 </script>";
         }
+    }
     }
 }
 ?>
@@ -234,16 +287,7 @@ if (isset($_POST['ProductSubmit'])) {
                             <select class="form-control show-tick ms select2" data-placeholder="Select" name="category" required>
                                 <option value="6360">Select Category</option>
                                 <?php
-                                    if(isset($_SESSION['subSession'])){
-                                        $userID = $_SESSION['subSession'];
-                                        if($userID == 'ALL' || $userID == 'all'){
-                                            $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' GROUP BY name");
-                                        } else {
-                                            $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' AND userID='$userID' GROUP BY name");
-                                        }
-                                    } else {
-                                        $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1' AND userID='$session' GROUP BY name");
-                                    }
+                                    $getct = mysqli_query($conn, "SELECT id, name FROM tblcategory WHERE status='1'");
                                     while($fetchcat = mysqli_fetch_array($getct)){
                                 ?>
                                 <option value="<?php echo $fetchcat['id']; ?>"><?php echo $fetchcat['name']; ?></option>
@@ -330,6 +374,10 @@ if (isset($_POST['ProductSubmit'])) {
                                 </label>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-md-12  my-2">
+                                            <label>Barcode</label>
+                                            <input type="text"  name="barcode" placeholder="Type Here" class="form-control" >
+                                        </div>
                         <div class="col-lg-6 col-md-12 my-2">
                                 <label>Is Purchase Enabled</label>
                                 <div class="fancy-checkbox">
@@ -516,10 +564,13 @@ if (isset($_POST['ProductSubmit'])) {
                 <div class="tab-pane active" id="menu">
                     <nav id="left-sidebar-nav" class="sidebar-nav">
                         <ul id="main-menu" class="metismenu">    
-                            <!-- <li>
+                            <?php
+                                   if(isset($_SESSION['admin'])){
+                                       ?>
+                            <li>
                                 <a href="<?php echo $base ?>/deliwheels/dashboard" class=""><i class="fa fa-truck"></i><span>DeliWheels</span></a>
-                               
-                            </li>                         -->
+                                <?php } ?>
+                            </li>                        
                                <?php
                                    if(isset($_SESSION['admin'])){
                                 ?>
@@ -529,9 +580,6 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/branches/mybranches"><i class="fa fa-building-o"></i> My Branch</a></li>
                                     <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
                                 </ul>
-                            </li>
-                            <li>
-                                <a href="<?php echo $base ?>/deliwheels/dashboard.php" class="has-arrow"><i class="icon-home"></i> <span>Deliwheels</span></a>
                             </li>
                             
                             <li>
@@ -565,6 +613,7 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/products/add-product"><i class="fa icon-mouse"></i> Add New Product</a></li>
                                     <li><a href="<?php echo $base ?>/products/manage-products"><i class="fa icon-mouse"></i> Manage Products</a></li>
                                     <li><a href="<?php echo $base ?>/products/mass-products"><i class="fa icon-mouse"></i> Mass-products</a></li>
+                                    <li><a href="<?php echo $base ?>/products/barcode-products"><i class="fa icon-mouse"></i> Barcode-products</a></li>
                                     <li><a href="<?php echo $base ?>/products/import-products"><i class="fa icon-mouse"></i> Import/Export Products</a></li>
                                     
                                 </ul>

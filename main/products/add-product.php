@@ -73,12 +73,37 @@ if (isset($_POST['submit'])) {
     $gst = $_POST['gst'];
     $sizetype = $size_number . $size;
     $discount = $_POST['default_discount_per_unit'];
-    $barcode = $_POST['barcode'];
+    $barcode = isset($_POST['barcode']) ? $_POST['barcode'] : null; // Check if barcode is submitted
     $ispurchaseenabled = isset($_POST['ispurchaseenabled']) ? 1 : 0;
     $sizeJoined = $size_number . $size;
 
+    if (!$barcode) {
+        // Fetch the last barcode and increment it
+        $barcodeQuery = "SELECT last_barcode_number FROM tbllast_barcode_number ORDER BY id DESC LIMIT 1";
+        $barcodeResult = mysqli_query($conn, $barcodeQuery);
+
+        if ($barcodeResult && mysqli_num_rows($barcodeResult) > 0) {
+            $row = mysqli_fetch_assoc($barcodeResult);
+            $barcode = str_pad((int)$row['last_barcode_number'] + 1, 5, '0', STR_PAD_LEFT); // Increment and pad to keep 5 digits
+        } else {
+            $barcode = '00001'; // Default barcode if no entry exists
+        }
+
+        // Update the last barcode in the table
+        $updateBarcodeQuery = "UPDATE tbllast_barcode_number SET last_barcode_number = '$barcode' ORDER BY id DESC LIMIT 1";
+        mysqli_query($conn, $updateBarcodeQuery);
+    }
+
+    $checkQuery = "SELECT * FROM tblproducts WHERE barcode = '$barcode' AND status = '1'";
+    $result = mysqli_query($conn, $checkQuery);
+
+    if (mysqli_num_rows($result) > 0) {
+        // Redirect if a duplicate product exists
+        echo "<script>window.location.href='add-product?status=exists'</script>";
+    }else{
+
     // Check if the product with the same name and size exists
-    $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND barcode = '$barcode' AND status = '1'";
+    $checkQuery = "SELECT * FROM tblproducts WHERE productname = '$productname' AND size = '$sizeJoined' AND status = '1'";
     $result = mysqli_query($conn, $checkQuery);
 
     if (mysqli_num_rows($result) > 0) {
@@ -95,6 +120,7 @@ if (isset($_POST['submit'])) {
             echo "<script>window.location.href='add-product?status=error'</script>";
         } 
     }
+}
 }
 ?>
 
@@ -235,7 +261,7 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>Barcode</label>
-                                            <input type="text" required name="barcode" placeholder="Type Here" class="form-control" >
+                                            <input type="text"  name="barcode" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12 my-2">
                                             <label>Is Branch Purchase Enabled</label>

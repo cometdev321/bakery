@@ -123,7 +123,36 @@ include('common/sidebar.php');
                     </div>
                 </div>
         </div>
+        <?php
+        if(!isset($_SESSION['admin'])){
+        ?>
+         <!-- basic -->
+         <div class="row clearfix">
+             <a href="<?php echo $base ?>/sales/create_sales_invoic">
+                <div class="col-lg-6 col-md-6">
+                    <div class="card overflowhidden">
+                        <div class="body">
+                            <h3>Create New Sales<i class="icon-basket-loaded float-right"></i></h3>
+                            <span>Start a new sales invoice </span>                            
+                        </div>
+                   
+                    </div>
+                </a>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <a href="<?php echo $base ?>/purchase/enabledpurchase/create_purchase_invoice">
+                    <div class="card overflowhidden">
+                        <div class="body">
+                
+                            <h3>Create New Purchase<i class="fa fa-dollar float-right"></i></h3>
+                            <span>Start a new purhcase invoice </span>                            
+                        </div>
 
+                    </div>
+                    </a>
+                </div>
+        </div>
+    <?php } ?>
         <div class="row clearfix">  
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="card overflowhidden number-chart">

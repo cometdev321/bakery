@@ -52,12 +52,12 @@ include('../../common/deliwheelsSidebar.php');
             <div class="col-lg-12">
                 <div class="card">
                     <div class="header">
-                        <h2>Payment History</h2>
+                        <h2>Payment History</h2> 
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="paymentHistoryTable">
-                                <thead>
+                        <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="paymentHistoryTable">
+                        <thead>
                                     <tr>
                                         <th>Payment ID</th>
                                         <th>Line Man</th>
@@ -240,3 +240,40 @@ $(document).ready(function() {
     fetchPaymentHistory();
 });
 </script>
+
+<!-- Javascript -->
+<script src="../../../assets/bundles/libscripts.bundle.js"></script>    
+<script src="../../../assets/bundles/vendorscripts.bundle.js"></script>
+
+<script src="../../../assets/bundles/datatablescripts.bundle.js"></script>
+<script src="../../../assets/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="../../../assets/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+<script src="../../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+<script src="../../../assets/js/pages/ui/dialogs.js"></script>
+<script src="../../../assets/vendor/sweetalert/sweetalert.min.js"></script> <!-- SweetAlert Plugin Js --> 
+
+<script src="../../../assets/vendor/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script> <!-- Bootstrap Colorpicker Js --> 
+<script src="../../../assets/vendor/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
+<script src="../../../assets/vendor/jquery.maskedinput/jquery.maskedinput.min.js"></script>
+
+<script src="../../../assets/vendor/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
+<script src="../../../assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
+<script src="../../../assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+<script src="../../../assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script> <!-- Bootstrap Tags Input Plugin Js --> 
+<script src="../../../assets/vendor/nouislider/nouislider.js"></script> <!-- noUISlider Plugin Js --> 
+
+<script src="../../../assets/vendor/select2/select2.min.js"></script> <!-- Select2 Js -->
+  <script src="../../../assets/js/pages/tables/jquery-datatable.js"></script>
+  
+<script src="../../../assets/bundles/mainscripts.bundle.js"></script>
+<script src="../../../assets/js/pages/forms/advanced-form-elements.js"></script>
+</body>
+
+<!-- Mirrored from www.wrraptheme.com/templates/lucid/html/light/forms-advanced.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 20 Mar 2023 05:12:17 GMT -->
+</html>
+

@@ -43,9 +43,7 @@ $row = mysqli_fetch_array($result1);
 $query3 = "SELECT name, location FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
 $result3 = mysqli_query($conn, $query3);
 $row3 = mysqli_fetch_array($result3);
-?>
-
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -54,7 +52,7 @@ $row3 = mysqli_fetch_array($result3);
     <style>
         @media print {
             .receipt {
-                width: 58mm;
+                width: 80mm;
                 font-size: 12px;
             }
             .hidden-print {
@@ -66,71 +64,89 @@ $row3 = mysqli_fetch_array($result3);
                 padding: 0;
             }
         }
+
         body {
             font-family: Arial, sans-serif;
         }
+
         .receipt {
-            width: 58mm;
+            width: 80mm;
             padding: 10px;
             margin: auto;
             border: 1px solid #ddd;
         }
+
         .receipt img {
             display: block;
             margin: auto;
         }
+
         .receipt .header,
         .receipt .footer {
             text-align: center;
         }
+
         .receipt .details,
         .receipt .items {
             width: 100%;
             border-collapse: collapse;
         }
+
         .receipt .details td,
         .receipt .items th,
         .receipt .items td {
             padding: 5px;
             text-align: left;
         }
+
         .receipt .items th,
         .receipt .items td {
             border-bottom: 1px solid #ddd;
         }
+
         .receipt .items th:last-child,
         .receipt .items td:last-child {
             text-align: right;
         }
+
+        .print-button {
+            margin: 20px auto;
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .print-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
-<body>
+<body onload="tryAutoPrint();">
     <div class="receipt">
         <div class="header">
-            <img src="../../Images/<?php echo $fetch['image'];?>" alt="logo" width="50">
-            <!-- <h2><?php echo strtoupper($row3['name']); ?></h2> -->
-            <p><?php echo $row3['location'];    
- ?></p>
+            <img src="../../Images/<?php echo $fetch['image']; ?>" alt="Logo" width="50">
+            <p><?php echo $row3['location']; ?></p>
         </div>
         <div class="details">
             <table>
                 <tr>
                     <td>Invoice #</td>
-                    <td><?php echo (isset($row['sales_invoice_number'])) ? $row['sales_invoice_number'] : $row['purchase_invoice_number']; ?></td>
+                    <td><?php echo $row['sales_invoice_number'] ?? $row['purchase_invoice_number']; ?></td>
                 </tr>
                 <tr>
                     <td>Date</td>
                     <td>
                         <?php
-                            $date = isset($row['sales_invoice_date']) ? $row['sales_invoice_date'] : $row['purchase_invoice_date'];
+                            $date = $row['sales_invoice_date'] ?? $row['purchase_invoice_date'];
                             echo date("d-m-Y", strtotime($date));
                         ?>
                     </td>
                 </tr>
-                <!-- <tr>
-                    <td>Customer</td>
-                    <td><?php echo $row['name']; ?></td>
-                </tr> -->
                 <tr>
                     <td>Phone</td>
                     <td><?php echo $row['mobno']; ?></td>
@@ -149,37 +165,38 @@ $row3 = mysqli_fetch_array($result3);
                 </thead>
                 <tbody>
                     <?php
-                    $slno = 1;
-                    if (isset($_POST['sale_id'])  || isset($_POST['new_sale_id'])) {
-                        $invoiceNum = $row['sales_invoice_number'];
-                        $query2 = "SELECT ts.*, tp.productname as `pname`
-                                   FROM tblsalesinvoice_details ts
-                                   INNER JOIN tblproducts tp ON tp.id=ts.ItemName
-                                   WHERE ts.sales_invoice_number='$invoiceNum' 
-                                   AND ts.userID='$session' 
-                                   AND ts.status='1' 
-                                   ORDER BY ts.id ASC";
-                    } else if (isset($_POST['purchase_id'])) {
-                        $invoiceNum = $row['purchase_invoice_number'];
-                        $query2 = "SELECT ts.*, tp.productname as pname
-                                   FROM tblpurchaseinvoice_details ts
-                                   INNER JOIN tblproducts tp ON tp.id=ts.ItemName
-                                   WHERE ts.purchase_invoice_number='$invoiceNum'
-                                   AND ts.userID='$session'
-                                   AND ts.status='1'
-                                   ORDER BY ts.id ASC";
-                    }
-                    $result3 = mysqli_query($conn, $query2);
-                    if (mysqli_num_rows($result3) > 0) {
-                        while ($row2 = mysqli_fetch_array($result3)) {
-                            echo "<tr>
-                                <td>{$row2['pname']}</td>
-                                <td>{$row2['Qty']}</td>
-                                <td>{$row2['Price']}</td>
-                                <td>{$row2['Amount']}</td>
-                            </tr>";
+                        $query2 = "";
+                        if (isset($_POST['sale_id']) || isset($_POST['new_sale_id'])) {
+                            $invoiceNum = $row['sales_invoice_number'];
+                            $query2 = "SELECT ts.*, tp.productname AS pname
+                                       FROM tblsalesinvoice_details ts
+                                       INNER JOIN tblproducts tp ON tp.id=ts.ItemName
+                                       WHERE ts.sales_invoice_number='$invoiceNum' 
+                                       AND ts.userID='$session' 
+                                       AND ts.status='1' 
+                                       ORDER BY ts.id ASC";
+                        } else if (isset($_POST['purchase_id'])) {
+                            $invoiceNum = $row['purchase_invoice_number'];
+                            $query2 = "SELECT ts.*, tp.productname AS pname
+                                       FROM tblpurchaseinvoice_details ts
+                                       INNER JOIN tblproducts tp ON tp.id=ts.ItemName
+                                       WHERE ts.purchase_invoice_number='$invoiceNum' 
+                                       AND ts.userID='$session' 
+                                       AND ts.status='1' 
+                                       ORDER BY ts.id ASC";
                         }
-                    } 
+
+                        $result3 = mysqli_query($conn, $query2);
+                        if (mysqli_num_rows($result3) > 0) {
+                            while ($row2 = mysqli_fetch_array($result3)) {
+                                echo "<tr>
+                                    <td>{$row2['pname']}</td>
+                                    <td>{$row2['Qty']}</td>
+                                    <td>{$row2['Price']}</td>
+                                    <td>{$row2['Amount']}</td>
+                                </tr>";
+                            }
+                        }
                     ?>
                 </tbody>
             </table>
@@ -189,12 +206,31 @@ $row3 = mysqli_fetch_array($result3);
             <p>Discount: <?php echo $row['discount']; ?></p>
             <p>Total: <?php echo $row['after_discount_total']; ?></p>
             <p>Thank you for your purchase!</p>
-            <p>999999999</p>
+            <p>9686920756</p>
         </div>
     </div>
-    
-    <div class="hidden-print">
-        <button onclick="window.print()">Print</button>
-    </div>
+    <button class="print-button hidden-print" id="printButton" onclick="window.print();">Print</button>
+
+    <script>
+        const printButton = document.getElementById('printButton');
+
+        // Hide the print button when print preview opens
+        window.onbeforeprint = () => {
+            printButton.style.display = 'none';
+        };
+
+        // Show the print button when print preview closes
+        window.onafterprint = () => {
+            printButton.style.display = 'block';
+        };
+
+        function tryAutoPrint() {
+            try {
+                window.print();
+            } catch (error) {
+                printButton.style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>

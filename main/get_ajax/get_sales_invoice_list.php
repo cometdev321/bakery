@@ -6,7 +6,7 @@ include('../common/session_control.php');
 $slno = 1;
 $fromDate = $_POST['fromDate'];
 $toDate = $_POST['toDate'];
-$query = "SELECT si.*, p.name AS party_name 
+$query = "SELECT si.sales_invoice_date,si.full_paid,si.id,si.after_discount_total,si.sales_invoice_number,p.name AS party_name 
           FROM tblsalesinvoices si
           INNER JOIN tblparty p ON si.party_name = p.id
           WHERE si.sales_invoice_date >= '$fromDate' AND si.sales_invoice_date <= '$toDate' AND si.userID = '$session' AND si.status = '1' 

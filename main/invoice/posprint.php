@@ -70,8 +70,8 @@ $row3 = mysqli_fetch_array($result3);
             }
 
             .receipt {
-                width: 80mm;
-                min-height: auto;
+                /* width: 80mm; */
+                /* min-height: auto; */
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -116,12 +116,12 @@ $row3 = mysqli_fetch_array($result3);
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            width: 80mm;
+            /* width: 80mm; */
         }
 
         .receipt {
-            width: 80mm;
-                min-height: auto;
+            /* width: 80mm; */
+                /* min-height: auto; */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -133,11 +133,7 @@ $row3 = mysqli_fetch_array($result3);
             border: 1px solid #ddd;
         }
 
-        .receipt .details,
-        .receipt .items {
-            width: 100%;
-            border-collapse: collapse;
-        }
+       
 
         .print-button {
             margin: 20px auto;
@@ -167,7 +163,7 @@ $row3 = mysqli_fetch_array($result3);
         .items table {
             margin: 20px;
             
-    width: 100%;
+    /* width: 100%; */
     border-collapse: collapse; /* Ensures no extra spacing between borders */
     border: 1px solid black; /* Adds border to the whole table */
 }

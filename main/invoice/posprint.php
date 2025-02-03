@@ -57,6 +57,8 @@ $row3 = mysqli_fetch_array($result3);
 
         @media print {
             body {
+                width: 80mm;
+                height: auto;
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
@@ -65,11 +67,9 @@ $row3 = mysqli_fetch_array($result3);
 
             .receipt {
                 display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-                width: 100%; /* Full width of the printable area */
-                /* max-width: 100%; */
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
                 padding: 10px;
                 font-size: 12px;
                 border: none; /* No borders for printing */
@@ -110,16 +110,17 @@ $row3 = mysqli_fetch_array($result3);
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            width: 80mm;
         }
 
         .receipt {
             display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-            width: 100%;
-            height: 100%;
-            margin: auto;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* width: 80mm; */
+            /* height: 100%; */
+          
             padding: 10px;
             border: 1px solid #ddd;
         }

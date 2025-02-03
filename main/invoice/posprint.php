@@ -51,8 +51,10 @@ $row3 = mysqli_fetch_array($result3);
     <title>POS Receipt</title>
     <style>
         *{
-            width: 80mm;
+            width: 105mm;
             min-height: auto;
+            margin: 0;
+                padding: 0;
         }
         @page {
             size: auto; /* Adapts to any printer paper */
@@ -63,8 +65,7 @@ $row3 = mysqli_fetch_array($result3);
             body {
                 width: 80mm;
                 height: auto;
-                margin: 0;
-                padding: 0;
+                
                 font-family: Arial, sans-serif;
                 -webkit-print-color-adjust: exact;
             }
@@ -91,7 +92,6 @@ $row3 = mysqli_fetch_array($result3);
             }
 
             .receipt table {
-                /* width: 100%; */
                 border-collapse: collapse;
             }
 
@@ -108,7 +108,6 @@ $row3 = mysqli_fetch_array($result3);
             .receipt .details,
         .receipt .items {
             margin: 10px;
-            /* width: 100%; */
             border-collapse: collapse;
         }
         }
@@ -116,18 +115,15 @@ $row3 = mysqli_fetch_array($result3);
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            /* width: 80mm; */
         }
 
         .receipt {
-            /* width: 80mm; */
-                /* min-height: auto; */
+          
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* width: 80mm; */
-            /* height: 100%; */
+           
           
             padding: 10px;
             border: 1px solid #ddd;
@@ -147,13 +143,11 @@ $row3 = mysqli_fetch_array($result3);
             cursor: pointer;
         }
         .content {
-    /* text-align: center; */
-            /* height: 100%; */
+
             display: flex;
             flex-direction: column;
             margin: 40px;
             align-items: center;
-            /* height: 500px; */
             justify-content: center;
         }
 
@@ -161,7 +155,7 @@ $row3 = mysqli_fetch_array($result3);
             background-color: #0056b3;
         }
         .items table {
-            margin: 20px;
+            margin: 20px 0;
             
     /* width: 100%; */
     border-collapse: collapse; /* Ensures no extra spacing between borders */

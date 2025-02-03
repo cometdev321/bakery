@@ -50,6 +50,10 @@ $row3 = mysqli_fetch_array($result3);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS Receipt</title>
     <style>
+        *{
+            width: 80mm;
+            min-height: auto;
+        }
         @page {
             size: auto; /* Adapts to any printer paper */
             margin: 0; /* No margin for better fitting */
@@ -66,6 +70,8 @@ $row3 = mysqli_fetch_array($result3);
             }
 
             .receipt {
+                width: 80mm;
+                min-height: auto;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -114,6 +120,8 @@ $row3 = mysqli_fetch_array($result3);
         }
 
         .receipt {
+            width: 80mm;
+                min-height: auto;
             display: flex;
             flex-direction: column;
             align-items: center;

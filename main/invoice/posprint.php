@@ -51,7 +51,7 @@ $row3 = mysqli_fetch_array($result3);
     <title>POS Receipt</title>
     <style>
         *{
-            width: 105mm;
+            width: 90mm;
             min-height: auto;
             margin: 0;
                 padding: 0;

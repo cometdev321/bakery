@@ -91,7 +91,7 @@ $row3 = mysqli_fetch_array($result3);
             }
 
             .receipt table {
-                width: 100%;
+                /* width: 100%; */
                 border-collapse: collapse;
             }
 
@@ -108,7 +108,7 @@ $row3 = mysqli_fetch_array($result3);
             .receipt .details,
         .receipt .items {
             margin: 10px;
-            width: 100%;
+            /* width: 100%; */
             border-collapse: collapse;
         }
         }
@@ -148,7 +148,7 @@ $row3 = mysqli_fetch_array($result3);
         }
         .content {
     /* text-align: center; */
-            height: 100%;
+            /* height: 100%; */
             display: flex;
             flex-direction: column;
             margin: 40px;

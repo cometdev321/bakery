@@ -53,6 +53,7 @@ $row3 = mysqli_fetch_array($result3);
         @media print {
             .receipt {
                 width: 80mm;
+                height: 100%;
                 font-size: 12px;
             }
             .hidden-print {
@@ -71,6 +72,7 @@ $row3 = mysqli_fetch_array($result3);
 
         .receipt {
             width: 80mm;
+            height: 100%;
             padding: 10px;
             margin: auto;
             border: 1px solid #ddd;

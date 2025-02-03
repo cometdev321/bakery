@@ -55,6 +55,8 @@ $row3 = mysqli_fetch_array($result3);
             min-height: auto;
             margin: 0;
                 padding: 0;
+                font-size: 20px;
+
         }
         @page {
             size: auto; /* Adapts to any printer paper */
@@ -103,12 +105,15 @@ $row3 = mysqli_fetch_array($result3);
 
             .receipt th:last-child,
             .receipt td:last-child {
-                text-align: right;
+                text-align: left;
             }
             .receipt .details,
         .receipt .items {
             margin: 10px;
             border-collapse: collapse;
+        }
+        .items .max_col{
+            width: 30px;
         }
         }
 
@@ -159,16 +164,17 @@ $row3 = mysqli_fetch_array($result3);
             
     /* width: 100%; */
     border-collapse: collapse; /* Ensures no extra spacing between borders */
-    border: 1px solid black; /* Adds border to the whole table */
+    /* border: 1px solid black; Adds border to the whole table */
 }
 
 .items th, .items td {
-    border: 1px solid black; /* Adds border to each cell */
+    /* border: 1px solid black; Adds border to each cell */
     padding: 5px;
     text-align: left;
 }
 
 
+      
     </style>
 </head>
 <body onload="tryAutoPrint();">
@@ -204,10 +210,10 @@ $row3 = mysqli_fetch_array($result3);
             <table>
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
+                        <th class="max_col">Item</th>
+                        <th >Qty</th>
+                        <th >Price</th>
+                        <th >Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -239,8 +245,8 @@ $row3 = mysqli_fetch_array($result3);
                                 echo "<tr>
                                 <td>{$row2['pname']}</td>
                                 <td>{$row2['Qty']}</td>
-                                <td>{$row2['Price']}</td>
-                                <td>{$row2['Amount']}</td>
+                                <td >{$row2['Price']}</td>
+                                <td >{$row2['Amount']}</td>
                                 </tr>";
                             }
                         }

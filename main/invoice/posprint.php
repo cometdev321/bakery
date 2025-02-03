@@ -55,7 +55,7 @@ $row3 = mysqli_fetch_array($result3);
             min-height: auto;
             margin: 0;
                 padding: 0;
-                font-size: 20px;
+                font-size: 18px;
 
         }
         @page {

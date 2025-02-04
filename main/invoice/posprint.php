@@ -40,7 +40,7 @@ if (isset($_POST['sale_id']) || isset($_POST['new_sale_id'])) {
 $result1 = mysqli_query($conn, $query1);
 $row = mysqli_fetch_array($result1);
 
-$query3 = "SELECT name, location FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
+$query3 = "SELECT name, location, phone_number FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
 $result3 = mysqli_query($conn, $query3);
 $row3 = mysqli_fetch_array($result3);
 ?><!DOCTYPE html>
@@ -173,7 +173,15 @@ $row3 = mysqli_fetch_array($result3);
     text-align: left;
 }
 
-
+.footer{
+    margin-top:-48px;
+}
+p{
+    margin-bottom: 0;
+}
+.footer-p{
+    margin-top:5px;
+}
       
     </style>
 </head>
@@ -259,8 +267,9 @@ $row3 = mysqli_fetch_array($result3);
             <p>Sub-total: <?php echo $row['sub_total']; ?></p>
             <p>Discount: <?php echo $row['discount']; ?></p>
             <p>Total: <?php echo $row['after_discount_total']; ?></p>
+            <p class="footer-p">Inclusive of all taxes</p>
             <p>Thank you for your purchase!</p>
-            <p>9686920756</p>
+            <p><?php echo $row3['phone_number']; ?></p>
         </div>
     </div>
     <button class="print-button hidden-print" id="printButton" onclick="window.print();">Print</button>

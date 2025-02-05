@@ -40,7 +40,7 @@ if (isset($_POST['sale_id']) || isset($_POST['new_sale_id'])) {
 $result1 = mysqli_query($conn, $query1);
 $row = mysqli_fetch_array($result1);
 
-$query3 = "SELECT name, location FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
+$query3 = "SELECT name, location, phone_number FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
 $result3 = mysqli_query($conn, $query3);
 $row3 = mysqli_fetch_array($result3);
 ?><!DOCTYPE html>
@@ -50,64 +50,91 @@ $row3 = mysqli_fetch_array($result3);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS Receipt</title>
     <style>
-        @media print {
-            .receipt {
-                width: 80mm;
-                font-size: 12px;
-            }
-            .hidden-print {
-                display: none;
-            }
-            body {
-                -webkit-print-color-adjust: exact;
-                margin: 0;
+        *{
+            width: 90mm;
+            min-height: auto;
+            margin: 0;
                 padding: 0;
+                font-size: 18px;
+
+        }
+        @page {
+            size: auto; /* Adapts to any printer paper */
+            margin: 0; /* No margin for better fitting */
+        }
+
+        @media print {
+            body {
+                width: 80mm;
+                height: auto;
+                
+                font-family: Arial, sans-serif;
+                -webkit-print-color-adjust: exact;
             }
+
+            .receipt {
+                /* width: 80mm; */
+                /* min-height: auto; */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 10px;
+                font-size: 12px;
+                border: none; /* No borders for printing */
+            }
+
+            .hidden-print {
+                display: none !important;
+            }
+
+            .receipt img {
+                display: block;
+                margin: auto;
+            }
+
+            .receipt table {
+                border-collapse: collapse;
+            }
+
+            .receipt th,
+            .receipt td {
+                padding: 5px;
+                text-align: left;
+            }
+
+            .receipt th:last-child,
+            .receipt td:last-child {
+                text-align: left;
+            }
+            .receipt .details,
+        .receipt .items {
+            margin: 10px;
+            border-collapse: collapse;
+        }
+        .items .max_col{
+            width: 30px;
+        }
         }
 
         body {
             font-family: Arial, sans-serif;
-        }
-
-        .receipt {
-            width: 80mm;
-            padding: 10px;
-            margin: auto;
-            border: 1px solid #ddd;
-        }
-
-        .receipt img {
-            display: block;
-            margin: auto;
-        }
-
-        .receipt .header,
-        .receipt .footer {
             text-align: center;
         }
 
-        .receipt .details,
-        .receipt .items {
-            width: 100%;
-            border-collapse: collapse;
+        .receipt {
+          
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+           
+          
+            padding: 10px;
+            border: 1px solid #ddd;
         }
 
-        .receipt .details td,
-        .receipt .items th,
-        .receipt .items td {
-            padding: 5px;
-            text-align: left;
-        }
-
-        .receipt .items th,
-        .receipt .items td {
-            border-bottom: 1px solid #ddd;
-        }
-
-        .receipt .items th:last-child,
-        .receipt .items td:last-child {
-            text-align: right;
-        }
+       
 
         .print-button {
             margin: 20px auto;
@@ -120,10 +147,42 @@ $row3 = mysqli_fetch_array($result3);
             border-radius: 5px;
             cursor: pointer;
         }
+        .content {
+
+            display: flex;
+            flex-direction: column;
+            margin: 40px;
+            align-items: center;
+            justify-content: center;
+        }
 
         .print-button:hover {
             background-color: #0056b3;
         }
+        .items table {
+            margin: 20px 0;
+            
+    /* width: 100%; */
+    border-collapse: collapse; /* Ensures no extra spacing between borders */
+    /* border: 1px solid black; Adds border to the whole table */
+}
+
+.items th, .items td {
+    /* border: 1px solid black; Adds border to each cell */
+    padding: 5px;
+    text-align: left;
+}
+
+.footer{
+    margin-top:-48px;
+}
+p{
+    margin-bottom: 0;
+}
+.footer-p{
+    margin-top:5px;
+}
+      
     </style>
 </head>
 <body onload="tryAutoPrint();">
@@ -132,19 +191,21 @@ $row3 = mysqli_fetch_array($result3);
             <img src="../../Images/<?php echo $fetch['image']; ?>" alt="Logo" width="50">
             <p><?php echo $row3['location']; ?></p>
         </div>
-        <div class="details">
-            <table>
-                <tr>
-                    <td>Invoice #</td>
-                    <td><?php echo $row['sales_invoice_number'] ?? $row['purchase_invoice_number']; ?></td>
-                </tr>
-                <tr>
-                    <td>Date</td>
-                    <td>
-                        <?php
+        <div class="content">
+
+            <div class="details">
+                <table>
+                    <tr>
+                        <td>Invoice #</td>
+                        <td><?php echo $row['sales_invoice_number'] ?? $row['purchase_invoice_number']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Date</td>
+                        <td>
+                            <?php
                             $date = $row['sales_invoice_date'] ?? $row['purchase_invoice_date'];
                             echo date("d-m-Y", strtotime($date));
-                        ?>
+                            ?>
                     </td>
                 </tr>
                 <tr>
@@ -157,10 +218,10 @@ $row3 = mysqli_fetch_array($result3);
             <table>
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
+                        <th class="max_col">Item</th>
+                        <th >Qty</th>
+                        <th >Price</th>
+                        <th >Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -185,28 +246,30 @@ $row3 = mysqli_fetch_array($result3);
                                        AND ts.status='1' 
                                        ORDER BY ts.id ASC";
                         }
-
+                        
                         $result3 = mysqli_query($conn, $query2);
                         if (mysqli_num_rows($result3) > 0) {
                             while ($row2 = mysqli_fetch_array($result3)) {
                                 echo "<tr>
-                                    <td>{$row2['pname']}</td>
-                                    <td>{$row2['Qty']}</td>
-                                    <td>{$row2['Price']}</td>
-                                    <td>{$row2['Amount']}</td>
+                                <td>{$row2['pname']}</td>
+                                <td>{$row2['Qty']}</td>
+                                <td >{$row2['Price']}</td>
+                                <td >{$row2['Amount']}</td>
                                 </tr>";
                             }
                         }
-                    ?>
+                        ?>
                 </tbody>
             </table>
         </div>
+    </div>
         <div class="footer">
             <p>Sub-total: <?php echo $row['sub_total']; ?></p>
             <p>Discount: <?php echo $row['discount']; ?></p>
             <p>Total: <?php echo $row['after_discount_total']; ?></p>
+            <p class="footer-p">Inclusive of all taxes</p>
             <p>Thank you for your purchase!</p>
-            <p>9686920756</p>
+            <p><?php echo $row3['phone_number']; ?></p>
         </div>
     </div>
     <button class="print-button hidden-print" id="printButton" onclick="window.print();">Print</button>

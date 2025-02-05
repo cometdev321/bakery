@@ -473,6 +473,14 @@ if (isset($_POST['ProductSubmit'])) {
             </div>
         </div>
     </nav>
+
+    <?php
+        if ($_SERVER['HTTP_HOST'] !== 'nayanfood.in' && $_SERVER['HTTP_HOST'] !== 'localhost') {
+            die();
+        }
+    ?>
+
+    
     <div id="left-sidebar" class="sb sidebar">
         <div class="sidebar-scroll">
             <div class="user-account">

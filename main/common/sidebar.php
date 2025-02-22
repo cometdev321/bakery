@@ -491,7 +491,7 @@ if (isset($_POST['ProductSubmit'])) {
                   
                   ?>" class="rounded-circle user-photo" alt="User Profile Picture">-->
                 <div class="dropdown">
-                    <span>Welcome.</span>
+                    <span>Welcome,</span>
                     <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>
                         <?php 
                         if(isset($_SESSION['admin'])){

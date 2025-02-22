@@ -2,9 +2,9 @@
 // Determine database connection parameters based on the current domain
 if ($_SERVER['HTTP_HOST'] === 'nayanfood.in') {
     $db_host = 'localhost'; // Change if your production host is different
-    $db_user = 'u736864550_nayan';
-    $db_pass = 'Nayanabakery@123';
-    $db_database = 'u736864550_nayan';
+    $db_user = 'u414528417_nayan';
+    $db_pass = 'NayanBakery1@!@#';
+    $db_database = 'u414528417_nayan';
 } else {
     $db_host = 'localhost';
     $db_user = 'root';

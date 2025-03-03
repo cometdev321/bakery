@@ -40,9 +40,6 @@ if (isset($_POST['sale_id']) || isset($_POST['new_sale_id'])) {
 $result1 = mysqli_query($conn, $query1);
 $row = mysqli_fetch_array($result1);
 
-
-
-
 $query3 = "SELECT name, location, phone_number FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
 $result3 = mysqli_query($conn, $query3);
 $row3 = mysqli_fetch_array($result3);

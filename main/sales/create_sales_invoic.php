@@ -95,7 +95,7 @@ date_default_timezone_set('Asia/Kolkata');
                 <label>Party</label>
                 <input type="text" id="partySelect" value="Guest" class="form-control show-tick ms select2" name="party_name"
                 placeholder="Enter party name">
-                <input type="text" hidden id="party_id" value="0" name="party_id">
+                <input type="text" hidden id="party_id" value="1" name="party_id">
                 <div id="suggestions"></div>
                         <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                     </div>

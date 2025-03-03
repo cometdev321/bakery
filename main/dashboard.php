@@ -1,8 +1,16 @@
 <?php
 include('common/header.php'); 
 include('common/sidebar.php'); 
-?>
 
+$checkGuest = "SELECT id FROM tblparty WHERE id = 1";
+$resultGuest = mysqli_query($conn, $checkGuest);
+if (mysqli_num_rows($resultGuest) == 0) {
+    // Insert Guest user if not exists
+    $addGuest = "INSERT INTO tblparty (id, userID, name, mobno, gstno, address, payment_info, status) 
+                 VALUES (1, '', 'Guest', '', '', '', '', 1)";
+    mysqli_query($conn, $addGuest);
+}
+?>
 <style>
         .alert-placeholder {
             position: fixed;

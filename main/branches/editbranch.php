@@ -8,9 +8,10 @@ if(isset($_POST['submit'])){
          $id  =     $_POST["id"];
          $branchname  =     $_POST["branchname"];
          $location    =     $_POST["location"];
+         $phone_number    =     $_POST["phone_number"];
             
    
-              $insert_query = "UPDATE branch SET name='$branchname', location='$location' WHERE id='$id'";
+              $insert_query = "UPDATE branch SET name='$branchname', location='$location',phone_number='$phone_number' WHERE id='$id'";
               $insert_result = mysqli_query($conn, $insert_query);
             
              if ($insert_result) {
@@ -68,6 +69,10 @@ if(isset($_POST['submit'])){
                                 <div class="form-group">
                                     <label>Location</label>
                                     <input type="text" class="form-control" value="<?php echo $branchdetails['location'];?>" name="location" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="text" class="form-control" value="<?php echo $branchdetails['phone_number'];?>" name="phone_number" required>
                                 </div>
                                 
                                 <div class="form-group">

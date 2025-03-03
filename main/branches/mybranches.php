@@ -115,6 +115,7 @@ if(isset($_POST['submit'])){
         }else{
          $branchname  =     $_POST["branchname"];
          $location    =     $_POST["location"];
+         $phone_number    =     $_POST["phone_number"];
             $query = "SELECT * FROM branch WHERE name = '$branchname' and status='1' and userID='$session'";
             $result = mysqli_query($conn, $query);
 
@@ -122,7 +123,7 @@ if(isset($_POST['submit'])){
                 echo"<script>window.location.href='mybranches?status=branch_error'</script>";
             } else {
               // If the branch does not exist, insert it into the database
-              $insert_query = "INSERT INTO branch (name, location,userID) VALUES ('$branchname', '$location','$session')";
+              $insert_query = "INSERT INTO branch (name, location,phone_number,userID) VALUES ('$branchname', '$location','$phone_number','$session')";
               $insert_result = mysqli_query($conn, $insert_query);
             
               if ($insert_result) {
@@ -167,6 +168,10 @@ if(isset($_POST['submit'])){
                                     <label>Location</label>
                                     <input type="text" placeholder="Type Here" class="form-control" name="location" required>
                                 </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="text" placeholder="Type Here" class="form-control" name="phone_number" required>
+                                </div>
                                 
                                 <div class="form-group">
                                 <button type="submit" name="submit" class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> <span>Save</span></button>
@@ -190,6 +195,7 @@ if(isset($_POST['submit'])){
                                         <th>Slno</th>
                                         <th>Branch Name</th>
                                         <th>Location</th>
+                                        <th>Phone Number</th>
                                         <th>Edit</th>
                                     </tr>
                                 </thead>
@@ -198,6 +204,7 @@ if(isset($_POST['submit'])){
                                         <th>Slno</th>
                                         <th>Branch Name</th>
                                         <th>Location</th>
+                                        <th>Phone Number</th>
                                         <th>Edit</th>
                                     </tr>
                                 </tfoot>
@@ -212,6 +219,7 @@ if(isset($_POST['submit'])){
                                         <td><?php echo $slno;?></td>
                                         <td><?php echo $row['name'];?></td>
                                         <td><?php echo $row['location'];?></td>
+                                        <td><?php echo $row['phone_number'];?></td>
                                         <td>
                                             <form action="editbranch" method="post">
                                             <input name="branchid" value="<?php echo $row['id'];?>" hidden>

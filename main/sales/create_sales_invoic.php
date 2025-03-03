@@ -93,13 +93,10 @@ date_default_timezone_set('Asia/Kolkata');
         <div class="row clearfix">
             <div class="col-lg-3 col-md-12 my-2">
                 <label>Party</label>
-                <input type="text" id="partySelect" class="form-control show-tick ms select2" name="party_name"
+                <input type="text" id="partySelect" value="Guest" class="form-control show-tick ms select2" name="party_name"
                 placeholder="Enter party name">
-                <input type="text" hidden id="party_id" name="party_id">
+                <input type="text" hidden id="party_id" value="0" name="party_id">
                 <div id="suggestions"></div>
-                <!-- <select class="form-control show-tick ms select2" data-placeholder="Select" name="party_name" id="partySelect" onchange="handleSelectChange(this.value, this.options[this.selectedIndex].dataset.mobno),clear_product_error()">
-                    <option value="add_new" class="btn btn-secondary btn-sm">Add New Party</option>
-                                                </select> -->
                         <small id="party_errorMessage" class="text-danger" style="display: none;">Select Party</small>
                     </div>
                     <div class="col-lg-3 col-md-12 my-2">
@@ -218,7 +215,7 @@ date_default_timezone_set('Asia/Kolkata');
                             <select class="custom-select" required name="amount_received_type" disabled
                                 id="amount_received_type" aria-label="Select dropdown" fdprocessedid="dgdb28">
                                 <option selected value="cash">Cash</option>
-                                <option value="bank">Bank</option>
+                                <option value="bank">UPI/Bank</option>
                                 <option value="cheque">Cheque</option>
                             </select>
                         </div>

@@ -40,6 +40,9 @@ if (isset($_POST['sale_id']) || isset($_POST['new_sale_id'])) {
 $result1 = mysqli_query($conn, $query1);
 $row = mysqli_fetch_array($result1);
 
+
+
+
 $query3 = "SELECT name, location, phone_number FROM branch WHERE id IN (SELECT branch FROM tblusers WHERE userID='$session')";
 $result3 = mysqli_query($conn, $query3);
 $row3 = mysqli_fetch_array($result3);
@@ -147,6 +150,17 @@ $row3 = mysqli_fetch_array($result3);
             border-radius: 5px;
             cursor: pointer;
         }
+        .back-button {
+            margin: 20px auto;
+            display: block;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: Black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
         .content {
 
             display: flex;
@@ -190,6 +204,7 @@ p{
         <div class="header">
             <img src="../../Images/<?php echo $fetch['image']; ?>" alt="Logo" width="50">
             <p><?php echo $row3['location']; ?></p>
+            <p><?php echo $row3['phone_number']; ?></p>
         </div>
         <div class="content">
 
@@ -269,22 +284,26 @@ p{
             <p>Total: <?php echo $row['after_discount_total']; ?></p>
             <p class="footer-p">Inclusive of all taxes</p>
             <p>Thank you for your purchase!</p>
-            <p><?php echo $row3['phone_number']; ?></p>
+            <p>Visit Again</p>
         </div>
     </div>
     <button class="print-button hidden-print" id="printButton" onclick="window.print();">Print</button>
+    <button class="back-button hidden-print" id="BackButton" onclick="window.location.href='<?php echo $base;?>/sales/create_sales_invoic';">Back</button>
 
     <script>
         const printButton = document.getElementById('printButton');
+        const BackButton = document.getElementById('BackButton');
 
         // Hide the print button when print preview opens
         window.onbeforeprint = () => {
             printButton.style.display = 'none';
+            BackButton.style.display = 'none';
         };
 
         // Show the print button when print preview closes
         window.onafterprint = () => {
             printButton.style.display = 'block';
+            BackButton.style.display = 'block';
         };
 
         function tryAutoPrint() {
@@ -292,6 +311,7 @@ p{
                 window.print();
             } catch (error) {
                 printButton.style.display = 'block';
+                BackButton.style.display = 'block';
             }
         }
     </script>

@@ -183,11 +183,17 @@ date_default_timezone_set('Asia/Kolkata');
                     <label>Sub-Total</label>
                     <input type="text" name="subtotal" placeholder="---" id="subtotal" readonly class="form-control">
                 </div>
-                <div class="col-lg-2 col-md-12 my-2">
-                    <label>Add-Discount</label>
-                    <input type="number" name="total_discount" value="0" placeholder="Type Here"
-                        onkeyup="calculate_total_discount()" id="discount" class="form-control">
+                <div class="col-lg-2 col-md-12 my-2 d-flex align-items-end">
+                    <div style="width: 100%;">
+                        <label>Add-Discount</label>
+                        <div class="input-group">
+                            <input type="number" name="total_discount" value="0" placeholder="Type Here"
+                                id="discount" class="form-control">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="calculate_total_discount()">Apply</button>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="col-lg-2 col-md-12 my-2">
                     <label>After Discount Total</label>
                     <input type="text" name="total" id="total" readonly class="form-control">
@@ -575,10 +581,29 @@ function calculate_total_discount() {
     if (isNaN(val)) {
         val = 0;
     }
-
-    document.getElementById('total').value = parseFloat(document.getElementById('subtotal').value) - val;
-    document.getElementById('balance_total').value = parseFloat(document.getElementById('subtotal').value) - val;
-    update_paid();
+    var total=document.getElementById('total').value;
+    if(val>total){
+        document.getElementById('discount').value=0;
+        document.getElementById('total').value = parseFloat(document.getElementById('subtotal').value)
+        update_paid();
+        Toastify({
+                    text: "Discount cannot be more than total",
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top", // top, bottom, left, right
+                    position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+                    backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+                    margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+                    stopOnFocus: true, // Prevent dismissing of toast on hover
+                    onClick: function() {}, // Callback after click
+                }).showToast();
+        return;
+    }else{
+        document.getElementById('total').value = parseFloat(document.getElementById('subtotal').value) - val;
+        document.getElementById('balance_total').value = parseFloat(document.getElementById('subtotal').value) - val;
+        update_paid();
+    }
 }
 
 function update_paid() {

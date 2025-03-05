@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Fetch today's added stock
 $todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname as product FROM tblstock ts
-                     right join tblproducts tp on tp.id=ts.product
+                      join tblproducts tp on tp.id=ts.product
                       WHERE date = '$dateToday' and ts.userID='$userId'";
 $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
 ?>

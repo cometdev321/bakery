@@ -320,9 +320,9 @@ if (isset($_POST['ProductSubmit'])) {
                         </div>
 
                         <!-- Opening Stock -->
-                        <div class="col-lg-6 col-md-12 my-2">
+                        <div class="col-lg-6 col-md-12 my-2" hidden>
                             <label>Opening Stock</label>
-                            <input type="text" name="openingstock" placeholder="Type Here" class="form-control">
+                            <input type="text" name="openingstock" value="0" placeholder="Type Here" class="form-control">
                         </div>
 
                         <!-- Default Discount Per Unit -->
@@ -345,6 +345,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 <option value="KG">Kilo Gram (kg)</option>
                                 <option value="ML">Milli Liter (ml)</option>
                                 <option value="L">Liter (L)</option>
+                                <option value="P">Packets</option>
                             </select>
                         </div>
 
@@ -473,12 +474,6 @@ if (isset($_POST['ProductSubmit'])) {
             </div>
         </div>
     </nav>
-
-    <?php
-        if ($_SERVER['HTTP_HOST'] !== 'nayanfood.in' && $_SERVER['HTTP_HOST'] !== 'localhost') {
-            die();
-        }
-    ?>
 
     
     <div id="left-sidebar" class="sb sidebar">
@@ -678,7 +673,18 @@ if (isset($_POST['ProductSubmit'])) {
                                 </ul>
                             </li>
                             <?php } ?>
-                            
+                            <?php
+                                   if(!isset($_SESSION['admin'])){
+                                ?>
+                            <li>
+                                <a href="#FileManager" class="has-arrow"><i class="icon-drawer"></i> <span>My Stock</span></a>
+                                <ul>                                    
+                                    <li><a href="<?php echo $base ?>/stock/update_stock">Update Stock</a></li>
+                                    <li><a href="<?php echo $base ?>/stock/view_stock">View Stock</a></li>
+                                </ul>
+                            </li>
+                            <?php
+                                } ?>
                             <?php
                                 if (isset($_SESSION['user'])) {
                                     $session = $_SESSION['user'];

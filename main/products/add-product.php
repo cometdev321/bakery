@@ -207,9 +207,9 @@ if (isset($_POST['submit'])) {
                                             <label>HSN Code</label>
                                             <input type="text" name="HSN" placeholder="Type Here" class="form-control" >
                                         </div>
-                                        <div class="col-lg-6 col-md-12  my-2">
+                                        <div class="col-lg-6 col-md-12  my-2" hidden>
                                             <label>Opening Stock</label>
-                                            <input type="text" name="openingstock" placeholder="Type Here" class="form-control" >
+                                            <input type="text" name="openingstock" value="0" placeholder="Type Here" class="form-control" >
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>Default Discount Per Unit</label>
@@ -227,6 +227,7 @@ if (isset($_POST['submit'])) {
                                               <option value="KG">Kilo Gram (kg)</option>
                                               <option value="ML">Milli Liter (ml)</option>
                                               <option value="L">Liter (L)</option>
+                                              <option value="P">Packets</option>
                                             </select>
                                         </div>
                                             

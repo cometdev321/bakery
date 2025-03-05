@@ -34,7 +34,7 @@ SELECT
 FROM tblproducts tp
 LEFT JOIN tblstock ts ON tp.id = ts.product
 LEFT JOIN tblsalesinvoice_details tblsales 
-    ON CONVERT(tblsales.ItemName USING utf8mb4) = CONVERT(tp.id USING utf8mb4)
+    ON CONVERT(tblsales.ItemName USING utf8mb4) = CONVERT(ts.id USING utf8mb4)
     where ts.userId='$userId'
 GROUP BY tp.productname;
 

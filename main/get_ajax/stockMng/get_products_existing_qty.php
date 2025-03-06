@@ -5,13 +5,22 @@ include('../../common/session_control.php');
 $product = $_POST['productID'];
 
 // Use prepared statement to prevent SQL injection
-$query = "SELECT 
-            COALESCE(SUM(ts.qty), 0) - COALESCE(SUM(tblsales.Qty), 0) AS available_stock 
-          FROM tblstock ts 
-          LEFT JOIN tblsalesinvoice_details tblsales 
-          ON tblsales.ItemName COLLATE utf8mb4_unicode_ci = ts.product COLLATE utf8mb4_unicode_ci 
-          WHERE ts.product COLLATE utf8mb4_unicode_ci = ? 
-          AND ts.userID = ?";
+$query = "
+SELECT 
+    COALESCE(SUM(ts.qty), 0) - COALESCE(sales.total_sold, 0) AS available_stock
+FROM tblstock ts
+LEFT JOIN (
+    -- Aggregate sales data first
+    SELECT ItemName, SUM(Qty) AS total_sold
+    FROM tblsalesinvoice_details
+    GROUP BY ItemName
+) sales 
+ON sales.ItemName COLLATE utf8mb4_unicode_ci = ts.product COLLATE utf8mb4_unicode_ci
+WHERE ts.product COLLATE utf8mb4_unicode_ci = ?
+AND ts.userID = ?;
+
+          
+          ";
 
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "si", $product, $session); // Assuming $session is an integer (userID)

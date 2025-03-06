@@ -11,19 +11,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    $query = "SELECT 
-                COALESCE(SUM(ts.qty), 0) - COALESCE(SUM(tblsales.Qty), 0) AS available_stock 
-              FROM tblstock ts 
-              LEFT JOIN tblsalesinvoice_details tblsales 
-              ON tblsales.ItemName COLLATE utf8mb4_unicode_ci = ts.product COLLATE utf8mb4_unicode_ci 
-              WHERE ts.product COLLATE utf8mb4_unicode_ci = ? 
-              AND ts.date = ? 
-              AND ts.userID = ?";
+    // Escape inputs to prevent SQL injection
+    $product = mysqli_real_escape_string($conn, $product);
+    $date = mysqli_real_escape_string($conn, $date);
 
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssi", $product, $date, $session); // $session = userID
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    $query = "
+    SELECT 
+        tp.productname AS product, 
+        COALESCE(stock.totalstock, 0) - COALESCE(sales.totalsales, 0) AS available_stock
+    FROM tblproducts tp
+    LEFT JOIN (
+        SELECT product, SUM(qty) AS totalstock 
+        FROM tblstock 
+        WHERE product = '$product' 
+                and date<='$date'
+              AND userID = '$session'
+        GROUP BY product
+    ) stock ON stock.product = tp.id
+    LEFT JOIN (
+        SELECT ItemName COLLATE utf8mb4_unicode_ci AS product, SUM(Qty) AS totalsales 
+        FROM tblsalesinvoice_details 
+        WHERE ItemName = '$product' 
+              AND Date <= '$date' 
+              AND userID = '$session'
+        GROUP BY ItemName COLLATE utf8mb4_unicode_ci
+    ) sales ON sales.product = tp.id
+    GROUP BY tp.productname, stock.totalstock, sales.totalsales";
+
+    $result = mysqli_query($conn, $query);
 
     if ($row = mysqli_fetch_assoc($result)) {
         echo $row['available_stock'];
@@ -31,6 +46,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "0";
     }
 
-    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
 }
 ?>

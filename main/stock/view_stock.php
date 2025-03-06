@@ -30,13 +30,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $todaysStockQuery = "
 SELECT 
     tp.productname AS product, 
-    COALESCE(SUM(ts.qty), 0) - COALESCE(SUM(tblsales.Qty), 0) AS available_stock
+    COALESCE(stock.totalstock, 0) -
+    COALESCE(sales.totalsales, 0) AS available_stock
 FROM tblproducts tp
-LEFT JOIN tblstock ts ON tp.id = ts.product
-LEFT JOIN tblsalesinvoice_details tblsales 
-    ON CONVERT(tblsales.ItemName USING utf8mb4) = CONVERT(ts.id USING utf8mb4)
-    where ts.userId='$userId'
-GROUP BY tp.productname;
+LEFT JOIN (
+    SELECT product, SUM(qty) AS totalstock 
+    FROM tblstock 
+    where userID='$userId'
+    GROUP BY product
+) stock ON stock.product = tp.id
+LEFT JOIN (
+    SELECT ItemName COLLATE utf8mb4_unicode_ci AS product, SUM(Qty) AS totalsales 
+    FROM tblsalesinvoice_details  where userID='$userId'
+    GROUP BY ItemName COLLATE utf8mb4_unicode_ci
+) sales ON sales.product = tp.id
+GROUP BY tp.productname, stock.totalstock, sales.totalsales 
+
+
+
 
 ";
 $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
@@ -53,6 +64,7 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
         </div>
 
         <div class="row clearfix">
+            
             <div class="col-lg-12">
                 <div class="card">
                     <div class="header">
@@ -93,7 +105,7 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
             <div class="col-lg-12">
                 <div class="card">
                     <div class="header">
-                        <h2>Today's Added Stock</h2>
+                        <h2>Current Stock</h2>
                     </div>
                     <div class="body">
                         <table class="table table-bordered table-striped table-hover dataTable js-exportable">

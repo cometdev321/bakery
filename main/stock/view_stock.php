@@ -44,7 +44,7 @@ LEFT JOIN (
     FROM tblsalesinvoice_details  where userID='$userId'
     GROUP BY ItemName COLLATE utf8mb4_unicode_ci
 ) sales ON sales.product = tp.id
-GROUP BY tp.productname, stock.totalstock, sales.totalsales 
+GROUP BY  stock.totalstock, sales.totalsales 
 
 
 

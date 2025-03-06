@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         WHERE Date <= '$date' AND userID = '$session'
         GROUP BY ItemName COLLATE utf8mb4_unicode_ci
     ) sales ON sales.product = tp.id
-    GROUP BY tp.productname";
+   ";
 
     $result = mysqli_query($conn, $query);
 

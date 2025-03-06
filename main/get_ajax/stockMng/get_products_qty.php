@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         GROUP BY ItemName COLLATE utf8mb4_unicode_ci
     ) sales ON sales.product = tp.id 
      WHERE tp.id = '$product'
-    GROUP BY tp.productname, stock.totalstock, sales.totalsales";
+    GROUP BY stock.totalstock, sales.totalsales";
 
     $result = mysqli_query($conn, $query);
 

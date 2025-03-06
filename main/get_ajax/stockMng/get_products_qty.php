@@ -1,6 +1,7 @@
 <?php
 include('../../common/cnn.php');
 include('../../common/session_control.php');
+$userId = $_SESSION['user'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product = $_POST['productID'];
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         FROM tblstock 
         WHERE product = '$product' 
                 and date<='$date'
-              AND userID = '$session'
+              AND userID = '$userId'
         GROUP BY product
     ) stock ON stock.product = tp.id
     LEFT JOIN (
@@ -33,9 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         FROM tblsalesinvoice_details 
         WHERE ItemName = '$product' 
               AND Date <= '$date' 
-              AND userID = '$session'
+              AND userID = '$userId'
         GROUP BY ItemName COLLATE utf8mb4_unicode_ci
-    ) sales ON sales.product = tp.id
+    ) sales ON sales.product = tp.id 
+     WHERE tp.id = '$product'
     GROUP BY tp.productname, stock.totalstock, sales.totalsales";
 
     $result = mysqli_query($conn, $query);

@@ -345,7 +345,8 @@ if (isset($_POST['ProductSubmit'])) {
                                 <option value="KG">Kilo Gram (kg)</option>
                                 <option value="ML">Milli Liter (ml)</option>
                                 <option value="L">Liter (L)</option>
-                                <option value="P">Packets</option>
+                                <option value="P">Packets(Pckt)</option>
+                                <option value="U">Unit(Unt)</option>
                             </select>
                         </div>
 

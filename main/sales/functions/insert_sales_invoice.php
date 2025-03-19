@@ -1,4 +1,4 @@
-<?php
+<?php 
 include('../../common/cnn.php');
 include('../../common/session_control.php');
 
@@ -20,43 +20,50 @@ $posActive = $postData['formData']['PosActive'];
 $amountReceivedtype = isset($postData['formData']['amount_received_type_value']) ? $postData['formData']['amount_received_type_value'] : 'none';
 $current_time = date("H:i:s", time());
 
-// Prepare and execute the query for tblsalesinvoices
-$query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sales_invoice_number, sales_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received, amount_received_type, total_balance, userID) 
-          VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype', '$totalBalance', '$session')";
+// Check for duplicate invoiceNumber and userID
+$checkQuery = "SELECT COUNT(*) AS count FROM tblsalesinvoices WHERE sales_invoice_number = '$invoiceNumber' AND userID = '$session' and status='1'";
+$checkResult = mysqli_query($conn, $checkQuery);
+$checkRow = mysqli_fetch_assoc($checkResult);
 
-// Perform the database query
-$result = mysqli_query($conn, $query);
-
-if ($result) {
-    // Insertion successful
-
-    // Retrieve the auto-generated sales_invoice_id
-    $salesInvoiceId = mysqli_insert_id($conn);
-
-    // Iterate through the posted data and insert the details records
-    foreach ($postData['data'] as $key => $val) {
-        $itemName = $val['itemname'];
-        $qty = $val['qty'];
-        $size = $val['size'];
-        $price = $val['price'];
-        $itemDiscount = 0; // Use a different variable name for the discount
-        $tax = $val['tax'];
-        $amount = $val['amount'];
-
-        // Perform the INSERT query for tblsalesinvoice_details
-        $details_query = "INSERT INTO tblsalesinvoice_details (`sales_invoice_number`,`ItemName`,`Size`,`Qty`,`Price`,`Discount`,`Tax`,`Amount`,`userID`,`Date`) 
-                          VALUES ('$invoiceNumber', '$itemName','$size','$qty', '$price', '$itemDiscount', '$tax', '$amount','$session','$invoiceDate')";
-        mysqli_query($conn, $details_query);
-    }
-
-    if ($posActive == "on") {
-        echo $salesInvoiceId;
-    } else {
-        echo "success";
-    }
+if ($checkRow['count'] > 0) {
+    echo "duplicate"; // Indicate that the invoice already exists
 } else {
-    // Insertion failed
-    echo "error";
+    // Prepare and execute the query for tblsalesinvoices
+    $query = "INSERT INTO tblsalesinvoices (party_name, party_mobno, sales_invoice_number, sales_invoice_date, sub_total, discount, after_discount_total, full_paid, amount_received, amount_received_type, total_balance, userID) 
+              VALUES ('$partyName', '$partyMobNo', '$invoiceNumber', '$invoiceDate', '$subtotal', '$totalDiscount', '$afterDiscountTotal', '$fullyPaid', '$amountReceived', '$amountReceivedtype', '$totalBalance', '$session')";
+
+    // Perform the database query
+    $result = mysqli_query($conn, $query);
+
+    if ($result) {
+        // Retrieve the auto-generated sales_invoice_id
+        $salesInvoiceId = mysqli_insert_id($conn);
+
+        // Iterate through the posted data and insert the details records
+        foreach ($postData['data'] as $key => $val) {
+            $itemName = $val['itemname'];
+            $qty = $val['qty'];
+            $size = $val['size'];
+            $price = $val['price'];
+            $itemDiscount = 0; // Use a different variable name for the discount
+            $tax = $val['tax'];
+            $amount = $val['amount'];
+
+            // Perform the INSERT query for tblsalesinvoice_details
+            $details_query = "INSERT INTO tblsalesinvoice_details (sales_invoice_number, ItemName, Size, Qty, Price, Discount, Tax, Amount, userID, Date) 
+                              VALUES ('$invoiceNumber', '$itemName', '$size', '$qty', '$price', '$itemDiscount', '$tax', '$amount', '$session', '$invoiceDate')";
+            mysqli_query($conn, $details_query);
+        }
+
+        if ($posActive == "on") {
+            echo $salesInvoiceId;
+        } else {
+            echo "success";
+        }
+    } else {
+        // Insertion failed
+        echo "error";
+    }
 }
 
 // Close the database connection

@@ -87,20 +87,20 @@ if (mysqli_num_rows($resultGuest) == 0) {
                 <div class="col-lg-3 col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
-                        <?php   
+                        <?php   $today = date('Y-m-d'); 
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
                                 if($userID=='ALL'){
-                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where status=1 and userID in(select userID from tblusers where superAdminID='$session')"; 
+                                    $query = "SELECT count(id) as total,sum(after_discount_total) as totalamount FROM tblpurchaseinvoices where status=1 and purchase_invoice_date='$today' and userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
-                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where status=1 and  userID='$userID' and status='1'"; 
+                                    $query = "SELECT count(id) as total,sum(after_discount_total) as totalamount FROM tblpurchaseinvoices where status=1 and purchase_invoice_date='$today' and userID='$userID' and status='1'"; 
                                 }else{
-                                    $query = "SELECT count(id) as total FROM tblpurchaseinvoices where status=1 and  userID='$session' and status='1'"; 
+                                    $query = "SELECT count(id) as total,sum(after_discount_total) as totalamount FROM tblpurchaseinvoices where status=1 and purchase_invoice_date='$today' and userID='$session' and status='1'"; 
                                 }
                                 $result = mysqli_query($conn,$query);
                                 $fetch = mysqli_fetch_array($result);
                           ?>
-                            <h3><?php echo $fetch['total']?$fetch['total']:'0';?><i class="fa fa-dollar float-right"></i></h3>
-                            <span>Total Purchases</span>       
+                            <h3><?php echo $fetch['total']?$fetch['total']:'0';?> - &#8377;<?php echo $fetch['totalamount']?$fetch['totalamount']:'0';?><i class="fa fa-dollar float-right"></i></h3>
+                            <span>Total Purchases Today</span>       
                         </div>
                         <div class="progress progress-xs progress-transparent custom-color-yellow m-b-0">
                             <div class="progress-bar" data-transitiongoal="100"></div>
@@ -110,20 +110,20 @@ if (mysqli_num_rows($resultGuest) == 0) {
                 <div class="col-lg-3 col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
-                        <?php   
+                        <?php   $today = date('Y-m-d'); 
                                 $userID = isset($_SESSION['subSession']) ? $_SESSION['subSession'] : '-';
                                 if($userID=='ALL'){
-                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where status=1 and  userID in(select userID from tblusers where superAdminID='$session')"; 
+                                    $query = "SELECT count(id) as total,sum(after_discount_total) as totalamount FROM tblsalesinvoices where status=1 and sales_invoice_date='$today' and  userID in(select userID from tblusers where superAdminID='$session')"; 
                                 }else if(isset($_SESSION['subSession'])){
-                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where status=1 and  userID='$userID' and status='1'"; 
+                                    $query = "SELECT count(id) as total,sum(after_discount_total) as totalamount FROM tblsalesinvoices where status=1 and sales_invoice_date='$today' and  userID='$userID' and status='1'"; 
                                 }else{
-                                    $query = "SELECT count(id) as total FROM tblsalesinvoices where status=1 and  userID='$session' and status='1'"; 
+                                    $query = "SELECT count(id) as total,sum(after_discount_total) as totalamount FROM tblsalesinvoices where status=1 and sales_invoice_date='$today' and  userID='$session' and status='1'"; 
                                 }
                                 $result = mysqli_query($conn,$query);
                                 $fetch = mysqli_fetch_array($result);
                           ?>
-                            <h3><?php echo $fetch['total']?$fetch['total']:'0';?><i class="fa fa-dollar float-right"></i></h3>
-                            <span>Total Sales</span>        
+                            <h3><?php echo $fetch['total']?$fetch['total']:'0';?> - &#8377;<?php echo $fetch['totalamount']?$fetch['totalamount']:'0';?><i class="fa fa-dollar float-right"></i></h3>
+                            <span>Total Sales Today</span>        
                         </div>
                         <div class="progress progress-xs progress-transparent custom-color-green m-b-0">
                             <div class="progress-bar" data-transitiongoal="100"></div>

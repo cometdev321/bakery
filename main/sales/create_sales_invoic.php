@@ -115,7 +115,21 @@ date_default_timezone_set('Asia/Kolkata');
                         }else{
                             $nextInvoiceNumber=1;
                         }
-                                                
+                        
+                        $Checkquery1 = "SELECT `sales_invoice_number` FROM `tblsalesinvoices` where 
+                        `userID`='$session' and status='1' and sales_invoice_number='$nextInvoiceNumber' ";
+                        $resultCheckquery1 = mysqli_query($conn, $Checkquery1);
+                        if (mysqli_num_rows($resultCheckquery1) > 0) {
+                            // Prevent infinite loop by checking if refresh has already happened
+                            if (!isset($_SESSION['refreshed'])) {
+                                $_SESSION['refreshed'] = true;
+                                echo "<script>setTimeout(() => location.reload(), 1000);</script>"; // Delay refresh to avoid loop
+                            } else {
+                                unset($_SESSION['refreshed']); // Reset flag after one refresh
+                            }
+                        }
+
+                        
                     ?>
 
                     <!-- Update the "Sale Invoice Number" input field -->
@@ -559,6 +573,7 @@ function create_sales_invoice() {
 }
 
 function calculate_subtotal() {
+    // calculate_total_discount();
     let amount = 0;
 
     for (let i = 1; i <= rowCount; i++) {
@@ -571,6 +586,8 @@ function calculate_subtotal() {
 
     document.getElementById('subtotal').value = parseFloat(amount);
     document.getElementById('total').value = parseFloat(amount);
+    
+    document.getElementById('amount_received').value = parseFloat(amount);
     document.getElementById('balance_total').value = parseFloat(amount);
 }
 

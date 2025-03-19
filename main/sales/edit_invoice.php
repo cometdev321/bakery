@@ -212,7 +212,7 @@ $query = "SELECT si.*, p.name AS `name`
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>Add-Discount</label>
-                                                <input type="number" name="total_discount" value="0" placeholder="Type Here"  value="<?php echo $row['discount']; ?>" onkeyup="calculate_total_discount()" id="discount"  class="form-control" >
+                                                <input type="text" name="total_discount" placeholder="Type Here"  value="<?php echo $row['discount']; ?>" onkeyup="calculate_total_discount()" id="discount"  class="form-control" >
                                             </div>
                                             <div class="col-lg-2 col-md-12 my-2">
                                                 <label>After Discount Total</label>
@@ -594,6 +594,8 @@ function create_sales_invoice() {
         type: 'POST',
         data: { sales_invoice_item: id }, 
         success: function (response) {
+            calculate_total_discount();
+            create_sales_invoice();
         }
     });
 

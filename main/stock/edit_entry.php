@@ -20,7 +20,7 @@ $dateToday = date("Y-m-d");
             <div class="col-lg-12">
                 <div class="card">
                     <div class="header">
-                        <h2>Manage Entry</h2> 
+                        <h2>Edit Stock Entry</h2> 
                     </div>
                     <div class="body">
                         <form method="POST">

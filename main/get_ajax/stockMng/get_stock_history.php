@@ -4,7 +4,6 @@ include('../../common/session_control.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $date = $_POST['date'] ?? date('Y-m-d'); // Get the selected date, default to today
-    $session = mysqli_real_escape_string($conn, $session); // Assuming $session holds the userID
 
     // Fetch stock history
     $query = "

@@ -13,7 +13,7 @@ while($product = mysqli_fetch_array($get_p)){
         data-Existingqty="<?php echo $product['openingstock']; ?>"
         data-hsn="<?php echo $product['HSN']; ?>"
         data-price="<?php echo $product['saleprice']; ?>"
-        data-sizetype="<?php echo $product['size']; ?>"
+        data-sizetype="<?php echo $product['size']; ?>" 
         data-gst="<?php echo $product['gst']; ?>"
         >
 <?php echo $product['productname']; ?>&nbsp;(<?php echo $product['size']; ?>)&nbsp;(<?php echo $product['barcode']; ?>)&nbsp;(<?php echo $product['saleprice']; ?>)</option>

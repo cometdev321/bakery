@@ -140,11 +140,13 @@ $(document).ready(function() {
                                 </tfoot>
                                 <tbody>
                                 <?php
-                                    $slno=1;
-                                        $query = "SELECT tp.*,tc.name FROM tblproducts tp
-                                        join tblcategory tc on tc.id=tp.category 
-                                        WHERE tp.status = '1'  
-                                        order by tp.id desc";
+                                    $slno=1; 
+                                    $query = "SELECT tp.*, tc.name 
+                                    FROM tblproducts tp
+                                    LEFT JOIN tblcategory tc ON tc.id = tp.category 
+                                    WHERE tp.status = '1'  
+                                    ORDER BY tp.id DESC";
+                          
                                     $result = mysqli_query($conn, $query);
                                     while($row=mysqli_fetch_array($result)){
                                 ?>

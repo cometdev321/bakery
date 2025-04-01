@@ -10,24 +10,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($conn)) {
         die("Database connection not established.");
     }
+
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     $product = mysqli_real_escape_string($conn, $_POST['product']);
     $qty = mysqli_real_escape_string($conn, $_POST['qty']);
 
-    if (empty($date) || empty($product) || empty($qty)) {
+    if (empty($date) || empty($product) || empty($qty) || empty($userId)) {
         $toastMessage = "Please fill all fields.";
     } else {
-        $query = "INSERT INTO tblstock (date, product, qty,userID) VALUES ('$date', '$product', '$qty','$userId')";
-        if (mysqli_query($conn, $query)) {
-            $toastMessage = "Stock updated successfully.";
+        // Check if the product exists for the same user on the same day
+        $checkQuery = "SELECT qty FROM tblstock WHERE date = '$date' AND product = '$product' AND userID = '$userId'";
+        $result = mysqli_query($conn, $checkQuery);
+
+        if (mysqli_num_rows($result) > 0) {
+            // If record exists, update the quantity
+            $row = mysqli_fetch_assoc($result);
+            $newQty = $row['qty'] + $qty;
+            $updateQuery = "UPDATE tblstock SET qty = '$newQty' WHERE date = '$date' AND product = '$product' AND userID = '$userId'";
+            if (mysqli_query($conn, $updateQuery)) {
+                $toastMessage = "Stock quantity updated successfully.";
+            } else {
+                $toastMessage = "Error updating stock quantity.";
+            }
         } else {
-            $toastMessage = "Error adding stock.";
+            // If no existing record, insert a new one
+            $insertQuery = "INSERT INTO tblstock (date, product, qty, userID) VALUES ('$date', '$product', '$qty', '$userId')";
+            if (mysqli_query($conn, $insertQuery)) {
+                $toastMessage = "Stock added successfully.";
+            } else {
+                $toastMessage = "Error adding stock.";
+            }
         }
     }
 }
 
+
 // Fetch today's added stock
-$todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname as product FROM tblstock ts
+$todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname  as product,tp.size as size,tp.saleprice as saleprice  FROM tblstock ts
                       join tblproducts tp on tp.id=ts.product
                       WHERE date = '$dateToday' and ts.userID='$userId'";
 $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
@@ -107,22 +126,26 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
                             </thead>
                             <tbody>
                                 <?php
+                                $amount=0;
                                 if (mysqli_num_rows($todaysStockResult) > 0) {
                                     $count = 1;
                                     while ($row = mysqli_fetch_assoc($todaysStockResult)) {
                                         echo "<tr>
                                             <td>{$count}</td>
                                             <td>{$row['date']}</td>
-                                            <td>{$row['product']}</td>
+                                            <td>{$row['product']}({$row['size']})(&#8377;{$row['saleprice']})</td>
                                             <td>{$row['qty']}</td>
                                         </tr>";
                                         $count++;
+                                        $amount+=($row['saleprice']*$row['qty']);
                                     }
                                 } else {
                                     echo "<tr><td colspan='4' class='text-center'>No stock added today</td></tr>";
                                 }
                                 ?>
                             </tbody>
+                            <h6>Stock Added Worth of :&#8377;<?php echo $amount;?> on <?php echo $dateToday;?></h6>
+
                         </table>
                     </div>
                 </div>

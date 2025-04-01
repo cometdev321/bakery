@@ -13,12 +13,12 @@ date_default_timezone_set('Asia/Kolkata');
             <div class="row">
                 <div class="col-lg-5 col-md-8 col-sm-12">                        
                     <h2><a href="javascript:void(0);" class="btn btn-xs btn-link btn-toggle-fullwidth">
-                        <i class="fa fa-arrow-left"></i></a> Sales Invoices
+                        <i class="fa fa-arrow-left"></i></a> Stock History
                     </h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index"><i class="icon-home"></i></a></li>                            
                         <li class="breadcrumb-item">Dashboard</li>
-                        <li class="breadcrumb-item active">Sales Invoices</li>
+                        <li class="breadcrumb-item active">Stock History</li>
                     </ul>
                 </div>            
             </div>

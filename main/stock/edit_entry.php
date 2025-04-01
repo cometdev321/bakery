@@ -2,8 +2,17 @@
 include('../common/header2.php'); 
 include('../common/sidebar.php'); 
 $dateToday = date("Y-m-d");
+$userId = $_SESSION['user'];
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectedDate'])) {
+    $dateToday = $_POST['selectedDate'];
+}
 
+// Fetch today's added stock
+$todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname as product,tp.size as size,tp.saleprice as saleprice FROM tblstock ts
+                      join tblproducts tp on tp.id=ts.product
+                      WHERE date = '$dateToday' and ts.userID='$userId'";
+$todaysStockResult = mysqli_query($conn, $todaysStockQuery);
 ?>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -27,7 +36,7 @@ $dateToday = date("Y-m-d");
                             <div class="row clearfix">
                                 <div class="col-lg-3 my-2">
                                     <label>Date</label>
-                                    <input type="date" name="date" id="date" value="<?php echo $dateToday; ?>" class="form-control" required>
+                                    <input type="date" name="date" id="date" value="<?php echo date("Y-m-d"); ?>" class="form-control" required>
                                 </div>
                                 <div class="col-lg-3 my-2">
                                     <label>Select Product</label>
@@ -71,7 +80,75 @@ $dateToday = date("Y-m-d");
             </div>
         </div>
 
-      
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>My Stok</h2> 
+                    </div>
+                    <div class="body">
+                    <form method="POST" action="">
+                        <div class="row clearfix">
+                            <div class="col-lg-3 my-2">
+                                <label>Date</label>
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="date" name="selectedDate" value="<?php echo $dateToday; ?>" class="form-control" required>
+                                    <button type="submit" class="btn btn-primary  ml-2">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table to show today's added stock -->
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>My Added Stock</h2>
+                    </div>
+                    <div class="body">
+                        <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                            <thead>
+                                <tr>
+                                    <th>Slno</th>
+                                    <th>Date</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $amount=0;
+                                if (mysqli_num_rows($todaysStockResult) > 0) {
+                                    $count = 1;
+                                    while ($row = mysqli_fetch_assoc($todaysStockResult)) {
+                                        echo "<tr>
+                                            <td>{$count}</td>
+                                            <td>{$row['date']}</td>
+                                            <td>{$row['product']}({$row['size']})(&#8377;{$row['saleprice']})</td>
+                                            <td>{$row['qty']}</td>
+                                        </tr>";
+                                        $count++;
+                                        $amount+=($row['saleprice']*$row['qty']);
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4' class='text-center'>No stock added today</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                            <h6>Stock Added Worth of :&#8377;<?php echo $amount;?> on <?php echo $dateToday;?></h6>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 

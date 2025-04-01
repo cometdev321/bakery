@@ -79,7 +79,7 @@ if(isset($_POST['submit'])){
                         <?php
                             $id = $_POST['pid'];
                             $product = mysqli_query($conn, "SELECT tp.*, tc.name FROM tblproducts tp 
-                                                            JOIN tblcategory tc ON tc.id = tp.category 
+                                                            LEFT JOIN tblcategory tc ON tc.id = tp.category 
                                                             WHERE tp.status = '1' AND tp.id = '$id'");
                             $pro_details = mysqli_fetch_array($product);
                         ?>

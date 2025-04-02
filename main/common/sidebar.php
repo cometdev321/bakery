@@ -583,6 +583,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 <ul>
                                     <li><a href="<?php echo $base ?>/branches/mybranches"><i class="fa fa-building-o"></i> My Branch</a></li>
                                     <li><a href="<?php echo $base ?>/users/myusers"><i class="fa fa-users"></i> My Users</a></li>
+                                    <li><a href="<?php echo $base ?>/pages/history"><i class="icon-book-open"></i>History</a></li>
                                 </ul>
                             </li>
                             

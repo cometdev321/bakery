@@ -477,6 +477,26 @@ function create_sales_invoice() {
         return;
     }
 
+    if(after_discount_total_value>100000){
+        Toastify({
+            text: 'Total Amount Looks Unusual',
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: 'top', // top, bottom, left, right
+            position: 'right', // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+            backgroundColor: 'linear-gradient(to right, #fe8c00, #f83600)', // Use gradient color with red mix
+            marginTop: '202px', // corrected to marginTop
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            onClick: function() {}, // Callback after click
+            style: {
+                margin: '70px 15px 10px 15px', // Add padding on the top of the toast message
+            },
+        }).showToast();
+        event.preventDefault();
+        return;
+    }
+
     var formData = {
         party: party,
         party_mob: party_mob,

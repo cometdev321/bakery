@@ -67,7 +67,7 @@ date_default_timezone_set('Asia/Kolkata');
                             id="barcodeproduct">
                             <option value="null">Select Item</option>
                             <?php
-                                $get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst`,`barcode` FROM tblproducts  where status='1'");
+                                $get_p = mysqli_query($conn, "SELECT `saleprice`,`size`,`productname`,`HSN`,`id`,`openingstock`,`gst`,`barcode` FROM tblproducts  where status='1' order by barcode");
                                 while($product = mysqli_fetch_array($get_p)){
                                     ?>
                                 <option value="<?php echo $product['id']; ?>" 

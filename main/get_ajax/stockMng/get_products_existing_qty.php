@@ -12,7 +12,7 @@ FROM tblstock ts
 LEFT JOIN (
     -- Aggregate sales data first
     SELECT ItemName, SUM(Qty) AS total_sold
-    FROM tblsalesinvoice_details
+    FROM tblsalesinvoice_details where status='1'
     GROUP BY ItemName
 ) sales 
 ON sales.ItemName COLLATE utf8mb4_unicode_ci = ts.product COLLATE utf8mb4_unicode_ci

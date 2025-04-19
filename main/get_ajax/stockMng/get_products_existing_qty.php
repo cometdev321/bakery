@@ -10,20 +10,19 @@ SELECT
     COALESCE(SUM(ts.qty), 0) - COALESCE(sales.total_sold, 0) AS available_stock
 FROM tblstock ts
 LEFT JOIN (
-    -- Aggregate sales data first
     SELECT ItemName, SUM(Qty) AS total_sold
-    FROM tblsalesinvoice_details where status='1'
+    FROM tblsalesinvoice_details 
+    WHERE status='1' AND userId = ?
     GROUP BY ItemName
 ) sales 
 ON sales.ItemName COLLATE utf8mb4_unicode_ci = ts.product COLLATE utf8mb4_unicode_ci
 WHERE ts.product COLLATE utf8mb4_unicode_ci = ?
 AND ts.userID = ?;
-
-          
-          ";
+";
 
 $stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "si", $product, $session); // Assuming $session is an integer (userID)
+mysqli_stmt_bind_param($stmt, "isi", $session, $product, $session); 
+ // Assuming $session is an integer (userID)
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 

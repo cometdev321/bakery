@@ -17,7 +17,7 @@ LEFT JOIN (
 ) sales 
 ON sales.ItemName COLLATE utf8mb4_unicode_ci = ts.product COLLATE utf8mb4_unicode_ci
 WHERE ts.product COLLATE utf8mb4_unicode_ci = ?
-AND ts.userID = ?;
+AND ts.userID = ? and sales.status='1';
 
           
           ";

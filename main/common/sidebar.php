@@ -334,7 +334,7 @@ if (isset($_POST['ProductSubmit'])) {
                         <!-- Size -->
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Size</label>
-                            <input type="number" name="size_number"  placeholder="Type Here" class="form-control" required>
+                            <input type="number" name="size_number"  placeholder="Type Here" class="form-control" required  step="0.1">
                         </div>
 
                         <!-- UOM (Unit of Measure) -->

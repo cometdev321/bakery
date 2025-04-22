@@ -682,7 +682,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 <a href="#FileManager" class="has-arrow"><i class="icon-drawer"></i> <span>My Stock</span></a>
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/stock/update_stock">Update Stock</a></li>
-                                    <li><a href="<?php echo $base ?>/stock/view_stock">View Stock</a></li>
+                                    <!-- <li><a href="<?php echo $base ?>/stock/view_stock">View Stock</a></li> -->
                                     <li><a href="<?php echo $base ?>/stock/stock_history">Stock History</a></li>
                                     <li><a href="<?php echo $base ?>/stock/edit_entry">Edit Entry</a></li>
                                 </ul>

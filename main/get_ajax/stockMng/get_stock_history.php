@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Fetch stock history
     $query = "
     SELECT 
-        tp.productname AS productname, 
+        tp.productname AS productname,tp.size,tp.saleprice,
         COALESCE(stock.totalstock, 0) - COALESCE(sales.totalsales, 0) AS available_stock
     FROM tblproducts tp
     LEFT JOIN (
@@ -32,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     while ($row = mysqli_fetch_assoc($result)) {
         $data[] = [
             'productname' => $row['productname'],
+            'size' => $row['size'],
+            'saleprice' => $row['saleprice'],
             'available_stock' => $row['available_stock']
         ];
     }

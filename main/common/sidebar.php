@@ -304,13 +304,13 @@ if (isset($_POST['ProductSubmit'])) {
                         <!-- Sale Price -->
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Sale Price</label>
-                            <input type="number" name="saleprice" placeholder="Type Here" class="form-control" required>
+                            <input type="number" name="saleprice" placeholder="Type Here" class="form-control" required step="0.01">
                         </div>
 
                         <!-- Purchase Price -->
                         <div class="col-lg-6 col-md-12 my-2">
                             <label>Purchase Price</label>
-                            <input type="number" name="purchaseprice" placeholder="Type Here" class="form-control" required>
+                            <input type="number" name="purchaseprice" placeholder="Type Here" class="form-control" required step="0.01">
                         </div>
 
                         <!-- HSN Code -->
@@ -436,9 +436,13 @@ if (isset($_POST['ProductSubmit'])) {
                         <li>
                             <a href="<?php echo $base ?>/party/add-party" title="New New Party"  class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-users"></i></a>
                         </li>
+                        <?php
+                        if(isset($_SESSION['admin'])){
+                            ?>
                         <li>
                             <a href="#" data-toggle="modal" data-target="#userDetailsModal" title="Add New Product" class="icon-menu d-none d-sm-block d-md-none d-lg-block"><i class="icon-briefcase"></i></a>
                         </li>
+                        <?php } ?>
                         <li>
                             <!-- <a href="<?php echo $base ?>/sales/create_sales_invoice"  title="Sales Invoice"  class="icon-menu d-none d-sm-block"><i class="icon-tag"></i></a> -->
                         </li>

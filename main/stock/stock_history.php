@@ -93,7 +93,7 @@ function get_list(selectedDate) {
                     $("#stock-list").append(
                         `<tr>
                             <td>${index + 1}</td>
-                            <td>${item.productname}</td>
+                            <td>${item.productname} (${item.size}) (₹${item.saleprice})</td>
                             <td>${item.available_stock}</td>
                         </tr>`
                     );

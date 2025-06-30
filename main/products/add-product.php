@@ -197,11 +197,11 @@ if (isset($_POST['submit'])) {
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>Sale Price</label>
-                                            <input type="number" name="saleprice" placeholder="Type Here"  class="form-control" required>
+                                            <input type="number" name="saleprice" placeholder="Type Here"  class="form-control" required step="0.01">
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>Purchase Price</label>
-                                            <input type="number" name="purchaseprice" placeholder="Type Here"  class="form-control" required>
+                                            <input type="number" name="purchaseprice" placeholder="Type Here"  class="form-control" required step="0.01">
                                         </div>
                                         <div class="col-lg-6 col-md-12  my-2">
                                             <label>HSN Code</label>

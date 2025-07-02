@@ -121,7 +121,7 @@ if(isset($_POST['submit'])){
                                 </div>
                                 <div class="col-lg-6 col-md-12 my-2">
                                     <label>Size</label>
-                                    <input type="number" name="size_number" placeholder="Type Here" value="<?php echo $pro_details['size'];?>" class="form-control"  step="0.1">
+                                    <input type="text" name="size_number" placeholder="Type Here" value="<?php echo intval($pro_details['size']);?>" class="form-control"  step="0.1">
                                 </div>
                                 <div class="col-lg-6 col-md-12 my-2">
                                     <label>Size-Type</label>

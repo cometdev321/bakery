@@ -661,6 +661,7 @@ if (isset($_POST['ProductSubmit'])) {
                                 <a href="#FileManager" class="has-arrow"><i class="icon-tag"></i> <span>Sales</span></a>
                                 <ul>                                    
                                     <li><a href="<?php echo $base ?>/sales/sales_invoice">Sales Invoices</a></li>
+                                    <li><a href="<?php echo $base ?>/sales/pendingpayments">Pending Payments</a></li>
                                     <li><a href="<?php echo $base ?>/sales/paymentIn_list">Payment In</a></li>
                                 </ul>
                             </li>

@@ -35,6 +35,7 @@ LEFT JOIN
             tblstock stck
         WHERE 
             stck.date = '$date'
+            stck.userId='$session'
     ) AS stock
 ON stock.product COLLATE utf8mb4_unicode_ci = sales.ItemName COLLATE utf8mb4_unicode_ci;
 

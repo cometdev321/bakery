@@ -24,7 +24,7 @@ WHERE
   AND ts.Date = '$date'
   AND ts.status = '1'
 GROUP BY 
-  ts.ItemName
+  stck.product
 
 
 

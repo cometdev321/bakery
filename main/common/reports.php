@@ -10,6 +10,7 @@
                                             <li><a href="<?php echo $base ?>/allBranchReport/transaction/sale">Sale</a></li>
                                             <li><a href="<?php echo $base ?>/allBranchReport/transaction/purchase">Purchase</a></li>
                                             <li><a href="<?php echo $base ?>/allBranchReport/transaction/daybook">Day Book</a></li>
+                                            <!-- <li><a href="<?php echo $base ?>/allBranchReport/transaction/daybookdetailed">Day Book Detailed</a></li> -->
                                             <li><a href="<?php echo $base ?>/allBranchReport/transaction/alltransaction">All Transaction</a></li>
                                         </ul>
                                     </li>
@@ -55,6 +56,7 @@
                                             <li><a href="<?php echo $base ?>/reports/transaction/sale">Sale</a></li>
                                             <li><a href="<?php echo $base ?>/reports/transaction/purchase">Purchase</a></li>
                                             <li><a href="<?php echo $base ?>/reports/transaction/daybook">Day Book</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/transaction/daybookdetailed">Day Book Detailed</a></li>
                                             <li><a href="<?php echo $base ?>/reports/transaction/alltransaction">All Transaction</a></li>
                                         </ul>
                                     </li>

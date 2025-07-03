@@ -148,12 +148,12 @@ if (mysqli_num_rows($resultGuest) == 0) {
                 </a>
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <a href="<?php echo $base ?>/purchase/enabledpurchase/create_purchase_invoice">
+                    <a href="<?php echo $base ?>/reports/transaction/daybookdetailed">
                     <div class="card overflowhidden">
                         <div class="body">
                 
-                            <h3>Create New Purchase<i class="fa fa-dollar float-right"></i></h3>
-                            <span>Start a new purhcase invoice </span>                            
+                            <h3>Day Book Detailed<i class="fa fa-dollar float-right"></i></h3>
+                            <span>View Today's Stock Entries and Sales</span>
                         </div>
 
                     </div>

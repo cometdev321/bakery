@@ -525,6 +525,8 @@ function create_sales_invoice() {
         }
         document.getElementById('subtotal').value = parseFloat(amount);
         document.getElementById('total').value = parseFloat(amount);
+        
+        document.getElementById('amount_received').value = parseFloat(amount);
         document.getElementById('balance_total').value = parseFloat(amount);
     }
 

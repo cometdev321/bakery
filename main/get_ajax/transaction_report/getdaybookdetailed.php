@@ -7,25 +7,36 @@ $slno = 1;
 $date=$_POST['date'];
     $query="
    SELECT 
-  tp.productname,
-  SUM(ts.Qty) AS total_sold,
-  SUM(COALESCE(stck.qty, 0)) AS total_stock
+    tp.productname,
+    sales.total_sold,
+    COALESCE(stock.today_stock, 0) AS total_stock
 FROM 
-  tblsalesinvoice_details AS ts
+    (
+        SELECT 
+            ts.ItemName,
+            SUM(ts.Qty) AS total_sold
+        FROM 
+            tblsalesinvoice_details ts
+        WHERE 
+            ts.userID = '$session'
+            AND ts.Date = '$date'
+            AND ts.status = '1'
+        GROUP BY 
+            ts.ItemName
+    ) AS sales
 JOIN 
-  tblproducts tp 
-    ON tp.id = ts.ItemName
+    tblproducts tp ON tp.id = sales.ItemName
 LEFT JOIN 
-  tblstock stck 
-    ON stck.product COLLATE utf8mb4_unicode_ci = ts.ItemName 
-    AND stck.date = '$date'
-WHERE 
-  ts.userID = '$session'
-  AND ts.Date = '$date'
-  AND ts.status = '1'
-GROUP BY 
-  stck.product
-
+    (
+        SELECT 
+            stck.product,
+            stck.qty AS today_stock
+        FROM 
+            tblstock stck
+        WHERE 
+            stck.date = '$date'
+    ) AS stock
+ON stock.product COLLATE utf8mb4_unicode_ci = sales.ItemName COLLATE utf8mb4_unicode_ci;
 
 
     ";

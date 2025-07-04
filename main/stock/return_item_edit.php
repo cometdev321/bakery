@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['selectedDate'])) {
 }
 
 // Fetch today's added stock
-$todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname as product,tp.size as size,tp.saleprice as saleprice FROM tblstock ts
+$todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname as product,tp.size as size,tp.saleprice as saleprice FROM tblstockreturn ts
                       join tblproducts tp on tp.id=ts.product
                       WHERE date = '$dateToday' and ts.userID='$userId'";
 $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
@@ -55,11 +55,10 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
                                     <input type="number" name="exstqty" readonly id="exstqty" class="form-control">
                                 </div>
                                 <div class="col-lg-3 my-2">
-                                    <label>Adding Quantity</label>
+                                    <label>Returned Quantity</label>
                                     <input type="number" name="qty" id="qty" class="form-control" required>
                                 </div>
                                 <div class="col-lg-3 my-2" hidden>
-                                    <label>Adding Quantity</label>
                                     <input type="text" name="id" id="id" class="form-control" required>
                                 </div>
                             </div>
@@ -109,7 +108,7 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
             <div class="col-lg-12">
                 <div class="card">
                     <div class="header">
-                        <h2>My Added Stock</h2>
+                        <h2>Stock Returned</h2>
                     </div>
                     <div class="body">
                         <table class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -141,7 +140,7 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
                                 }
                                 ?>
                             </tbody>
-                            <h6>Stock Added Worth of :&#8377;<?php echo $amount;?> on <?php echo $dateToday;?></h6>
+                            <h6>Stock Returned Worth of :&#8377;<?php echo $amount;?> on <?php echo $dateToday;?></h6>
 
                         </table>
                     </div>
@@ -173,7 +172,7 @@ function removestock() {
     var data = { id: id };
 
     $.ajax({
-        url: '../get_ajax/stockMng/update_stock_to_zero.php',
+        url: '../get_ajax/stockMng/update_return_to_zero.php',
         type: 'POST',
         data: data,
         success: function(response) {
@@ -213,7 +212,7 @@ function updatestock() {
     var data = { id: id, qty: qty };
 
     $.ajax({
-        url: '../get_ajax/stockMng/update_stock.php',
+        url: '../get_ajax/stockMng/update_return_stock.php',
         type: 'POST',
         data: data,
         success: function(response) {
@@ -249,7 +248,7 @@ $(document).ready(function() {
 
         if (productID) {
             $.ajax({
-                url: '../get_ajax/stockMng/get_added_records.php',
+                url: '../get_ajax/stockMng/get_returned_product_records.php',
                 type: 'POST',
                 data: data,
                 dataType: 'json', // Ensure response is treated as JSON

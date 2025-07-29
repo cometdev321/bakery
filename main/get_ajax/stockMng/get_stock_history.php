@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     LEFT JOIN (
         SELECT ItemName COLLATE utf8mb4_unicode_ci AS product, SUM(Qty) AS totalsales 
         FROM tblsalesinvoice_details 
-        WHERE Date <= '$date' AND userID = '$session'
+        WHERE Date <= '$date' AND userID = '$session' and status='1'
         GROUP BY ItemName COLLATE utf8mb4_unicode_ci
     ) sales ON sales.product = tp.id
    ";

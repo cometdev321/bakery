@@ -69,7 +69,7 @@ $(document).ready(function() {
 
             <div class="row clearfix">
 
-                <div class="col-lg-12 col-md-12">
+                <!-- <div class="col-lg-12 col-md-12">
                     <div class="card planned_task">
                         <div class="body row">
                             <div class="col-lg-3 col-md-12">
@@ -102,12 +102,12 @@ $(document).ready(function() {
 
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                                <div class="col-lg-12">
                     <div class="card">
                         <div class="header">
-                            <h2>SALES INVOICE LIST </h2>                            
+                            <h2>SALES INVOICE LIST LAST TWO DAYS</h2>                            
                         </div>
                         <div class="body">
 						<div class="table-responsive">
@@ -208,6 +208,12 @@ function get_list(val) {
             fromDate: "<?php echo date('Y-m-d', strtotime('-7 days'));?>",
             toDate: "<?php echo date('Y-m-d'); ?>"
         };
+    }
+    else if (val === 'default') {
+        formData = {
+            fromDate: "<?php echo date('Y-m-d', strtotime('yesterday')); ?>",
+            toDate: "<?php echo date('Y-m-d'); ?>"
+        };
     }else {
         let start = document.getElementById('startDate').value;
         let end = document.getElementById('endDate').value;
@@ -232,7 +238,7 @@ function get_list(val) {
     });
 }
 
-  get_list("This-Month");
+  get_list("default");
 </script>
 <script>
     document.title="NAYAN"

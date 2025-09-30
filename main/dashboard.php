@@ -44,7 +44,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
 
          <!-- basic -->
         <div class="row clearfix">
-                <div class="col-lg-3 col-md-6">
+            <div class="col-lg-<?php echo isset($_SESSION['admin']) ? '3' : '6'; ?> col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
@@ -61,7 +61,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-<?php echo isset($_SESSION['admin']) ? '3' : '6'; ?> col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
@@ -84,6 +84,9 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>
                 </div>
+                <?php
+                if(isset($_SESSION['admin'])){
+                ?>
                 <div class="col-lg-3 col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
@@ -130,6 +133,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>
                 </div>
+                <?php } ?>
         </div>
         <?php
         if(!isset($_SESSION['admin'])){
@@ -161,6 +165,9 @@ if (mysqli_num_rows($resultGuest) == 0) {
                 </div>
         </div>
     <?php } ?>
+    <?php
+        if(isset($_SESSION['admin'])){
+        ?>
         <div class="row clearfix">  
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="card overflowhidden number-chart">
@@ -305,7 +312,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>    
         </div>    
-        
+        <?php } ?>
         <!-- Annual Sales and purchase -->
         <div class="row clearfix">  
             <div class="col-lg-6 col-md-12">

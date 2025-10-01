@@ -44,7 +44,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
 
          <!-- basic -->
         <div class="row clearfix">
-            <div class="col-lg-<?php echo isset($_SESSION['admin']) ? '3' : '6'; ?> col-md-6">
+            <div class="col-lg-3 col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
@@ -61,7 +61,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-<?php echo isset($_SESSION['admin']) ? '3' : '6'; ?> col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
                         <?php   
@@ -84,9 +84,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>
                 </div>
-                <?php
-                if(isset($_SESSION['admin'])){
-                ?>
+              
                 <div class="col-lg-3 col-md-6">
                     <div class="card overflowhidden">
                         <div class="body">
@@ -133,7 +131,6 @@ if (mysqli_num_rows($resultGuest) == 0) {
                         </div>
                     </div>
                 </div>
-                <?php } ?>
         </div>
         <?php
         if(!isset($_SESSION['admin'])){
@@ -314,7 +311,11 @@ if (mysqli_num_rows($resultGuest) == 0) {
         </div>    
         <?php } ?>
         <!-- Annual Sales and purchase -->
-        <div class="row clearfix">  
+          
+        <div class="row clearfix">
+              <?php
+        if(isset($_SESSION['admin'])){
+        ?>  
             <div class="col-lg-6 col-md-12">
                 <div class="card">
                     <div class="header">
@@ -324,8 +325,9 @@ if (mysqli_num_rows($resultGuest) == 0) {
                     <div id="multiple-chart" class="ct-chart"></div>
                     </div>
                 </div>
-            </div>  
-            <div class="col-lg-6 col-md-12">
+            </div>
+            <?php } ?>  
+            <div class="col-lg-<?php echo isset($_SESSION['admin']) ? '6' : '12'; ?> col-md-12">
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12">
                 <a href="profile/page-profile">
@@ -384,7 +386,9 @@ if (mysqli_num_rows($resultGuest) == 0) {
 
 
 
-
+  <?php
+        if(isset($_SESSION['admin'])){
+        ?>  
         <!-- sales -->
         <div class="row clearfix">
                 <div class="col-lg-6 col-md-12">
@@ -439,7 +443,7 @@ if (mysqli_num_rows($resultGuest) == 0) {
             </div>
                
 
-
+<?php } ?>
             
         </div>
 </div>

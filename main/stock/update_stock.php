@@ -14,31 +14,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = mysqli_real_escape_string($conn, $_POST['date']);
     $product = mysqli_real_escape_string($conn, $_POST['product']);
     $qty = mysqli_real_escape_string($conn, $_POST['qty']);
+    $expire_date = mysqli_real_escape_string($conn, $_POST['expire_date']);
 
-    if (empty($date) || empty($product) || empty($qty) || empty($userId)) {
+    if (empty($date) || empty($product) || empty($qty) || empty($userId) || empty($expire_date) ) {
         $toastMessage = "Please fill all fields.";
     } else {
         // Check if the product exists for the same user on the same day
-        $checkQuery = "SELECT qty FROM tblstock WHERE date = '$date' AND product = '$product' AND userID = '$userId'";
+        $checkQuery = "SELECT qty FROM tblstock WHERE date = '$date' AND product = '$product' AND userID = '$userId' AND expire_date='$expire_date'";
         $result = mysqli_query($conn, $checkQuery);
 
         if (mysqli_num_rows($result) > 0) {
             // If record exists, update the quantity
             $row = mysqli_fetch_assoc($result);
             $newQty = $row['qty'] + $qty;
-            $updateQuery = "UPDATE tblstock SET qty = '$newQty' WHERE date = '$date' AND product = '$product' AND userID = '$userId'";
+            $updateQuery = "UPDATE tblstock SET qty = '$newQty' WHERE date = '$date' AND product = '$product' AND userID = '$userId' AND expire_date='$expire_date'";
             if (mysqli_query($conn, $updateQuery)) {
                 $toastMessage = "Stock quantity updated successfully.";
+                echo "<script>window.location.href = 'update_stock?status=success'</script>";
+
             } else {
                 $toastMessage = "Error updating stock quantity.";
+                echo "<script>window.location.href = 'update_stock?status=error'</script>";
             }
         } else {
             // If no existing record, insert a new one
-            $insertQuery = "INSERT INTO tblstock (date, product, qty, userID) VALUES ('$date', '$product', '$qty', '$userId')";
+            $insertQuery = "INSERT INTO tblstock (date, product, qty,expire_date, userID) VALUES ('$date', '$product', '$qty','$expire_date' ,'$userId')";
             if (mysqli_query($conn, $insertQuery)) {
                 $toastMessage = "Stock added successfully.";
+                echo "<script>window.location.href = 'update_stock?status=success'</script>";
             } else {
                 $toastMessage = "Error adding stock.";
+                echo "<script>window.location.href = 'update_stock?status=error'</script>";
+
             }
         }
     }
@@ -52,9 +59,51 @@ $todaysStockQuery = "SELECT ts.date,ts.qty,tp.productname  as product,tp.size as
 $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
 ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+$(document).ready(function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const status = urlParams.get('status');
+  if (status === 'success') {
+    Toastify({
+      text: " sales stored succesfully",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top",
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #84fab0, #8fd3f4)", // Use gradient color
+      margintop:"202px",
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
+
+ 
+   if (status === 'error') {
+    Toastify({
+      text: "Something Went Wrong",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // top, bottom, left, right
+      position: "right", // top-left, top-center, top-right, bottom-left, bottom-center, bottom-right, center
+      backgroundColor: "linear-gradient(to right, #fe8c00, #f83600)", // Use gradient color with red mix
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function(){}, // Callback after click
+       style: {
+        margin: "70px 15px 10px 15px", // Add padding on the top of the toast message
+      },
+    }).showToast();
+  }
+});
+</script>
+
 
 <div id="main-content">
     <div class="container-fluid">
@@ -87,11 +136,15 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
                                         ?>
                                     </select>
                                 </div>
-                                <div class="col-lg-3 my-2">
+                                <div class="col-lg-2 my-2">
+                                    <label>Expire Date</label>
+                                    <input type="date" name="expire_date" id="expire_date" value="<?php echo date('Y-m-d',strtotime('+7 days'))?>" class="form-control" required>
+                                </div>
+                                <div class="col-lg-2 my-2">
                                     <label>Existing Quantity</label>
                                     <input type="number" name="exstqty" readonly id="exstqty" class="form-control">
                                 </div>
-                                <div class="col-lg-3 my-2">
+                                <div class="col-lg-2 my-2">
                                     <label>Adding Quantity</label>
                                     <input type="number" name="qty" id="qty" class="form-control" required>
                                 </div>

@@ -691,6 +691,7 @@ if (isset($_POST['ProductSubmit'])) {
                                     <li><a href="<?php echo $base ?>/stock/edit_entry">Edit Stock Entry</a></li>
                                     <li><a href="<?php echo $base ?>/stock/return_item">Return Item</a></li>
                                     <li><a href="<?php echo $base ?>/stock/return_item_edit">Edit Return Entry</a></li>
+                                    <li><a href="<?php echo $base ?>/stock/expiring_products">Expiring Products</a></li>
                                 </ul>
                             </li>
                             <?php

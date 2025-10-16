@@ -36,8 +36,8 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
                             <thead>
                                 <tr>
                                     <th>Slno</th>
-                                    <th>Expiring On</th>
                                     <th>Product</th>
+                                    <th>Expiring On</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,8 +48,8 @@ $todaysStockResult = mysqli_query($conn, $todaysStockQuery);
                                     while ($row = mysqli_fetch_assoc($todaysStockResult)) {
                                         echo "<tr>
                                             <td>{$count}</td>
-                                            <td>{$row['expire_date']}</td>
                                             <td>{$row['product']}({$row['size']})(&#8377;{$row['saleprice']})</td>
+                                            <td>{$row['expire_date']}</td>
                                         </tr>";
                                         $count++;
                                         $amount+=($row['saleprice']*$row['qty']);

@@ -45,7 +45,7 @@
                                                 <th>#</th>
                                                 <th>Product Name</th>
                                                 <th>Total Stock</th>
-                                                <th>Total Sales </th>
+                                                <th>Total Sales Today</th>
                                                 <th>Remaining </th>
                                             </tr>
                                         </thead>
@@ -54,7 +54,7 @@
                                             <th>#</th>
                                                 <th>Product Name</th>
                                                 <th>Total Stock</th>
-                                                <th>Total Sales </th>
+                                                <th>Total Sales Today</th>
                                                 <th>Remaining </th>
                                             </tr>
                                         </tfoot>

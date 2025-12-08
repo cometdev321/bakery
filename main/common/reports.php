@@ -78,12 +78,12 @@
                                             <!-- <li><a href="<?php echo $base ?>/reports/stock/lowStock">Low Stock Summary</a></li> -->
                                         </ul>
                                     </li>
-                                    <!-- <li>
-                                        <a href="#menu-level-2" class="has-arrow">Expense Report</a>
+                                    <li>
+                                        <a href="#menu-level-2" class="has-arrow">Daily Summary Report</a>
                                         <ul>
-                                            <li><a href="">Expense Details</a></li>
+                                            <li><a href="<?php echo $base ?>/reports/daily/dailysummary">Daily Summary</a></li>
                                         </ul>
-                                    </li> -->
+                                    </li>
                                     
                                 </ul>
                             </li>
